@@ -3,7 +3,6 @@ rest.py: Rest API helper classes
 """
 
 from dataclasses import dataclass
-from requests.auth import HTTPBasicAuth
 
 
 @dataclass
