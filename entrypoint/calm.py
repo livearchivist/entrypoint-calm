@@ -1,14 +1,12 @@
-import sys
-import os
-import json
-import time
-import requests
-import urllib3
-import argparse
-import getpass
+"""
+calm.py: automation to configure Calm for
+NX-on-GCP / Test Drive.
 
-from base64 import b64encode
-from requests.auth import HTTPBasicAuth
+Author: Michael Haigh (michael@nutanix.com)
+Date: 2020-02-23
+"""
+
+import time
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
@@ -50,7 +48,8 @@ def main():
     print (type(prjlistresp))
 
     if prjlistresp.ok:
-      print json.dumps(json.loads(prjlistresp.content), indent=4)
+      #print json.dumps(json.loads(prjlistresp.content), indent=4)
+      print(prjlistresp.content)
 
     else:
       print("Something went wrong with the request")

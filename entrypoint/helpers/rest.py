@@ -2,6 +2,18 @@
 rest.py: Rest API helper classes
 """
 
+import requests
+import urllib3
+import argparse
+import getpass
+import json
+import sys
+import os
+
+from base64 import b64encode
+from requests.auth import HTTPBasicAuth
+
+
 class RequestParameters:
     """
     class to hold the parameters of our API request
