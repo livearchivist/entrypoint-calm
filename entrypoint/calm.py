@@ -7,6 +7,15 @@ Date: 2020-02-23
 """
 
 import time
+import sys
+import requests
+import urllib3
+import argparse
+import getpass
+import json
+
+from base64 import b64encode
+from requests.auth import HTTPBasicAuth
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
