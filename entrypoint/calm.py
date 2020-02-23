@@ -44,7 +44,7 @@ def get_uuid_via_v3_post(ip, endpoint, password, entity_name):
     )
   rest_client = PostRESTClient(parameters)
   resp = rest_client.post_request()
-  INFO(f"get_uuid_via_v3_post: {ip}, {endpoint}, {entity_name}:\nresp")
+  INFO(f"get_uuid_via_v3_post: {ip}, {endpoint}, {entity_name}:\n{resp}")
 
   # Return UUID
   for entity in resp.json["entities"]:
@@ -61,14 +61,14 @@ def get_body_via_v3_get(ip, endpoint, password, entity_uuid):
   parameters = RequestParameters(
         uri=create_v3_url(ip, f"{endpoint}/{entity_uuid}"),
         username="admin",
-        password=pc_password
+        password=password
   )
   rest_client = RESTClient(parameters)
   resp = rest_client.get_request()
-  INFO(f"get_body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\nresp")
+  INFO(f"get_body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\n{resp}")
 
   # Get the body, delete unneeded status, return body
-  body = project_get_resp.json
+  body = resp.json
   del body["status"]
   return body
 
@@ -91,20 +91,31 @@ def main():
   try:
 
     # Get "default" project UUID
-    project_uuid = get_uuid_via_v3_post(pc_external_ip, "projects/list",
+    project_uuid = get_uuid_via_v3_post(pc_external_ip, "projects",
                                         pc_password, "default")
     INFO(f"default_project_uuid: {project_uuid}")
 
     # Get the single account UUID
-    account_uuid = get_uuid_via_v3_post(pc_external_ip, "accounts/list",
+    account_uuid = get_uuid_via_v3_post(pc_external_ip, "accounts",
                                         pc_password, "")
     INFO(f"account_uuid: {account_uuid}")
 
-    # Make the projects Get
     # Get the pojects body
     project_body = get_body_via_v3_get(pc_external_ip, "projects",
                                        pc_password, project_uuid)
     INFO(f"project_body: {project_body}")
+
+    # Added resources to projects body
+    project_body["spec"]["resources"]["account_reference_list"] = [
+        {
+            "kind": "account",
+            "uuid": account_uuid
+        }
+    ]
+
+    INFO(f"project_body: {project_body}")
+
+    # TODO: Make an API call to update Project
 
   except Exception as ex:
     print(ex)
