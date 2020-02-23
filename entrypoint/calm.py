@@ -8,6 +8,7 @@ Date: 2020-02-23
 
 import time
 import sys
+import os
 import requests
 import urllib3
 import argparse
@@ -46,22 +47,18 @@ def main():
   try:
 
     # Make the API call
-    parameters = RequestParameters(
+    parameters = PostRequestParameters(
           uri=create_v3_url(pc_external_ip, "projects/list"),
           username="admin",
-          password=pc_password
+          password=pc_password,
+          payload="{}"
     )
-    rest_client = RESTClient(parameters)
+    rest_client = PostRESTClient(parameters)
     prjlistresp = rest_client.get_request()
 
     print (type(prjlistresp))
 
-    if prjlistresp.ok:
-      #print json.dumps(json.loads(prjlistresp.content), indent=4)
-      print(prjlistresp.content)
-
-    else:
-      print("Something went wrong with the request")
+    print(prjlistresp)
 
   except Exception as ex:
     print(ex)
