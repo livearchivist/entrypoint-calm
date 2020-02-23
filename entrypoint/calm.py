@@ -37,14 +37,14 @@ def get_uuid_via_v3_post(ip, endpoint, password, entity_name):
 
   # Make the API call
   parameters = PostRequestParameters(
-          uri=create_v3_url(ip, "{endpoint}/list"),
+          uri=create_v3_url(ip, f"{endpoint}/list"),
           username="admin",
           password=password,
           payload="{\"length\": 100}"
     )
   rest_client = PostRESTClient(parameters)
   resp = rest_client.post_request()
-  INFO("get_uuid_via_v3_post: {ip}, {endpoint}, {entity_name}:\nresp")
+  INFO(f"get_uuid_via_v3_post: {ip}, {endpoint}, {entity_name}:\nresp")
 
   # Return UUID
   for entity in resp.json["entities"]:
@@ -65,7 +65,7 @@ def get_body_via_v3_get(ip, endpoint, password, entity_uuid):
   )
   rest_client = RESTClient(parameters)
   resp = rest_client.get_request()
-  INFO("get_body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\nresp")
+  INFO(f"get_body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\nresp")
 
   # Get the body, delete unneeded status, return body
   body = project_get_resp.json
