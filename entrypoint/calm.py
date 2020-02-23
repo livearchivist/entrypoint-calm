@@ -46,7 +46,7 @@ def main():
 
   try:
 
-    # Make the API call
+    # Make the projects/list Post
     parameters = PostRequestParameters(
           uri=create_v3_url(pc_external_ip, "projects/list"),
           username="admin",
@@ -54,11 +54,27 @@ def main():
           payload="{}"
     )
     rest_client = PostRESTClient(parameters)
-    prjlistresp = rest_client.post_request()
+    project_list_resp = rest_client.post_request()
 
-    print (type(prjlistresp))
+    # Get "default" project UUID
+    for entity in project_list_resp.json["entities"]:
+      if entity["spec"]["name"] == "default":
+        project_uuid = entity["metadata"]["uuid"]
 
-    print(prjlistresp)
+    # Make the projects Get
+    parameters = RequestParameters(
+          uri=create_v3_url(pc_external_ip, f"projects/{project_uuid}"),
+          username="admin",
+          password=pc_password
+    )
+    rest_client = RESTClient(parameters)
+    project_get_resp = rest_client.get_request()
+
+    # Get the project body, delete unneeded status
+    project_body = project_get_resp.json
+    del project_body["status"]
+
+    print(project_body)
 
   except Exception as ex:
     print(ex)
