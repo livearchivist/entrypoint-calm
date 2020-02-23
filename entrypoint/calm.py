@@ -25,9 +25,34 @@ from helpers.rest import (RequestParameters, PostRequestParameters,
      RequestResponse, RESTClient, PostRESTClient)
 
 
+# Given an IP and Endpoint, return Nutanix v3 API URL
 def create_v3_url(ip, endpoint):
 
   return f"https://{ip}:9440/api/nutanix/v3/{endpoint}"
+
+
+# Return the UUID of a desired entity.  If entity_name is empty
+# assume a single entity in response and send first UUID
+def get_uuid_via_v3_post(ip, endpoint, password, entity_name):
+
+  # Make the API call
+  parameters = PostRequestParameters(
+          uri=create_v3_url(ip, "projects/list"),
+          username="admin",
+          password=password,
+          payload="{'length': 100}"
+    )
+  rest_client = PostRESTClient(parameters)
+  resp = rest_client.post_request()
+  INFO(resp)
+
+  # Return UUID
+  for entity in resp.json["entities"]:
+    if entity_name == "":
+      return entity["metadata"]["uuid"]
+    elif entity["spec"]["name"] == entity_name:
+      return entity["metadata"]["uuid"]
+
 
 def main():
 
@@ -46,20 +71,15 @@ def main():
 
   try:
 
-    # Make the projects/list Post
-    parameters = PostRequestParameters(
-          uri=create_v3_url(pc_external_ip, "projects/list"),
-          username="admin",
-          password=pc_password,
-          payload="{}"
-    )
-    rest_client = PostRESTClient(parameters)
-    project_list_resp = rest_client.post_request()
-
     # Get "default" project UUID
-    for entity in project_list_resp.json["entities"]:
-      if entity["spec"]["name"] == "default":
-        project_uuid = entity["metadata"]["uuid"]
+    project_uuid = get_uuid_via_v3_post(pc_external_ip,"projects/list",
+                                        pc_password, "default")
+    INFO(project_uuid)
+
+    # Get the single account UUID
+    account_uuid = get_uuid_via_v3_post(pc_external_ip,"accounts/list",
+                                        pc_password, "")
+    INFO(account_uuid)
 
     # Make the projects Get
     parameters = RequestParameters(
@@ -69,12 +89,12 @@ def main():
     )
     rest_client = RESTClient(parameters)
     project_get_resp = rest_client.get_request()
+    INFO(project_get_resp)
 
     # Get the project body, delete unneeded status
     project_body = project_get_resp.json
     del project_body["status"]
-
-    print(project_body)
+    INFO(project_body)
 
   except Exception as ex:
     print(ex)
