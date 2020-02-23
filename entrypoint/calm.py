@@ -100,6 +100,11 @@ def main():
                                         pc_password, "")
     INFO(f"account_uuid: {account_uuid}")
 
+    # Get the single subnets UUID
+    subnet_uuid = get_uuid_via_v3_post(pc_external_ip, "subnets",
+                                        pc_password, "")
+    INFO(f"subnet_uuid: {subnet_uuid}")
+
     # Get the pojects body
     project_body = get_body_via_v3_get(pc_external_ip, "projects",
                                        pc_password, project_uuid)
@@ -112,6 +117,18 @@ def main():
             "uuid": account_uuid
         }
     ]
+    # TODO: Is there a better way than hardcoding the 'default-net' name?
+    project_body["spec"]["resources"]["subnet_reference_list"] = [
+        {
+            "kind": "subnet",
+            "name": "default-net",
+            "uuid": subnet_uuid
+        }
+    ]
+    project_body["spec"]["resources"]["default_subnet_reference"] = {
+        "kind": "subnet",
+        "uuid": subnet_uuid
+    }
 
     INFO(f"project_body: {project_body}")
 
