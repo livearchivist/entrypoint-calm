@@ -54,7 +54,7 @@ def main():
           payload="{}"
     )
     rest_client = PostRESTClient(parameters)
-    prjlistresp = rest_client.get_request()
+    prjlistresp = rest_client.post_request()
 
     print (type(prjlistresp))
 
