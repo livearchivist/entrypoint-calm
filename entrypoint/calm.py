@@ -23,6 +23,9 @@ def create_v3_url(ip, endpoint):
 
 def main():
 
+  # Suppress Warnings
+  urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
   # Get and log the config from the Env variable
   config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
   INFO(config)
@@ -33,14 +36,27 @@ def main():
   pc_internal_ip = pc_info.get("ips")[0][1]
   pc_password = pc_info.get("prism_password")
 
+  try:
 
-  parameters = RequestParameters(
-        uri="url",
-        username="admin",
-        password="password"
-  )
+    # Make the API call
+    parameters = RequestParameters(
+          uri=create_v3_url(pc_external_ip, "projects/list"),
+          username="admin",
+          password=pc_password
+    )
+    rest_client = RESTClient(parameters)
+    prjlistresp = rest_client.get_request()
 
-  print(create_v3_url(pc_external_ip, "projects"))
+    print (type(prjlistresp))
+
+    if prjlistresp.ok:
+      print json.dumps(json.loads(prjlistresp.content), indent=4)
+
+    else:
+      print "Something went wrong with the request"
+
+  except Exception as ex:
+    print(ex)
 
 if __name__ == '__main__':
   main()
