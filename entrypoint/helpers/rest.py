@@ -14,9 +14,7 @@ from requests.auth import HTTPBasicAuth
 
 class RequestParameters:
     """
-    class to hold the parameters of our API request
-    this is not strictly required but can make
-    our requests cleaner
+    bass class to hold the parameters of our API request
     """
 
     def __init__(self, uri, username, password):
@@ -31,17 +29,14 @@ class RequestParameters:
                 f'password={self.password})')
 
 
-class PostRequestParameters: 
+class PostRequestParameters(RequestParameters): 
     """
-    class to hold the parameters of our API request
-    this is not strictly required but can make
-    our requests cleaner
+    Post parameters class which inherits our base
+    RequestParameters class
     """
 
     def __init__(self, uri, username, password, payload):
-        self.uri = uri
-        self.username = username
-        self.password = password
+        RequestParameters.__init__(self, uri, username, password)
         self.payload = payload
 
     def __repr__(self):
