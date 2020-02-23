@@ -37,14 +37,14 @@ def get_uuid_via_v3_post(ip, endpoint, password, entity_name):
 
   # Make the API call
   parameters = PostRequestParameters(
-          uri=create_v3_url(ip, "projects/list"),
+          uri=create_v3_url(ip, "{endpoint}/list"),
           username="admin",
           password=password,
-          payload="{'length': 100}"
+          payload="{\"length\": 100}"
     )
   rest_client = PostRESTClient(parameters)
   resp = rest_client.post_request()
-  INFO(resp)
+  INFO("get_uuid_via_v3_post: {ip}, {endpoint}, {entity_name}:\nresp")
 
   # Return UUID
   for entity in resp.json["entities"]:
@@ -52,6 +52,25 @@ def get_uuid_via_v3_post(ip, endpoint, password, entity_name):
       return entity["metadata"]["uuid"]
     elif entity["spec"]["name"] == entity_name:
       return entity["metadata"]["uuid"]
+
+
+# Return the body of a desired entity
+def get_body_via_v3_get(ip, endpoint, password, entity_uuid):
+
+  # Make the API call
+  parameters = RequestParameters(
+        uri=create_v3_url(ip, f"{endpoint}/{entity_uuid}"),
+        username="admin",
+        password=pc_password
+  )
+  rest_client = RESTClient(parameters)
+  resp = rest_client.get_request()
+  INFO("get_body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\nresp")
+
+  # Get the body, delete unneeded status, return body
+  body = project_get_resp.json
+  del body["status"]
+  return body
 
 
 def main():
@@ -72,29 +91,20 @@ def main():
   try:
 
     # Get "default" project UUID
-    project_uuid = get_uuid_via_v3_post(pc_external_ip,"projects/list",
+    project_uuid = get_uuid_via_v3_post(pc_external_ip, "projects/list",
                                         pc_password, "default")
-    INFO(project_uuid)
+    INFO(f"default_project_uuid: {project_uuid}")
 
     # Get the single account UUID
-    account_uuid = get_uuid_via_v3_post(pc_external_ip,"accounts/list",
+    account_uuid = get_uuid_via_v3_post(pc_external_ip, "accounts/list",
                                         pc_password, "")
-    INFO(account_uuid)
+    INFO(f"account_uuid: {account_uuid}")
 
     # Make the projects Get
-    parameters = RequestParameters(
-          uri=create_v3_url(pc_external_ip, f"projects/{project_uuid}"),
-          username="admin",
-          password=pc_password
-    )
-    rest_client = RESTClient(parameters)
-    project_get_resp = rest_client.get_request()
-    INFO(project_get_resp)
-
-    # Get the project body, delete unneeded status
-    project_body = project_get_resp.json
-    del project_body["status"]
-    INFO(project_body)
+    # Get the pojects body
+    project_body = get_body_via_v3_get(pc_external_ip, "projects",
+                                       pc_password, project_uuid)
+    INFO(f"project_body: {project_body}")
 
   except Exception as ex:
     print(ex)
