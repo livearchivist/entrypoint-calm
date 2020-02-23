@@ -53,7 +53,7 @@ def main():
       print json.dumps(json.loads(prjlistresp.content), indent=4)
 
     else:
-      print "Something went wrong with the request"
+      print("Something went wrong with the request")
 
   except Exception as ex:
     print(ex)

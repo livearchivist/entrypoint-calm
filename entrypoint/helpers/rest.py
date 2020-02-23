@@ -4,15 +4,15 @@ rest.py: Rest API helper classes
 
 class RequestParameters:
     """
-    dataclass to hold the parameters of our API request
+    class to hold the parameters of our API request
     this is not strictly required but can make
     our requests cleaner
     """
 
-    def __init__(self):
-        self.uri = ""
-        self.username = ""
-        self.password = ""
+    def __init__(self, uri, username, password):
+        self.uri = uri
+        self.username = username
+        self.password = password
 
     def __repr__(self):
         return (f'{self.__class__.__name__}('
@@ -23,16 +23,16 @@ class RequestParameters:
 
 class PostRequestParameters: 
     """
-    dataclass to hold the parameters of our API request
+    class to hold the parameters of our API request
     this is not strictly required but can make
     our requests cleaner
     """
 
-    def __init__(self):
-        self.uri = ""
-        self.username = ""
-        self.password = ""
-        self.payload = ""
+    def __init__(self, uri, username, password, payload):
+        self.uri = uri
+        self.username = username
+        self.password = password
+        self.payload = payload
 
     def __repr__(self):
         return (f'{self.__class__.__name__}('
