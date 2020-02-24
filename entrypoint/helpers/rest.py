@@ -76,6 +76,7 @@ class RESTClient:
     """
     username = self.params.username
     password = self.params.password
+    method = self.params.method
     encoded_credentials = b64encode(
         bytes(f"{username}:{password}", encoding="ascii")
     ).decode("ascii")

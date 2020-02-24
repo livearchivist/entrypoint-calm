@@ -62,10 +62,12 @@ def body_via_v3_get(ip, endpoint, password, entity_uuid):
   parameters = RequestParameters(
         uri=create_v3_url(ip, f"{endpoint}/{entity_uuid}"),
         username="admin",
-        password=password
+        password=password,
+        method="get",
+        payload=None
   )
   rest_client = RESTClient(parameters)
-  resp = rest_client.get_request()
+  resp = rest_client.request()
   INFO(f"body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\n{resp}")
 
   # Get the body, delete unneeded status, return body
