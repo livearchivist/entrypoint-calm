@@ -41,7 +41,7 @@ def create_via_v3_post(ip, endpoint, password, body):
           username="admin",
           password=password,
           method="post",
-          payload=body
+          payload=json.dumps(body)
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
