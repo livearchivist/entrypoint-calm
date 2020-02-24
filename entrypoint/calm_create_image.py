@@ -14,8 +14,8 @@ sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
-from helpers.calm import (file_to_dict, uuid_via_v3_post,
-                          body_via_v3_get)
+from helpers.calm import (file_to_dict, create_via_v3_post,
+                          uuid_via_v3_post, body_via_v3_get)
 
 
 def main():
@@ -34,18 +34,19 @@ def main():
 
     # Read in the spec file and conver to dict
     image_spec = file_to_dict("calm_image.spec")
+    INFO(f"image_spec: {image_spec}")
 
     # Make API call to create image
-    resp = create_via_v3_post(ip, "images", pc_password,
-                              image_spec)
+    resp = create_via_v3_post(pc_external_ip, "images",
+                              pc_password, image_spec)
 
     # Log appropriately based on response
     if resp.code == 202:
       INFO("CentOS 7 Image created successfully.")
     else:
-      raise Exception(f"CentOS 7 Image create failed with:\n"
-                      "Error Code: {response.code}\n"
-                      "Errro Message: {response.message}")
+      raise Exception(f"CentOS 7 Image create failed with:\n" +
+                      f"Error Code: {resp.code}\n" +
+                      f"Errro Message: {resp.message}")
 
   except Exception as ex:
     INFO(ex)

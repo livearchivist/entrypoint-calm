@@ -47,7 +47,7 @@ def create_via_v3_post(ip, endpoint, password, body):
   resp = rest_client.request()
   INFO(f"create_via_v3_post: {ip}, {endpoint}:\n{resp}")
 
-  return response  
+  return resp  
 
 
 # Return the UUID of a desired entity.  If entity_name is empty
