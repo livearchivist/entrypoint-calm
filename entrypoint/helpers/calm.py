@@ -21,10 +21,33 @@ from helpers.rest import (RequestParameters, RequestResponse,
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
+# Given a filename, return a dict of the file's contents
+def file_to_dict(filename):
+  with open(os.path.join(os.getcwd(), filename)) as json_file:
+    return json.load(json_file)
+
+
 # Given an IP and Endpoint, return Nutanix v3 API URL
 def create_v3_url(ip, endpoint):
-
   return f"https://{ip}:9440/api/nutanix/v3/{endpoint}"
+
+
+# Create a new entity via a v3 post call, return the response
+def create_via_v3_post(ip, endpoint, password, body):
+
+  # Make the API call
+  parameters = RequestParameters(
+          uri=create_v3_url(ip, f"{endpoint}"),
+          username="admin",
+          password=password,
+          method="post",
+          payload=body
+    )
+  rest_client = RESTClient(parameters)
+  resp = rest_client.request()
+  INFO(f"create_via_v3_post: {ip}, {endpoint}:\n{resp}")
+
+  return response  
 
 
 # Return the UUID of a desired entity.  If entity_name is empty
@@ -50,6 +73,7 @@ def uuid_via_v3_post(ip, endpoint, password, entity_name):
     elif entity["spec"]["name"] == entity_name:
       return entity["metadata"]["uuid"]
 
+
 # Return the body of a desired entity
 def body_via_v3_get(ip, endpoint, password, entity_uuid):
 
@@ -69,5 +93,4 @@ def body_via_v3_get(ip, endpoint, password, entity_uuid):
   body = resp.json
   del body["status"]
   return body
-
 
