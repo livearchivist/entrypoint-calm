@@ -6,30 +6,17 @@ Author: michael@nutanix.com
 Date:   2020-02-24
 """
 
-import time
 import sys
 import os
-import requests
-import urllib3
-import argparse
-import getpass
 import json
-
-from base64 import b64encode
-from requests.auth import HTTPBasicAuth
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
-from helpers.rest import (RequestParameters, RequestResponse,
-                          RESTClient)
 from helpers.calm import (uuid_via_v3_post, body_via_v3_get)
 
 
 def main():
-
-  # Suppress Warnings
-  urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
   # Get and log the config from the Env variable
   config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])

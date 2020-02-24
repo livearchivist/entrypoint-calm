@@ -5,23 +5,20 @@ automation for NX-on-GCP.
 Author: michael@nutanix.com
 Date:   2020-02-24
 '''
-import time
+
 import sys
 import os
 import requests
 import urllib3
-import argparse
-import getpass
 import json
-
-from base64 import b64encode
-from requests.auth import HTTPBasicAuth
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
 from helpers.rest import (RequestParameters, RequestResponse,
                           RESTClient)
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 # Given an IP and Endpoint, return Nutanix v3 API URL
