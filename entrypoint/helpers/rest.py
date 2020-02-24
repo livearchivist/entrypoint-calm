@@ -102,18 +102,25 @@ class RESTClient:
           timeout=10,
         )
       elif method.lower() == "put":
-        api_request = requests.put(
-          self.params.uri,
-          data=self.params.payload,
-          headers=headers,
-          verify=False,
-          timeout=10,
-        )
+        if headers is not None:
+          api_request = requests.put(
+            self.params.uri,
+            data=self.params.payload,
+            headers=headers,
+            verify=False,
+            timeout=10,
+          )
+        else:
+          api_request = requests.put(
+            self.params.uri,
+            data=self.params.payload,
+            verify=False,
+            timeout=10,
+          )
       elif method.lower() == "get":
         api_request = requests.get(
           self.params.uri,
           headers=headers,
-          auth=HTTPBasicAuth(username, password),
           timeout=10,
           verify=False
         )
