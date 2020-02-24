@@ -21,8 +21,8 @@ from requests.auth import HTTPBasicAuth
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
-from helpers.rest import (RequestParameters, PostRequestParameters,
-     RequestResponse, RESTClient, PostRESTClient)
+from helpers.rest import (RequestParameters, pRequestParameters,
+     RequestResponse, RESTClient, PostRESTClient, PutRESTClient)
 
 
 # Given an IP and Endpoint, return Nutanix v3 API URL
@@ -36,7 +36,7 @@ def create_v3_url(ip, endpoint):
 def get_uuid_via_v3_post(ip, endpoint, password, entity_name):
 
   # Make the API call
-  parameters = PostRequestParameters(
+  parameters = pRequestParameters(
           uri=create_v3_url(ip, f"{endpoint}/list"),
           username="admin",
           password=password,
