@@ -12,306 +12,139 @@ from base64 import b64encode
 from requests.auth import HTTPBasicAuth
 
 
-class RequestParameters:
-    """
-    bass class to hold the parameters of our API request
-    """
+class RequestParameters: 
+  """
+  Class to hold the parameters of our Request
+  """
 
-    def __init__(self, uri, username, password):
-        self.uri = uri
-        self.username = username
-        self.password = password
+  def __init__(self, uri, username, password,
+               method, payload):
+    self.uri = uri
+    self.username = username
+    self.password = password
+    self.method = method
+    self.payload = payload
 
-    def __repr__(self):
-        return (f'{self.__class__.__name__}('
-                f'uri={self.uri},'
-                f'username={self.username},'
-                f'password={self.password})')
-
-
-class pRequestParameters(RequestParameters): 
-    """
-    Post/Put parameters class which inherits our base
-    RequestParameters class
-    """
-
-    def __init__(self, uri, username, password, payload):
-        RequestParameters.__init__(self, uri, username, password)
-        self.payload = payload
-
-    def __repr__(self):
-        return (f'{self.__class__.__name__}('
-                f'uri={self.uri},'
-                f'username={self.username},'
-                f'password={self.password},'
-                f'payload={self.payload})')
+  def __repr__(self):
+    return (f'{self.__class__.__name__}('
+            f'uri={self.uri},'
+            f'username={self.username},'
+            f'password={self.password},'
+            f'method={self.method},'
+            f'payload={self.payload})')
 
 class RequestResponse:
-    """
-    class to hold the response from our
-    requests
-    again, not strictly necessary but can
-    make things cleaner later
-    """
+  """
+  Class to hold the response from our Request
+  """
 
-    def __init__(self):
-        self.code = 0
-        self.message = ""
-        self.json = ""
-        self.details = ""
+  def __init__(self):
+    self.code = 0
+    self.message = ""
+    self.json = ""
+    self.details = ""
 
-    def __repr__(self):
-        '''
-        decent __repr__ for debuggability
-        this is something recommended by Raymond Hettinger
-        it is good practice and should be left here
-        unless there's a good reason to remove it
-        '''
-        return (f'{self.__class__.__name__}('
-                f'code={self.code},'
-                f'message={self.message},'
-                f'json={self.json},'
-                f'details={self.details})')
+  def __repr__(self):
+    return (f'{self.__class__.__name__}('
+            f'code={self.code},'
+            f'message={self.message},'
+            f'json={self.json},'
+            f'details={self.details})')
+
 
 class RESTClient:
+  """
+  the RESTClient class carries out the actual API request
+  by 'packaging' these functions into a dedicated class
+  """
+
+  def __init__(self, parameters: RequestParameters):
+     self.params = parameters
+
+  def request(self):
     """
-    the RESTClient class carries out the actual API request
-    by 'packaging' these functions into a dedicated class
+    this is the main method that carries out the request
+    basic exception handling is managed here, as well as
+    returning the response (success or fail), as an instance
+    of our RequestResponse
     """
+    response = RequestResponse()
 
-    def __init__(self, parameters: RequestParameters):
-        """
-        class constructor
-        """
-        self.params = parameters
-
-    def get_request(self):
-        """
-        this is the main method that carries out the request
-        basic exception handling is managed here, as well as
-        returning the response (success or fail), as an instance
-        of our RequestResponse dataclass
-        """
-        response = RequestResponse()
-
-        """
-        setup the HTTP Basic Authorization header based on the
-        supplied username and password
-        done this way so that passwords are not supplied on the command line
-        """
-        username = self.params.username
-        password = self.params.password
-        encoded_credentials = b64encode(
-            bytes(f"{username}:{password}", encoding="ascii")
-        ).decode("ascii")
-        auth_header = f"Basic {encoded_credentials}"
-
-        """
-        setup the request headers
-        note the use of {auth_header} i.e. the Basic Authorization
-        credentials we setup earlier
-        """
-
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": f"{auth_header}",
-            "cache-control": "no-cache",
-        }
-
-        try:
-            # submit the request
-            api_request = requests.get(
-                self.params.uri,
-                headers=headers,
-                auth=HTTPBasicAuth(username, password),
-                timeout=30,
-                verify=False
-            )
-            # if no exceptions occur here, we can process the response
-            response.code = api_request.status_code
-            response.message = "Request submitted successfully."
-            response.json = api_request.json()
-            response.details = "N/A"
-        except requests.exceptions.ConnectTimeout:
-            # timeout while connecting to the specified IP address or FQDN
-            response.code = -99
-            response.message = f"Connection has timed out. {username} {password}"
-            response.details = "Exception: requests.exceptions.ConnectTimeout"
-        except urllib3.exceptions.ConnectTimeoutError:
-            # timeout while connecting to the specified IP address or FQDN
-            response.code = -99
-            response.message = f"Connection has timed out."
-            response.details = "urllib3.exceptions.ConnectTimeoutError"
-        except requests.exceptions.MissingSchema:
-            # potentially bad URL
-            response.code = -99
-            response.message = "Missing URL schema/bad URL."
-            response.details = "N/A"
-        except Exception as _e:
-            # Unhandled exceptions
-            response.code = -99
-            response.message = "An unhandled exception has occurred."
-            response.details = _e
-
-        return response
-
-class PostRESTClient:
     """
-    the RESTClient class carries out the actual API request
-    by 'packaging' these functions into a dedicated class
+    setup the HTTP Basic Authorization header based on the
+    supplied username and password
     """
+    username = self.params.username
+    password = self.params.password
+    encoded_credentials = b64encode(
+        bytes(f"{username}:{password}", encoding="ascii")
+    ).decode("ascii")
+    auth_header = f"Basic {encoded_credentials}"
 
-    def __init__(self, parameters: pRequestParameters):
-        """
-        class constructor
-        """
-        self.params = parameters
+    # Create the headers with the previous creds
+    headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": f"{auth_header}",
+      "cache-control": "no-cache",
+    }
 
-    def post_request(self):
-        """
-        this is the main method that carries out the request
-        basic exception handling is managed here, as well as
-        returning the response (success or fail), as an instance
-        of our RequestResponse
-        """
-        response = RequestResponse()
+    try:
 
-        """
-        setup the HTTP Basic Authorization header based on the
-        supplied username and password
-        """
-        username = self.params.username
-        password = self.params.password
-        encoded_credentials = b64encode(
-            bytes(f"{username}:{password}", encoding="ascii")
-        ).decode("ascii")
-        auth_header = f"Basic {encoded_credentials}"
-        
+      # based on the method, submit the request
+      if method.lower() == "post":
+        api_request = requests.post(
+          self.params.uri,
+          data=self.params.payload,
+          headers=headers,
+          verify=False,
+          timeout=10,
+        )
+      elif method.lower() == "put":
+        api_request = requests.put(
+          self.params.uri,
+          data=self.params.payload,
+          headers=headers,
+          verify=False,
+          timeout=10,
+        )
+      elif method.lower() == "get":
+        api_request = requests.get(
+          self.params.uri,
+          headers=headers,
+          auth=HTTPBasicAuth(username, password),
+          timeout=10,
+          verify=False
+        )
+      else:
+        raise Exception(f"Passed method of '{method}' is not supported. " +
+                        " Supported methods are 'post', 'put', and 'get'.") 
 
-        # Create the headers with the previous creds
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": f"{auth_header}",
-            "cache-control": "no-cache",
-        }
+      # if no exceptions occur here, we can process the response
+      response.code = api_request.status_code
+      response.message = "Request submitted successfully."
+      response.json = api_request.json()
+      response.details = "N/A"
+    except requests.exceptions.ConnectTimeout:
+      # timeout while connecting to the specified IP address or FQDN
+      response.code = -99
+      response.message = f"Connection has timed out. {username} {password}"
+      response.details = "Exception: requests.exceptions.ConnectTimeout"
+    except urllib3.exceptions.ConnectTimeoutError:
+      # timeout while connecting to the specified IP address or FQDN
+      response.code = -99
+      response.message = f"Connection has timed out."
+      response.details = "urllib3.exceptions.ConnectTimeoutError"
+    except requests.exceptions.MissingSchema:
+      # potentially bad URL
+      response.code = -99
+      response.message = "Missing URL schema/bad URL."
+      response.details = "N/A"
+    except Exception as _e:
+      # unhandled exceptions
+      response.code = -99
+      response.message = "An unhandled exception has occurred."
+      response.details = _e
 
-        try:
-            # submit the request
-            api_request = requests.post(
-                self.params.uri,
-                data=self.params.payload,
-                headers=headers,
-                verify=False,
-                timeout=10,
-            )
-
-            '''auth=HTTPBasicAuth(username, password),'''
-            # if no exceptions occur here, we can process the response
-            response.code = api_request.status_code
-            response.message = "Request submitted successfully."
-            response.json = api_request.json()
-            response.details = "N/A"
-        except requests.exceptions.ConnectTimeout:
-            # timeout while connecting to the specified IP address or FQDN
-            response.code = -99
-            response.message = f"Connection has timed out. {username} {password}"
-            response.details = "Exception: requests.exceptions.ConnectTimeout"
-        except urllib3.exceptions.ConnectTimeoutError:
-            # timeout while connecting to the specified IP address or FQDN
-            response.code = -99
-            response.message = f"Connection has timed out."
-            response.details = "urllib3.exceptions.ConnectTimeoutError"
-        except requests.exceptions.MissingSchema:
-            # potentially bad URL
-            response.code = -99
-            response.message = "Missing URL schema/bad URL."
-            response.details = "N/A"
-        except Exception as _e:
-            # unhandled exceptions
-            response.code = -99
-            response.message = "An unhandled exception has occurred."
-            response.details = _e
-
-        return response
-
-class PutRESTClient:
-    """
-    the RESTClient class carries out the actual API request
-    by 'packaging' these functions into a dedicated class
-    """
-
-    def __init__(self, parameters: pRequestParameters):
-        """
-        class constructor
-        """
-        self.params = parameters
-
-    def put_request(self):
-        """
-        this is the main method that carries out the request
-        basic exception handling is managed here, as well as
-        returning the response (success or fail), as an instance
-        of our RequestResponse
-        """
-        response = RequestResponse()
-
-        """
-        setup the HTTP Basic Authorization header based on the
-        supplied username and password
-        """
-        username = self.params.username
-        password = self.params.password
-        encoded_credentials = b64encode(
-            bytes(f"{username}:{password}", encoding="ascii")
-        ).decode("ascii")
-        auth_header = f"Basic {encoded_credentials}"
-
-        # Create the headers with the previous creds
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": f"{auth_header}",
-            "cache-control": "no-cache",
-        }
-
-        try:
-            # submit the request
-            api_request = requests.put(
-                self.params.uri,
-                data=self.params.payload,
-                headers=headers,
-                verify=False,
-                timeout=10,
-            )
-
-            '''auth=HTTPBasicAuth(username, password),'''
-            # if no exceptions occur here, we can process the response
-            response.code = api_request.status_code
-            response.message = "Request submitted successfully."
-            response.json = api_request.json()
-            response.details = "N/A"
-        except requests.exceptions.ConnectTimeout:
-            # timeout while connecting to the specified IP address or FQDN
-            response.code = -99
-            response.message = f"Connection has timed out. {username} {password}"
-            response.details = "Exception: requests.exceptions.ConnectTimeout"
-        except urllib3.exceptions.ConnectTimeoutError:
-            # timeout while connecting to the specified IP address or FQDN
-            response.code = -99
-            response.message = f"Connection has timed out."
-            response.details = "urllib3.exceptions.ConnectTimeoutError"
-        except requests.exceptions.MissingSchema:
-            # potentially bad URL
-            response.code = -99
-            response.message = "Missing URL schema/bad URL."
-            response.details = "N/A"
-        except Exception as _e:
-            # unhandled exceptions
-            response.code = -99
-            response.message = "An unhandled exception has occurred."
-            response.details = _e
-
-        return response
+    return response
 

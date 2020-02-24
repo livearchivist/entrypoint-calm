@@ -21,8 +21,8 @@ from requests.auth import HTTPBasicAuth
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
-from helpers.rest import (RequestParameters, pRequestParameters,
-     RequestResponse, RESTClient, PostRESTClient, PutRESTClient)
+from helpers.rest import (RequestParameters, RequestResponse,
+                          RESTClient)
 
 
 # Given an IP and Endpoint, return Nutanix v3 API URL
@@ -33,18 +33,19 @@ def create_v3_url(ip, endpoint):
 
 # Return the UUID of a desired entity.  If entity_name is empty
 # assume a single entity in response and send first UUID
-def get_uuid_via_v3_post(ip, endpoint, password, entity_name):
+def uuid_via_v3_post(ip, endpoint, password, entity_name):
 
   # Make the API call
-  parameters = pRequestParameters(
+  parameters = RequestParameters(
           uri=create_v3_url(ip, f"{endpoint}/list"),
           username="admin",
           password=password,
+          method="post",
           payload="{\"length\": 100}"
     )
-  rest_client = PostRESTClient(parameters)
-  resp = rest_client.post_request()
-  INFO(f"get_uuid_via_v3_post: {ip}, {endpoint}, {entity_name}:\n{resp}")
+  rest_client = RESTClient(parameters)
+  resp = rest_client.request()
+  INFO(f"uuid_via_v3_post: {ip}, {endpoint}, {entity_name}:\n{resp}")
 
   # Return UUID
   for entity in resp.json["entities"]:
@@ -55,7 +56,7 @@ def get_uuid_via_v3_post(ip, endpoint, password, entity_name):
 
 
 # Return the body of a desired entity
-def get_body_via_v3_get(ip, endpoint, password, entity_uuid):
+def body_via_v3_get(ip, endpoint, password, entity_uuid):
 
   # Make the API call
   parameters = RequestParameters(
@@ -65,7 +66,7 @@ def get_body_via_v3_get(ip, endpoint, password, entity_uuid):
   )
   rest_client = RESTClient(parameters)
   resp = rest_client.get_request()
-  INFO(f"get_body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\n{resp}")
+  INFO(f"body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\n{resp}")
 
   # Get the body, delete unneeded status, return body
   body = resp.json
@@ -91,22 +92,22 @@ def main():
   try:
 
     # Get "default" project UUID
-    project_uuid = get_uuid_via_v3_post(pc_external_ip, "projects",
-                                        pc_password, "default")
+    project_uuid = uuid_via_v3_post(pc_external_ip, "projects",
+                                    pc_password, "default")
     INFO(f"default_project_uuid: {project_uuid}")
 
     # Get the single account UUID
-    account_uuid = get_uuid_via_v3_post(pc_external_ip, "accounts",
-                                        pc_password, "")
+    account_uuid = uuid_via_v3_post(pc_external_ip, "accounts",
+                                    pc_password, "")
     INFO(f"account_uuid: {account_uuid}")
 
     # Get the single subnets UUID
-    subnet_uuid = get_uuid_via_v3_post(pc_external_ip, "subnets",
-                                        pc_password, "")
+    subnet_uuid = uuid_via_v3_post(pc_external_ip, "subnets",
+                                   pc_password, "")
     INFO(f"subnet_uuid: {subnet_uuid}")
 
     # Get the pojects body
-    project_body = get_body_via_v3_get(pc_external_ip, "projects",
+    project_body = body_via_v3_get(pc_external_ip, "projects",
                                        pc_password, project_uuid)
     INFO(f"project_body: {project_body}")
 
