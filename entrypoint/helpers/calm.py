@@ -70,7 +70,7 @@ def uuid_via_v3_post(ip, endpoint, password, entity_name):
   for entity in resp.json["entities"]:
     if entity_name == "":
       return entity["metadata"]["uuid"]
-    elif entity["spec"]["name"] == entity_name:
+    elif entity["status"]["name"] == entity_name:
       return entity["metadata"]["uuid"]
 
 
@@ -90,7 +90,21 @@ def body_via_v3_get(ip, endpoint, password, entity_uuid):
   INFO(f"body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\n{resp}")
 
   # Get the body, delete unneeded status, return body
-  body = resp.json
-  del body["status"]
-  return body
+  return resp.json
 
+# Update a given entity with a PUT
+def update_via_v3_put(ip, endpoint, password, entity_uuid,
+                      body):
+
+  # Make the API call
+  parameters = RequestParameters(
+        uri=create_v3_url(ip, f"{endpoint}/{entity_uuid}"),
+        username="admin",
+        password=password,
+        method="put",
+        payload=json.dumps(body)
+  )
+  rest_client = RESTClient(parameters)
+  resp = rest_client.request()
+
+  return resp
