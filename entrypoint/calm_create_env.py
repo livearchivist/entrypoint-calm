@@ -1,5 +1,5 @@
 """
-calm_configure_environment.py: automation to configure a
+calm_create_env.py: automation to create a
 Calm environment on NX-on-GCP / Test Drive.
 
 Author: michael@nutanix.com
@@ -42,10 +42,18 @@ def main():
     subnet_uuid = uuid_via_v3_post(pc_external_ip, "subnets",
                                    pc_password, "")
     INFO(f"subnet_uuid: {subnet_uuid}")
+    
 
-    # Need to create image
+    # Generate UUIDs for new components
+    env_uuid = uuid.uuid4()
+    substrate_uuid = uuid.uuid4()
 
-    # Apply random UUIDs to 
+    # Sub in our UUIDs and names
+    env_spec["spec"]["name"] = "default_env" #TODO: param this
+    env_spec["metadata"]["name"] = "default_env" #TODO: param this
+    env_spec["spec"]["resources"]["substrate_definition_list"][0]\
+            ["uuid"] = substrate_uuid
+    
 
   except Exception as ex:
     INFO(ex)
