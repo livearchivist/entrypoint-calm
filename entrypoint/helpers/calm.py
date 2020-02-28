@@ -74,6 +74,25 @@ def uuid_via_v3_post(ip, endpoint, password, entity_name):
       return entity["metadata"]["uuid"]
 
 
+# Return the body of a group of entities
+def body_via_v3_post(ip, endpoint, password):
+
+  # Make the API call
+  parameters = RequestParameters(
+          uri=create_v3_url(ip, f"{endpoint}/list"),
+          username="admin",
+          password=password,
+          method="post",
+          payload="{\"length\": 100}"
+    )
+  rest_client = RESTClient(parameters)
+  resp = rest_client.request()
+  INFO(f"body_via_v3_post: {ip}, {endpoint}, {entity_name}:\n{resp}")
+
+  # Return the body
+  return resp.json
+
+
 # Return the body of a desired entity
 def body_via_v3_get(ip, endpoint, password, entity_uuid):
 
@@ -89,7 +108,7 @@ def body_via_v3_get(ip, endpoint, password, entity_uuid):
   resp = rest_client.request()
   INFO(f"body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\n{resp}")
 
-  # Get the body, delete unneeded status, return body
+  # Return the body
   return resp.json
 
 # Update a given entity with a PUT
