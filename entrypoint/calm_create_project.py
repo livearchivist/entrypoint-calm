@@ -71,4 +71,6 @@ def main(project_name):
 
 if __name__ == '__main__':
   for project in sys.argv:
-    main(project)
+    if not project.endswith(".py"):
+      main(project)
+
