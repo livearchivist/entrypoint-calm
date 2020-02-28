@@ -13,6 +13,13 @@
                "uuid":"<subnet_uuid>"
             }
          ],
+         "user_reference_list":[
+            {
+               "kind":"user",
+               "name":"admin",
+               "uuid":"00000000-0000-0000-0000-000000000000"
+            }
+         ],
          "environment_reference_list":[]
       }
    }

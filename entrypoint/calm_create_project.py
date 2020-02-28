@@ -9,7 +9,6 @@ Date:   2020-02-28
 import sys
 import os
 import json
-import uuid
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
@@ -20,7 +19,7 @@ from helpers.calm import (file_to_dict, create_via_v3_post,
                           body_via_v3_post)
 
 
-def main():
+def main(project_name):
 
   # Get and log the config from the Env variable
   config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
@@ -47,7 +46,7 @@ def main():
         subnet_uuid = subnet["metadata"]["uuid"]
         
     # Update our project_spec
-    project_spec["spec"]["name"] = "NY_Office" #TODO: parameterize
+    project_spec["spec"]["name"] = project_name
     project_spec["spec"]["resources"]["subnet_reference_list"][0]\
                 ["name"] = subnet_name
     project_spec["spec"]["resources"]["subnet_reference_list"][0]\
@@ -71,4 +70,5 @@ def main():
     INFO(ex)
 
 if __name__ == '__main__':
-  main()
+  for project in sys.argv:
+    main(project)
