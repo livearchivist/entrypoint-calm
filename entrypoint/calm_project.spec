@@ -1,0 +1,19 @@
+{
+   "api_version":"3.1.0",
+   "metadata":{
+      "kind":"project"
+   },
+   "spec":{
+      "name":"<project_name>",
+      "resources":{
+         "subnet_reference_list":[
+            {
+               "kind":"subnet",
+               "name":"<subnet_name>",
+               "uuid":"<subnet_uuid>"
+            }
+         ],
+         "environment_reference_list":[]
+      }
+   }
+}
