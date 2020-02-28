@@ -36,12 +36,12 @@ def main():
 
     # Read in the spec file and conver to dict
     project_spec = file_to_dict("calm_project.spec")
-    INFO(f"image_spec: {project_spec}")
+    INFO(f"project_spec pre-update: {project_spec}")
 
     # Get our subnet info from the infra
     subnets_body = body_via_v3_post(pc_external_ip, "subnets",
                                    pc_password)
-    for subnet in subnets_body.json['entities']:
+    for subnet in subnets_body.json["entities"]:
       if subnet["spec"]["resources"]["vlan_id"] == 1:
         subnet_name = subnet["spec"]["name"]
         subnet_uuid = subnet["metadata"]["uuid"]
@@ -50,8 +50,9 @@ def main():
     project_spec["spec"]["name"] = "NY_Office" #TODO: parameterize
     project_spec["spec"]["resources"]["subnet_reference_list"][0]\
                 ["name"] = subnet_name
-    project_spec["spec"]["resources"]["subnet_reference_list"][0]\  
+    project_spec["spec"]["resources"]["subnet_reference_list"][0]\
                 ["uuid"] = subnet_uuid
+    INFO(f"project_spec post-update: {project_spec}")
 
     # Make API call to create image
     resp = create_via_v3_post(pc_external_ip, "projects",

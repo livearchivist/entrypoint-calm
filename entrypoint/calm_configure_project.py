@@ -46,8 +46,9 @@ def main():
     INFO(f"subnet_uuid: {subnet_uuid}")
 
     # Get the pojects body, delete status
-    project_body = body_via_v3_get(pc_external_ip, "projects",
+    project_resp = body_via_v3_get(pc_external_ip, "projects",
                                        pc_password, project_uuid)
+    project_body = project_resp.json
     del project_body["status"]
     INFO(f"project_body: {project_body}")
 

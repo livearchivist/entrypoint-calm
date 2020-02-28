@@ -87,10 +87,10 @@ def body_via_v3_post(ip, endpoint, password):
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
-  INFO(f"body_via_v3_post: {ip}, {endpoint}, {entity_name}:\n{resp}")
+  INFO(f"body_via_v3_post: {ip}, {endpoint}:\n{resp}")
 
-  # Return the body
-  return resp.json
+  # Return the response
+  return resp
 
 
 # Return the body of a desired entity
@@ -108,8 +108,9 @@ def body_via_v3_get(ip, endpoint, password, entity_uuid):
   resp = rest_client.request()
   INFO(f"body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\n{resp}")
 
-  # Return the body
-  return resp.json
+  # Return the response
+  return resp
+
 
 # Update a given entity with a PUT
 def update_via_v3_put(ip, endpoint, password, entity_uuid,
