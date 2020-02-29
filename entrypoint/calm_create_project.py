@@ -40,7 +40,7 @@ def main(project_name):
     INFO(f"subnet_spec pre-update: {subnet_spec}")
 
     # Get our subnet info from the infra
-    subnet_info = get_subnet_info(pc_external_ip, password,
+    subnet_info = get_subnet_info(pc_external_ip, pc_password,
                                   subnet_spec["vlan"])
     
     # Update our project_spec
@@ -56,7 +56,7 @@ def main(project_name):
                               pc_password, project_spec)
 
     # Log appropriately based on response
-    if resp.code == 202:
+    if resp.code == 200 || resp.code == 202:
       INFO(f"{project_spec['spec']['name']} Project created successfully.")
     else:
       raise Exception(f"{project_spec['spec']['name']} Project create" +

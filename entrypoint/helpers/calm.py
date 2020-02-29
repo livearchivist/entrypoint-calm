@@ -137,8 +137,7 @@ def get_subnet_info(ip, password, vlan_id):
   subnet_info = {}
 
   # Get our subnet info from the infra
-  subnets_body = body_via_v3_post(pc_external_ip, "subnets",
-                                  pc_password)
+  subnets_body = body_via_v3_post(ip, "subnets", password)
   for subnet in subnets_body.json["entities"]:
     if subnet["spec"]["resources"]["vlan_id"] == vlan_id:
       subnet_info["name"] = subnet["spec"]["name"]
