@@ -41,7 +41,7 @@ def main():
                               pc_password, image_spec)
 
     # Log appropriately based on response
-    if resp.code == 202:
+    if (resp.code == 200 or resp.code == 202):
       INFO("CentOS 7 Image created successfully.")
     else:
       raise Exception(f"CentOS 7 Image create failed with:\n" +

@@ -120,7 +120,7 @@ def main():
                               pc_password, env_spec)
 
     # Log appropriately based on response
-    if resp.code == 202 || resp.code == 200:
+    if (resp.code == 200 or resp.code == 202):
       INFO(f"{env_spec['spec']['name']} Env created successfully.")
     else:
       raise Exception(f"{env_spec['spec']['name']} Env create" +
