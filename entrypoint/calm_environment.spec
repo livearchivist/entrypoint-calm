@@ -1,11 +1,13 @@
 {
    "spec":{
-      "name":"<name>",
+      "name":"<name_uuid>",
       "resources":{
          "substrate_definition_list":[
             {
                "uuid":"<substrate_uuid>",
-               "action_list":[],
+               "action_list":[
+
+               ],
                "readiness_probe":{
                   "connection_type":"SSH",
                   "connection_port":22,
@@ -31,7 +33,9 @@
                               "subnet_reference":true
                            }
                         },
-                        "serial_port_list":{},
+                        "serial_port_list":{
+
+                        },
                         "num_vcpus_per_socket":true,
                         "num_sockets":true,
                         "memory_size_mib":true,
@@ -52,7 +56,7 @@
                "os_type":"Linux",
                "type":"AHV_VM",
                "create_spec":{
-                  "name":"lin-@@{calm_array_index}@@-@@{calm_time}@@",
+                  "name":"vm-@@{calm_array_index}@@-@@{calm_time}@@",
                   "resources":{
                      "nic_list":[
                         {
@@ -90,7 +94,9 @@
                      ]
                   }
                },
-               "variable_list":[],
+               "variable_list":[
+
+               ],
                "name":"Untitled"
             }
          ],
@@ -125,11 +131,12 @@
    "api_version":"3.1.0",
    "metadata":{
       "kind":"environment",
+      "uuid":"<env_uuid>",
       "owner_reference":{
          "kind":"user",
          "uuid":"00000000-0000-0000-0000-000000000000",
          "name":"admin"
       },
-      "name":"<name>"
+      "name":"<name_uuid>"
    }
 }
