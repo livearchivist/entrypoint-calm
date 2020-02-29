@@ -31,14 +31,14 @@ def main():
   try:
 
     # Get "default" project UUID
-    project_uuid = uuid_via_v3_post(pc_external_ip, "projects",
-                                    pc_password, "default")
-    INFO(f"default_project_uuid: {project_uuid}")
+    #project_uuid = uuid_via_v3_post(pc_external_ip, "projects",
+    #                                pc_password, "default")
+    #INFO(f"default_project_uuid: {project_uuid}")
 
     # Get the single account UUID
-    account_uuid = uuid_via_v3_post(pc_external_ip, "accounts",
-                                    pc_password, "")
-    INFO(f"account_uuid: {account_uuid}")
+    #account_uuid = uuid_via_v3_post(pc_external_ip, "accounts",
+    #                                pc_password, "")
+    #INFO(f"account_uuid: {account_uuid}")
 
     # Get the single subnets UUID
     subnet_uuid = uuid_via_v3_post(pc_external_ip, "subnets",

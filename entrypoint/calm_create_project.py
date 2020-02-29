@@ -16,7 +16,7 @@ from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
 from helpers.calm import (file_to_dict, create_via_v3_post,
                           uuid_via_v3_post, body_via_v3_get,
-                          body_via_v3_post)
+                          body_via_v3_post, get_subnet_info)
 
 
 def main(project_name):
@@ -33,24 +33,22 @@ def main(project_name):
 
   try:
 
-    # Read in the spec file and conver to dict
+    # Read in the spec files and conver to dicts
     project_spec = file_to_dict("calm_project.spec")
     INFO(f"project_spec pre-update: {project_spec}")
+    subnet_spec = file_to_dict("calm_subnet.spec")
+    INFO(f"subnet_spec pre-update: {subnet_spec}")
 
     # Get our subnet info from the infra
-    subnets_body = body_via_v3_post(pc_external_ip, "subnets",
-                                   pc_password)
-    for subnet in subnets_body.json["entities"]:
-      if subnet["spec"]["resources"]["vlan_id"] == 1:
-        subnet_name = subnet["spec"]["name"]
-        subnet_uuid = subnet["metadata"]["uuid"]
-        
+    subnet_info = get_subnet_info(pc_external_ip, password,
+                                  subnet_spec["vlan"])
+    
     # Update our project_spec
     project_spec["spec"]["name"] = project_name
     project_spec["spec"]["resources"]["subnet_reference_list"][0]\
-                ["name"] = subnet_name
+                ["name"] = subnet_info["name"]
     project_spec["spec"]["resources"]["subnet_reference_list"][0]\
-                ["uuid"] = subnet_uuid
+                ["uuid"] = subnet_info["uuid"]
     INFO(f"project_spec post-update: {project_spec}")
 
     # Make API call to create image
@@ -71,6 +69,6 @@ def main(project_name):
 
 if __name__ == '__main__':
   for project in sys.argv:
-    if not project.endswith(".py"):
+    if not project.endswith("py"):
       main(project)
 

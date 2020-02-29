@@ -16,7 +16,7 @@ sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 from framework.lib.nulog import INFO, ERROR
 from helpers.calm import (file_to_dict, uuid_via_v3_post,
                           body_via_v3_get, body_via_v3_post,
-                          create_via_v3_post)
+                          create_via_v3_post, get_subnet_info)
 
 
 def main():
@@ -35,8 +35,10 @@ def main():
 
     # Read in the spec files and convert to dicts
     env_spec = file_to_dict("calm_environment.spec")
-    pass_spec = file_to_dict("calm_userpassword.spec")
     key_spec = file_to_dict("calm_userkey.spec")
+    pass_spec = file_to_dict("calm_userpassword.spec")
+    image_spec = file_to_dict("calm_image.spec")
+    subnet_spec = file_to_dict("calm_subnet.spec")
 
     # Logic due to the fake Prism Pro Account
     accounts_resp = body_via_v3_post(pc_external_ip, "accounts",
@@ -47,16 +49,11 @@ def main():
     INFO(f"account_uuid: {account_uuid}")
 
     # Get our subnet info from the infra
-    subnets_body = body_via_v3_post(pc_external_ip, "subnets",
-                                    pc_password)
-    for subnet in subnets_body.json["entities"]:
-      if subnet["spec"]["resources"]["vlan_id"] == 1:
-        subnet_name = subnet["spec"]["name"]
-        subnet_uuid = subnet["metadata"]["uuid"]
-    INFO(f"subnet_uuid: {subnet_uuid}")
+    subnet_info = get_subnet_info(pc_external_ip, password,
+                                  subnet_spec["vlan"])
+    INFO(f"subnet_uuid: {subnet_info['uuid']}")
 
     # Get our image info from the infra
-    image_spec = file_to_dict("calm_image.spec")
     image_name = image_spec["metadata"]["name"]
     image_uuid = uuid_via_v3_post(pc_external_ip, "images",
                                   pc_password, image_name)
@@ -87,7 +84,7 @@ def main():
     # subnet
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["create_spec"]["resources"]["nic_list"][0]\
-            ["subnet_reference"]["uuid"] = subnet_uuid
+            ["subnet_reference"]["uuid"] = subnet_info["uuid"]
 
     # image
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\

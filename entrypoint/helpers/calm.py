@@ -128,3 +128,21 @@ def update_via_v3_put(ip, endpoint, password, entity_uuid,
   resp = rest_client.request()
 
   return resp
+
+
+# Given a VLAN ID, return a dict of the matching
+# Subnet UUID and name
+def get_subnet_info(ip, password, vlan_id):
+
+  subnet_info = {}
+
+  # Get our subnet info from the infra
+  subnets_body = body_via_v3_post(pc_external_ip, "subnets",
+                                  pc_password)
+  for subnet in subnets_body.json["entities"]:
+    if subnet["spec"]["resources"]["vlan_id"] == vlan_id:
+      subnet_info["name"] = subnet["spec"]["name"]
+      subnet_info["uuid"] = subnet["metadata"]["uuid"]
+
+  return subnet_info
+
