@@ -40,14 +40,6 @@ def main():
     image_spec = file_to_dict("calm_image.spec")
     subnet_spec = file_to_dict("calm_subnet.spec")
 
-    # Logic due to the fake Prism Pro Account
-    accounts_resp = body_via_v3_post(pc_external_ip, "accounts",
-                                     pc_password)
-    for account in accounts_resp.json["entities"]:
-      if account["status"]["resources"]["state"] == "VERIFIED":
-        account_uuid = account["metadata"]["uuid"]    
-    INFO(f"account_uuid: {account_uuid}")
-
     # Get our subnet info from the infra
     subnet_info = get_subnet_info(pc_external_ip, pc_password,
                                   subnet_spec["vlan"])
