@@ -1,6 +1,6 @@
 """
-calm_configure_project.py: automation to configure the default
-Calm project on NX-on-GCP / Test Drive.
+calm_configure_project.py: automation to configure
+Calm projects on NX-on-GCP / Test Drive.
 
 Author: michael@nutanix.com
 Date:   2020-02-24
@@ -13,7 +13,8 @@ import json
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
-from helpers.calm import (uuid_via_v3_post, body_via_v3_get)
+from helpers.calm import (uuid_via_v3_post, body_via_v3_get,
+                          get_subnet_info, update_via_v3_put)
 
 
 def main():
@@ -30,51 +31,59 @@ def main():
 
   try:
 
-    # Get "default" project UUID
-    #project_uuid = uuid_via_v3_post(pc_external_ip, "projects",
-    #                                pc_password, "default")
-    #INFO(f"default_project_uuid: {project_uuid}")
+    # Convert our spec to dict
+    subnet_spec = file_to_dict("calm_subnet.spec")
 
-    # Get the single account UUID
-    #account_uuid = uuid_via_v3_post(pc_external_ip, "accounts",
-    #                                pc_password, "")
-    #INFO(f"account_uuid: {account_uuid}")
+    # Get our subnet info from the infra
+    subnet_info = get_subnet_info(pc_external_ip, password,
+                                  subnet_spec["vlan"])
+    INFO(f"subnet_uuid: {subnet_info['uuid']}")
 
-    # Get the single subnets UUID
-    subnet_uuid = uuid_via_v3_post(pc_external_ip, "subnets",
-                                   pc_password, "")
-    INFO(f"subnet_uuid: {subnet_uuid}")
+    # Get our only env uuid from the infra
+    env_uuid = uuid_via_v3_post(pc_external_ip, "environments",
+                                pc_password, "")
 
-    # Get the pojects body, delete status
-    project_resp = body_via_v3_get(pc_external_ip, "projects",
-                                       pc_password, project_uuid)
-    project_body = project_resp.json
-    del project_body["status"]
-    INFO(f"project_body: {project_body}")
+    # Get the pojects body
+    project_resp = body_via_v3_post(pc_external_ip, "projects",
+                                    pc_password)
 
-    # Added resources to projects body
-    project_body["spec"]["resources"]["account_reference_list"] = [
-        {
-            "kind": "account",
-            "uuid": account_uuid
-        }
-    ]
-    # TODO: Is there a better way than hardcoding the 'default-net' name?
-    project_body["spec"]["resources"]["subnet_reference_list"] = [
-        {
+    # Loop through each project to add the env
+    for project in project_resp.json["entities"]:
+
+      # Delete the unneeded "status"
+      del project["status"]
+
+      # If default project, add subnet_ref_list
+      if project["spec"["name"] == "default":
+        project["spec"]["resources"]["subnet_reference_list"] = [
+          {
             "kind": "subnet",
-            "name": "default-net",
-            "uuid": subnet_uuid
+            "name": subnet_info["name"],
+            "uuid": subnet_info["uuid"]
+          }
+        ]
+
+      # Add environment to all projects
+      project["spec"]["resources"]["environment_reference_list"] = [
+        {
+          "kind": "environment",
+          "uuid": env_uuid
         }
-    ]
-    project_body["spec"]["resources"]["default_subnet_reference"] = {
-        "kind": "subnet",
-        "uuid": subnet_uuid
-    }
+      ]
 
-    INFO(f"project_body: {project_body}")
+      # Make the API call to update the Project
+      INFO(f"project: {project_body}")
+      resp = update_via_v3_put(pc_external_ip, "projects", pc_password,
+                               project["metadata"]["uuid"], project)
 
-    # TODO: Make an API call to update Project
+      # Log appropriately based on response
+      if resp.code == 202 || resp.code == 200:
+        INFO(f"{project['spec']['name']} Project updated successfully.")
+      else:
+        raise Exception(f"{project['spec']['name']} Project update" +
+                        f" failed with:\n" +
+                        f"Error Code: {resp.code}\n" +
+                        f"Error Message: {resp.message}")
 
   except Exception as ex:
     print(ex)
