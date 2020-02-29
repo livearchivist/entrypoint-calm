@@ -49,7 +49,7 @@ def main():
     INFO(f"account_uuid: {account_uuid}")
 
     # Get our subnet info from the infra
-    subnet_info = get_subnet_info(pc_external_ip, password,
+    subnet_info = get_subnet_info(pc_external_ip, pc_password,
                                   subnet_spec["vlan"])
     INFO(f"subnet_uuid: {subnet_info['uuid']}")
 

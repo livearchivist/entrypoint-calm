@@ -14,7 +14,8 @@ sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
 from helpers.calm import (uuid_via_v3_post, body_via_v3_get,
-                          get_subnet_info, update_via_v3_put)
+                          get_subnet_info, update_via_v3_put,
+                          file_to_dict)
 
 
 def main():
@@ -35,7 +36,7 @@ def main():
     subnet_spec = file_to_dict("calm_subnet.spec")
 
     # Get our subnet info from the infra
-    subnet_info = get_subnet_info(pc_external_ip, password,
+    subnet_info = get_subnet_info(pc_external_ip, pc_password,
                                   subnet_spec["vlan"])
     INFO(f"subnet_uuid: {subnet_info['uuid']}")
 
