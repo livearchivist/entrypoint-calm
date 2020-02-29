@@ -33,7 +33,7 @@ def main():
 
     # Create the API call body
     body = {
-      "create_via_v3_post": True
+      "enable_nutanix_apps": True
     }
 
     # Make API call to enable marketplace

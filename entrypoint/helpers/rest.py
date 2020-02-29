@@ -133,6 +133,11 @@ class RESTClient:
       response.message = "Request submitted successfully."
       response.json = api_request.json()
       response.details = "N/A"
+    except ValueError:
+      # handle when our APIs do not return a JSON body
+      response.code = api_request.status_code
+      response.message = "Request submitted successfully."
+      response.details = "N/A"
     except requests.exceptions.ConnectTimeout:
       # timeout while connecting to the specified IP address or FQDN
       response.code = -99
