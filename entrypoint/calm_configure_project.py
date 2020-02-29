@@ -55,21 +55,17 @@ def main():
 
       # If default project, add subnet_ref_list
       if project["spec"["name"] == "default":
-        project["spec"]["resources"]["subnet_reference_list"] = [
-          {
+        project["spec"]["resources"]["subnet_reference_list"].append({
             "kind": "subnet",
             "name": subnet_info["name"],
             "uuid": subnet_info["uuid"]
-          }
-        ]
+          })
 
       # Add environment to all projects
-      project["spec"]["resources"]["environment_reference_list"] = [
-        {
+      project["spec"]["resources"]["environment_reference_list"].append({
           "kind": "environment",
           "uuid": env_uuid
-        }
-      ]
+        })
 
       # Make the API call to update the Project
       INFO(f"project: {project_body}")
@@ -77,7 +73,7 @@ def main():
                                project["metadata"]["uuid"], project)
 
       # Log appropriately based on response
-      if resp.code == 202 || resp.code == 200:
+      if (resp.code == 202 || resp.code == 200):
         INFO(f"{project['spec']['name']} Project updated successfully.")
       else:
         raise Exception(f"{project['spec']['name']} Project update" +
