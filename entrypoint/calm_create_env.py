@@ -79,7 +79,7 @@ def main():
     # account
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["readiness_probe"]["login_credential_local_reference"]\
-            ["uuid"] = account_uuid
+            ["uuid"] = key_uuid
 
     # subnet
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\

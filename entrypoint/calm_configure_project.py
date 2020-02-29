@@ -13,7 +13,7 @@ import json
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
-from helpers.calm import (uuid_via_v3_post, body_via_v3_get,
+from helpers.calm import (uuid_via_v3_post, body_via_v3_post,
                           get_subnet_info, update_via_v3_put,
                           file_to_dict)
 
@@ -73,7 +73,7 @@ def main():
       )
 
       # Make the API call to update the Project
-      INFO(f"project: {project_body}")
+      INFO(f"project: {project}")
       resp = update_via_v3_put(pc_external_ip, "projects", pc_password,
                                project["metadata"]["uuid"], project)
 
