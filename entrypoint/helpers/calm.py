@@ -75,7 +75,12 @@ def uuid_via_v3_post(ip, endpoint, password, entity_name):
 
 
 # Return the body of a group of entities
-def body_via_v3_post(ip, endpoint, password):
+# If payload is None, assume length=100
+def body_via_v3_post(ip, endpoint, password, payload):
+
+  # Determine payload
+  if payload is None:
+    payload={"length": 100}
 
   # Make the API call
   parameters = RequestParameters(
@@ -83,11 +88,12 @@ def body_via_v3_post(ip, endpoint, password):
           username="admin",
           password=password,
           method="post",
-          payload="{\"length\": 100}"
+          payload=json.dumps(payload)
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
-  INFO(f"body_via_v3_post: {ip}, {endpoint}:\n{resp}")
+  INFO(f"body_via_v3_post: {ip}, {endpoint}, " +
+       f"{json.dumps(payload)}:\n{resp}")
 
   # Return the response
   return resp
@@ -137,7 +143,8 @@ def get_subnet_info(ip, password, vlan_id):
   subnet_info = {}
 
   # Get our subnet info from the infra
-  subnets_body = body_via_v3_post(ip, "subnets", password)
+  subnets_body = body_via_v3_post(ip, "subnets", password,
+                                  None)
   for subnet in subnets_body.json["entities"]:
     if subnet["spec"]["resources"]["vlan_id"] == vlan_id:
       subnet_info["name"] = subnet["spec"]["name"]

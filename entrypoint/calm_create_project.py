@@ -15,8 +15,7 @@ sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
 from helpers.calm import (file_to_dict, create_via_v3_post,
-                          uuid_via_v3_post, body_via_v3_get,
-                          body_via_v3_post, get_subnet_info)
+                          get_subnet_info)
 
 
 def main(project_name):

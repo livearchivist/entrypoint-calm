@@ -46,7 +46,7 @@ def main():
 
     # Get the pojects body
     project_resp = body_via_v3_post(pc_external_ip, "projects",
-                                    pc_password)
+                                    pc_password, None)
 
     # Loop through each project to add the env
     for project in project_resp.json["entities"]:
