@@ -26,10 +26,10 @@ def main(project_name):
   INFO(config)
 
   # Get PC info from the config dict
-  pc_info = config.get("my_pc")
+  pc_info = config.get("tdaas_pc")
   pc_external_ip = pc_info.get("ips")[0][0]
   pc_internal_ip = pc_info.get("ips")[0][1]
-  pc_password = pc_info.get("prism_password")
+  pc_password = pc_info.get("password")
 
   try:
 
