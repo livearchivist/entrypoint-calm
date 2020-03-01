@@ -80,7 +80,9 @@ def body_via_v3_post(ip, endpoint, password, payload):
 
   # Determine payload
   if payload is None:
-    payload={"length": 100}
+    payload = {
+      "length": 100
+    }
 
   # Make the API call
   parameters = RequestParameters(
