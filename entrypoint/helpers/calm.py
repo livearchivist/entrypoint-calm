@@ -133,8 +133,7 @@ def update_via_v3_put(ip, endpoint, password, entity_uuid,
   )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
-  INFO(f"update_via_v3_put: {ip}, {endpoint}, {entity_uuid}, " +
-       f"{body}")
+  INFO(f"update_via_v3_put: {ip}, {endpoint}, {entity_uuid}")
 
   # Return the response
   return resp
