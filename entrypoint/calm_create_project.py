@@ -1,5 +1,5 @@
 """
-calm_create_image.py: automation to create a
+calm_create_project.py: automation to create a
 Calm Project on NX-on-GCP / Test Drive.
 
 Author: michael@nutanix.com
@@ -50,7 +50,7 @@ def main(project_name):
                 ["uuid"] = subnet_info["uuid"]
     INFO(f"project_spec post-update: {project_spec}")
 
-    # Make API call to create image
+    # Make API call to create project
     resp = create_via_v3_post(pc_external_ip, "projects",
                               pc_password, project_spec)
 

@@ -39,35 +39,35 @@ def main():
       "filter":"name!=default"
     }
     projects_resp = body_via_v3_post(pc_external_ip, "projects",
-                                     pc_password, payload)
+                                     pc_password, projects_payload)
 
     # Loop through our to-be-published apps
     for app in apps_spec["marketplace_apps"]:
 
       # Construct payload and make call
-      payload = {
+      mp_payload = {
         "filter":f"name=={app['app_name']}"
       }
       mp_post = body_via_v3_post(pc_external_ip, "marketplace_items",
-                                 pc_password, payload)
+                                 pc_password, mp_payload)
 
       # Loop through our response to find matching version
-      for mp_item in mp_post["entities"]:
-        if mp_item["status"]["resources"]["app_state"] == 'ACCEPTED'
+      for mp_item in mp_post.json["entities"]:
+        if mp_item["status"]["resources"]["app_state"] == 'ACCEPTED'\
                   and mp_item["status"]["resources"]\
                   ["version"] == app['app_version']:
 
           # Make a GET with our UUID
           mp_get = body_via_v3_get(pc_external_ip, "marketplace_items",
-                                   pc_password, mp_item["metadata"]["uuid"]
+                                   pc_password, mp_item["metadata"]["uuid"])
 
           # Modify the response body
           mp_body = mp_get.json
           del mp_body["status"]
           mp_body["spec"]["resources"]["app_state"] = "PUBLISHED"
-          for project in projects_resp["entities"]:
+          for project in projects_resp.json["entities"]:
             mp_body["spec"]["resources"]["project_reference_list"].append(
-                   project["metadata"]["project_reference"]
+                   project["metadata"]["project_reference"])
 
           # Publish the blueprint
           pub_resp = update_via_v3_put(pc_external_ip, "marketplace_items",
@@ -75,7 +75,7 @@ def main():
                                        mp_body)
 
           # Log appropriately based on response
-          if (resp.code == 202 or resp.code == 200):
+          if (pub_resp.code == 200 or pub_resp.code == 202):
             INFO(f"{mp_body['spec']['name']} MP item published successfully.")
           else:
             raise Exception(f"{mp_body['spec']['name']} MP App Publish" +
