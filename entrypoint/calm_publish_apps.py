@@ -13,9 +13,8 @@ import json
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
-from helpers.calm import (uuid_via_v3_post, body_via_v3_post,
-                          get_subnet_info, update_via_v3_put,
-                          file_to_dict)
+from helpers.calm import (body_via_v3_get, body_via_v3_post,
+                          update_via_v3_put, file_to_dict)
 
 
 def main():
@@ -35,6 +34,13 @@ def main():
     # Convert our spec to dict
     apps_spec = file_to_dict("calm_mp_apps.spec")
 
+    # Get our non-default projects before the loop
+    projects_payload = {
+      "filter":"name!=default"
+    }
+    projects_resp = body_via_v3_post(pc_external_ip, "projects",
+                                     pc_password, payload)
+
     # Loop through our to-be-published apps
     for app in apps_spec["marketplace_apps"]:
 
@@ -42,73 +48,40 @@ def main():
       payload = {
         "filter":f"name=={app['app_name']}"
       }
-      mp_resp = body_via_v3_post(pc_external_ip, "marketplace_items",
+      mp_post = body_via_v3_post(pc_external_ip, "marketplace_items",
                                  pc_password, payload)
 
       # Loop through our response to find matching version
-      for mp_item in mp_resp["entities"]:
+      for mp_item in mp_post["entities"]:
         if mp_item["status"]["resources"]["app_state"] == 'ACCEPTED'
                   and mp_item["status"]["resources"]\
                   ["version"] == app['app_version']:
 
-          # Modify body and publish
+          # Make a GET with our UUID
+          mp_get = body_via_v3_get(pc_external_ip, "marketplace_items",
+                                   pc_password, mp_item["metadata"]["uuid"]
 
+          # Modify the response body
+          mp_body = mp_get.json
+          del mp_body["status"]
+          mp_body["spec"]["resources"]["app_state"] = "PUBLISHED"
+          for project in projects_resp["entities"]:
+            mp_body["spec"]["resources"]["project_reference_list"].append(
+                   project["metadata"]["project_reference"]
 
+          # Publish the blueprint
+          pub_resp = update_via_v3_put(pc_external_ip, "marketplace_items",
+                                       pc_password, mp_body["metadata"]["uuid"],
+                                       mp_body)
 
-    # Loop through the entities
-    for app in mp_resp["entities"]:
-      if app["status"
-
-    # Get our subnet info from the infra
-    subnet_info = get_subnet_info(pc_external_ip, pc_password,
-                                  subnet_spec["vlan"])
-    INFO(f"subnet_uuid: {subnet_info['uuid']}")
-
-    # Get our only env uuid from the infra
-    env_uuid = uuid_via_v3_post(pc_external_ip, "environments",
-                                pc_password, "")
-
-    # Get the pojects body
-    project_resp = body_via_v3_post(pc_external_ip, "projects",
-                                    pc_password)
-
-    # Loop through each project to add the env
-    for project in project_resp.json["entities"]:
-
-      # Delete the unneeded "status"
-      del project["status"]
-
-      # If default project, add subnet_ref_list
-      if project["spec"]["name"] == "default":
-        project["spec"]["resources"]["subnet_reference_list"].append(
-          {
-            "kind": "subnet",
-            "name": subnet_info["name"],
-            "uuid": subnet_info["uuid"]
-          }
-        )
-
-      # Add environment to all projects
-      project["spec"]["resources"]["environment_reference_list"].append(
-        {
-          "kind": "environment",
-          "uuid": env_uuid
-        }
-      )
-
-      # Make the API call to update the Project
-      INFO(f"project: {project}")
-      resp = update_via_v3_put(pc_external_ip, "projects", pc_password,
-                               project["metadata"]["uuid"], project)
-
-      # Log appropriately based on response
-      if (resp.code == 202 or resp.code == 200):
-        INFO(f"{project['spec']['name']} Project updated successfully.")
-      else:
-        raise Exception(f"{project['spec']['name']} Project update" +
-                        f" failed with:\n" +
-                        f"Error Code: {resp.code}\n" +
-                        f"Error Message: {resp.message}")
+          # Log appropriately based on response
+          if (resp.code == 202 or resp.code == 200):
+            INFO(f"{mp_body['spec']['name']} MP item published successfully.")
+          else:
+            raise Exception(f"{mp_body['spec']['name']} MP App Publish" +
+                            f" failed with:\n" +
+                            f"Error Code: {resp.code}\n" +
+                            f"Error Message: {resp.message}")
 
   except Exception as ex:
     print(ex)
