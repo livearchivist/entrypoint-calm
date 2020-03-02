@@ -45,7 +45,7 @@ def create_via_v3_post(ip, endpoint, password, body):
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
-  INFO(f"create_via_v3_post: {ip}, {endpoint}:\n{resp}")
+  INFO(f"create_via_v3_post: {ip}, {endpoint}")
 
   return resp  
 
@@ -64,7 +64,7 @@ def uuid_via_v3_post(ip, endpoint, password, entity_name):
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
-  INFO(f"uuid_via_v3_post: {ip}, {endpoint}, {entity_name}:\n{resp}")
+  INFO(f"uuid_via_v3_post: {ip}, {endpoint}, {entity_name}")
 
   # Return UUID
   for entity in resp.json["entities"]:
@@ -94,8 +94,7 @@ def body_via_v3_post(ip, endpoint, password, payload):
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
-  INFO(f"body_via_v3_post: {ip}, {endpoint}, " +
-       f"{json.dumps(payload)}:\n{resp}")
+  INFO(f"body_via_v3_post: {ip}, {endpoint}")
 
   # Return the response
   return resp
@@ -114,7 +113,7 @@ def body_via_v3_get(ip, endpoint, password, entity_uuid):
   )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
-  INFO(f"body_via_v3_get: {ip}, {endpoint}, {entity_uuid}:\n{resp}")
+  INFO(f"body_via_v3_get: {ip}, {endpoint}, {entity_uuid}")
 
   # Return the response
   return resp
@@ -135,7 +134,7 @@ def update_via_v3_put(ip, endpoint, password, entity_uuid,
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
   INFO(f"update_via_v3_put: {ip}, {endpoint}, {entity_uuid}, " +
-       f"{body}:\n{resp}")
+       f"{body}")
 
   # Return the response
   return resp
