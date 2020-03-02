@@ -27,7 +27,7 @@ def main():
   pc_info = config.get("tdaas_pc")
   pc_external_ip = pc_info.get("ips")[0][0]
   pc_internal_ip = pc_info.get("ips")[0][1]
-  pc_password = pc_info.get("password")
+  pc_password = pc_info.get("prism_password")
 
   try:
 
