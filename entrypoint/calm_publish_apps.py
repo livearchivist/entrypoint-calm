@@ -48,17 +48,16 @@ def main():
       mp_payload = {
         "filter":f"name=={app['app_name']}"
       }
-      mp_post = body_via_v3_post(pc_external_ip, "marketplace_items",
+      mp_post = body_via_v3_post(pc_external_ip, "calm_marketplace_items",
                                  pc_password, mp_payload)
 
       # Loop through our response to find matching version
       for mp_item in mp_post.json["entities"]:
-        if mp_item["status"]["resources"]["app_state"] == 'ACCEPTED'\
-                  and mp_item["status"]["resources"]\
-                  ["version"] == app['app_version']:
+        if mp_item["status"]["app_state"] == 'ACCEPTED' and\
+           mp_item["status"]["version"] == app["app_version"]:
 
           # Make a GET with our UUID
-          mp_get = body_via_v3_get(pc_external_ip, "marketplace_items",
+          mp_get = body_via_v3_get(pc_external_ip, "calm_marketplace_items",
                                    pc_password, mp_item["metadata"]["uuid"])
 
           # Modify the response body
@@ -70,7 +69,7 @@ def main():
                    project["metadata"]["project_reference"])
 
           # Publish the blueprint
-          pub_resp = update_via_v3_put(pc_external_ip, "marketplace_items",
+          pub_resp = update_via_v3_put(pc_external_ip, "calm_marketplace_items",
                                        pc_password, mp_body["metadata"]["uuid"],
                                        mp_body)
 
