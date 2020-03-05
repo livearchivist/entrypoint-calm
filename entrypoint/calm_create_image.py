@@ -36,17 +36,21 @@ def main():
     image_spec = file_to_dict("calm_image.spec")
     INFO(f"image_spec: {image_spec}")
 
-    # Make API call to create image
-    resp = create_via_v3_post(pc_external_ip, "images",
-                              pc_password, image_spec)
+    # Loop through each image
+    for image in image_spec["entities"]:
 
-    # Log appropriately based on response
-    if (resp.code == 200 or resp.code == 202):
-      INFO("CentOS 7 Image created successfully.")
-    else:
-      raise Exception(f"CentOS 7 Image create failed with:\n" +
-                      f"Error Code: {resp.code}\n" +
-                      f"Errro Message: {resp.message}")
+      # Make API call to create image
+      resp = create_via_v3_post(pc_external_ip, "images",
+                                pc_password, image)
+
+      # Log appropriately based on response
+      if (resp.code == 200 or resp.code == 202):
+        INFO(f"image['spec']['name'] Image created successfully.")
+      else:
+        raise Exception(f"image['spec']['name'] Image create " + 
+                        f"failed with:\n" +
+                        f"Error Code: {resp.code}\n" +
+                        f"Error Message: {resp.message}")
 
   except Exception as ex:
     INFO(ex)
