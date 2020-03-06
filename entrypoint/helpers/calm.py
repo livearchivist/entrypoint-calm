@@ -57,7 +57,7 @@ def upload_bp_via_v3_post(ip, password,
 
   # Create the file dictionary
   files = {
-    "upload_file": open(f"blueprints/{filename}", "rb")
+    "file": open(f"blueprints/{filename}", "rb")
   }
 
   # Make the API call
