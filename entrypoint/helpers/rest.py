@@ -97,6 +97,8 @@ class RESTClient:
       # based on the method, submit the request
       if method.lower() == "post":
         if self.params.files is not None:
+          del headers["Accept"]
+          del headers["Content-Type"]
           api_request = requests.post(
             self.params.uri,
             data=self.params.payload,
