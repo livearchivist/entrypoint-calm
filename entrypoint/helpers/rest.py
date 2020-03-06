@@ -32,7 +32,8 @@ class RequestParameters:
             f'username={self.username},'
             f'password={self.password},'
             f'method={self.method},'
-            f'payload={self.payload})')
+            f'payload={self.payload}'
+            f'files={self.files})')
 
 class RequestResponse:
   """
