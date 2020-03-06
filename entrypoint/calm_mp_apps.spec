@@ -1,5 +1,5 @@
 {
-   "marketplace_apps":[
+   "entities":[
       {
          "app_name":"Kafka",
          "app_version":"3.0.0"

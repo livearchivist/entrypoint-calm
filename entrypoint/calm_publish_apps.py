@@ -42,7 +42,7 @@ def main():
                                      pc_password, projects_payload)
 
     # Loop through our to-be-published apps
-    for app in apps_spec["marketplace_apps"]:
+    for app in apps_spec["entities"]:
 
       # Construct payload and make call
       mp_payload = {
