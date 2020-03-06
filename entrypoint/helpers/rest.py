@@ -18,12 +18,13 @@ class RequestParameters:
   """
 
   def __init__(self, uri, username, password,
-               method, payload):
+               method, payload, files):
     self.uri = uri
     self.username = username
     self.password = password
     self.method = method
     self.payload = payload
+    self.files = files
 
   def __repr__(self):
     return (f'{self.__class__.__name__}('
@@ -77,6 +78,7 @@ class RESTClient:
     username = self.params.username
     password = self.params.password
     method = self.params.method
+    files = self.params.files
     encoded_credentials = b64encode(
         bytes(f"{username}:{password}", encoding="ascii")
     ).decode("ascii")
@@ -94,13 +96,23 @@ class RESTClient:
 
       # based on the method, submit the request
       if method.lower() == "post":
-        api_request = requests.post(
-          self.params.uri,
-          data=self.params.payload,
-          headers=headers,
-          verify=False,
-          timeout=10,
-        )
+        if files is not None:
+          api_request = requests.post(
+            self.params.uri,
+            data=self.params.payload,
+            files=files,
+            headers=headers,
+            verify=False,
+            timeout=10,
+          )
+        else:
+          api_request = requests.post(
+            self.params.uri,
+            data=self.params.payload,
+            headers=headers,
+            verify=False,
+            timeout=10,
+          )
       elif method.lower() == "put":
         if headers is not None:
           api_request = requests.put(

@@ -41,13 +41,34 @@ def create_via_v3_post(ip, endpoint, password, body):
           username="admin",
           password=password,
           method="post",
-          payload=json.dumps(body)
+          payload=json.dumps(body),
+          files=None
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
   INFO(f"create_via_v3_post: {ip}, {endpoint}")
 
   return resp  
+
+
+# Uploads a named blueprint to a particular project
+def upload_bp_via_v3_post(ip, password,
+                          body, filename):
+
+  # Make the API call
+  parameters = RequestParameters(
+          uri=create_v3_url(ip, "blueprints/import_file"),
+          username="admin",
+          password=password,
+          method="post",
+          payload=json.dumps(body),
+          files=file_to_dict(f"blueprints/{filename}")
+    )
+  rest_client = RESTClient(parameters)
+  resp = rest_client.request()
+  INFO(f"upload_bp_via_v3_post: {ip}, {body}")
+
+  return resp
 
 
 # Return the UUID of a desired entity.  If entity_name is empty
@@ -60,7 +81,8 @@ def uuid_via_v3_post(ip, endpoint, password, entity_name):
           username="admin",
           password=password,
           method="post",
-          payload="{\"length\": 100}"
+          payload="{\"length\": 100}",
+          files=None
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
@@ -90,7 +112,8 @@ def body_via_v3_post(ip, endpoint, password, payload):
           username="admin",
           password=password,
           method="post",
-          payload=json.dumps(payload)
+          payload=json.dumps(payload),
+          files=None
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
@@ -109,7 +132,8 @@ def body_via_v3_get(ip, endpoint, password, entity_uuid):
         username="admin",
         password=password,
         method="get",
-        payload=None
+        payload=None,
+        files=None
   )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
@@ -129,7 +153,8 @@ def update_via_v3_put(ip, endpoint, password, entity_uuid,
         username="admin",
         password=password,
         method="put",
-        payload=json.dumps(body)
+        payload=json.dumps(body),
+        files=None
   )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()
