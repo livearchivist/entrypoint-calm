@@ -55,6 +55,11 @@ def create_via_v3_post(ip, endpoint, password, body):
 def upload_bp_via_v3_post(ip, password,
                           body, filename):
 
+  # Create the file dictionary
+  files = {
+    "upload_file": open(f"blueprints/{filename}", "rb")
+  }
+
   # Make the API call
   parameters = RequestParameters(
           uri=create_v3_url(ip, "blueprints/import_file"),
@@ -62,7 +67,7 @@ def upload_bp_via_v3_post(ip, password,
           password=password,
           method="post",
           payload=json.dumps(body),
-          files=file_to_dict(f"blueprints/{filename}")
+          files=files
     )
   rest_client = RESTClient(parameters)
   resp = rest_client.request()

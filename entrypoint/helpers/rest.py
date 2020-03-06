@@ -79,7 +79,6 @@ class RESTClient:
     username = self.params.username
     password = self.params.password
     method = self.params.method
-    files = self.params.files
     encoded_credentials = b64encode(
         bytes(f"{username}:{password}", encoding="ascii")
     ).decode("ascii")
@@ -97,11 +96,11 @@ class RESTClient:
 
       # based on the method, submit the request
       if method.lower() == "post":
-        if files is not None:
+        if self.params.files is not None:
           api_request = requests.post(
             self.params.uri,
             data=self.params.payload,
-            files=files,
+            files=self.params.files,
             headers=headers,
             verify=False,
             timeout=10,
@@ -115,7 +114,7 @@ class RESTClient:
             timeout=10,
           )
       elif method.lower() == "put":
-        if headers is not None:
+        if self.params.payload is not None:
           api_request = requests.put(
             self.params.uri,
             data=self.params.payload,
@@ -126,7 +125,7 @@ class RESTClient:
         else:
           api_request = requests.put(
             self.params.uri,
-            data=self.params.payload,
+            headers=headers,
             verify=False,
             timeout=10,
           )
