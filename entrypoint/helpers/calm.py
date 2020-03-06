@@ -66,7 +66,7 @@ def upload_bp_via_v3_post(ip, password,
           username="admin",
           password=password,
           method="post",
-          payload=json.dumps(body),
+          payload=body,
           files=files
     )
   rest_client = RESTClient(parameters)
