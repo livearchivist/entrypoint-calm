@@ -14,9 +14,8 @@ sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
-from helpers.calm import (file_to_dict, uuid_via_v3_post,
-                          upload_bp_via_v3_post,
-                          get_subnet_info)
+from helpers.calm import (file_to_dict, get_subnet_info
+                          body_via_v3_get, update_via_v3_put)
 
 def main():
 
@@ -33,8 +32,8 @@ def main():
   try:
 
     # Read in the spec files and conver to dicts
-    #subnet_spec = file_to_dict("calm_subnet.spec")
-    #INFO(f"subnet_spec: {subnet_spec}")
+    subnet_spec = file_to_dict("calm_subnet.spec")
+    INFO(f"subnet_spec: {subnet_spec}")
     #bp_spec = file_to_dict("calm_bp_upload.spec")
     #INFO(f"bp_spec: {bp_spec}")
     key_spec = file_to_dict("calm_userkey.spec")
@@ -69,7 +68,7 @@ def main():
         secret["secret"]["attrs"]["is_secret_modified"] = True
         #TODO: Add username
         secret["secret"]["value"] = key_spec["secret"]
-        print(json.dumps(secret, sort_keys=True, indent=4)        
+        print(json.dumps(secret, sort_keys=True, indent=4))
 
       # Configure NICs
       for substrate in bp_body["spec"]["resources"]["substrate_definition_list"]:
@@ -77,7 +76,7 @@ def main():
           for nic in substrate["create_spec"]["resources"]["nic_list"]:
             nic["subnet_reference"]["uuid"] = subnet_info["uuid"]
             nic["subnet_reference"]["name"] = subnet_info["name"]
-            print(json.dumps(nic, sort_keys=True, indent=4)
+            print(json.dumps(nic, sort_keys=True, indent=4))
 
       # Update our blueprint
       resp = update_via_v3_put(pc_ip, "blueprints", pc_password,
