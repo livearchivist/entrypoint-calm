@@ -68,9 +68,11 @@ def main():
         if secret["type"] == "KEY":
           secret["secret"]["value"] = key_spec["secret"]
           secret["secret"]["username"] = key_spec["username"]
+          secret["username"] = key_spec["username"]
         else:
           secret["secret"]["value"] = pass_spec["secret"]
           secret["secret"]["username"] = pass_spec["username"]
+          secret["username"] = pass_spec["username"]
         print(json.dumps(secret, sort_keys=True, indent=4))
 
       # Configure NICs
