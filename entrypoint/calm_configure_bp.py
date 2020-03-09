@@ -14,8 +14,9 @@ sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
-from helpers.calm import (file_to_dict, get_subnet_info
-                          body_via_v3_get, update_via_v3_put)
+from helpers.calm import (file_to_dict, get_subnet_info,
+                          body_via_v3_get, body_via_v3_post,
+                          update_via_v3_put)
 
 def main():
 
@@ -34,8 +35,6 @@ def main():
     # Read in the spec files and conver to dicts
     subnet_spec = file_to_dict("calm_subnet.spec")
     INFO(f"subnet_spec: {subnet_spec}")
-    #bp_spec = file_to_dict("calm_bp_upload.spec")
-    #INFO(f"bp_spec: {bp_spec}")
     key_spec = file_to_dict("calm_userkey.spec")
     INFO(f"userkey_spec: {key_spec}")
     pass_spec = file_to_dict("calm_userpassword.spec")
@@ -50,24 +49,28 @@ def main():
       "filter": "state==DRAFT"
     }
     draft_resp = body_via_v3_post(pc_external_ip, "blueprints",
-                                  pc_password, payload)
+                                  pc_password, payload).json
 
     # Loop through the blueprints to modify
     for bp in draft_resp["entities"]:
 
       # Get the body of our blueprint
       bp_body = body_via_v3_get(pc_external_ip, "blueprints",
-                                pc_password, bp["metadata"]["uuid"])
+                                pc_password, bp["metadata"]["uuid"]).json
 
       # Remove unneeded status
       del bp_body["status"]
 
       # Configure secrets
-      for secret in bp_body["spec"]["resources"]["credential_definition_list"]:
-        #TODO: add conditional based on secret type
+      for secret in bp_body["spec"]["resources"]\
+                           ["credential_definition_list"]:
         secret["secret"]["attrs"]["is_secret_modified"] = True
-        #TODO: Add username
-        secret["secret"]["value"] = key_spec["secret"]
+        if secret["type"] == "KEY":
+          secret["secret"]["value"] = key_spec["secret"]
+          secret["secret"]["username"] = key_spec["username"]
+        else:
+          secret["secret"]["value"] = pass_spec["secret"]
+          secret["secret"]["username"] = pass_spec["username"]
         print(json.dumps(secret, sort_keys=True, indent=4))
 
       # Configure NICs
@@ -79,7 +82,7 @@ def main():
             print(json.dumps(nic, sort_keys=True, indent=4))
 
       # Update our blueprint
-      resp = update_via_v3_put(pc_ip, "blueprints", pc_password,
+      resp = update_via_v3_put(pc_external_ip, "blueprints", pc_password,
                                bp["metadata"]["uuid"], bp_body)
 
       # Log appropriately based on response
