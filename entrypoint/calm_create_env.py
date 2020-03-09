@@ -45,7 +45,7 @@ def main():
     INFO(f"subnet_uuid: {subnet_info['uuid']}")
 
     # Get our image info from the infra
-    image_name = image_spec["metadata"]["name"]
+    image_name = image_spec["entities"][0]["metadata"]["name"]
     image_uuid = uuid_via_v3_post(pc_external_ip, "images",
                                   pc_password, image_name)
     INFO(f"image_uuid: {image_uuid}")
