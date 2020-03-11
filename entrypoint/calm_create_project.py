@@ -45,21 +45,19 @@ def main(project_name):
                                     pc_password, None)
 
     # Cycle through our accounts to find the right one
-    for account in account_info["entities"]:
+    for account in account_info.json["entities"]:
       if account["status"]["resources"]["type"] == "nutanix_pc":
 
         # Update our project_spec
-        project_spec["spec"]["project_detail"]["name"] = project_name
-        project_spec["spec"]["project_detail"]["resources"]\
-                    ["subnet_reference_list"][0]["name"] = subnet_info["name"]
-        project_spec["spec"]["project_detail"]["resources"]\
-                    ["subnet_reference_list"][0]["uuid"] = subnet_info["uuid"]
-        project_spec["spec"]["project_detail"]["resources"]\
-                    ["account_reference_list"][0]["name"]\
-                    = account["metadata"]["name"]
-        project_spec["spec"]["project_detail"]["resources"]\
-                    ["account_reference_list"][0]["uuid"]\
-                    = account["metadata"]["uuid"]
+        project_spec["spec"]["name"] = project_name
+        project_spec["spec"]["resources"]["subnet_reference_list"][0]\
+                    ["name"] = subnet_info["name"]
+        project_spec["spec"]["resources"]["subnet_reference_list"][0]\
+                    ["uuid"] = subnet_info["uuid"]
+        project_spec["spec"]["resources"]["account_reference_list"][0]\
+                    ["name"] = account["metadata"]["name"]
+        project_spec["spec"]["resources"]["account_reference_list"][0]\
+                    ["uuid"] = account["metadata"]["uuid"]
         INFO(f"project_spec post-update: {project_spec}")
 
         # Make API call to create project
