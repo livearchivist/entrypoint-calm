@@ -61,7 +61,7 @@ def main(project_name):
         INFO(f"project_spec post-update: {project_spec}")
 
         # Make API call to create project
-        resp = create_via_v3_post(pc_external_ip, "projects_internal",
+        resp = create_via_v3_post(pc_external_ip, "projects",
                                   pc_password, project_spec)
 
         # Log appropriately based on response

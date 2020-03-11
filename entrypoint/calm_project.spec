@@ -6,6 +6,13 @@
    "spec":{
       "name":"<project_name>",
       "resources":{
+         "account_reference_list":[
+            {
+               "uuid":"<account_uuid>",
+               "kind":"account",
+               "name":"<account_name>"
+            }
+         ],
          "subnet_reference_list":[
             {
                "kind":"subnet",
