@@ -15,7 +15,7 @@ sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
 from helpers.calm import (file_to_dict, create_via_v3_post,
-                          get_subnet_info)
+                          get_subnet_info, body_via_v3_post)
 
 
 def main(project_name):
@@ -38,30 +38,42 @@ def main(project_name):
     subnet_spec = file_to_dict("calm_subnet.spec")
     INFO(f"subnet_spec pre-update: {subnet_spec}")
 
-    # Get our subnet info from the infra
+    # Get our info from the infra
     subnet_info = get_subnet_info(pc_external_ip, pc_password,
                                   subnet_spec["vlan"])
-    
-    # Update our project_spec
-    project_spec["spec"]["name"] = project_name
-    project_spec["spec"]["resources"]["subnet_reference_list"][0]\
-                ["name"] = subnet_info["name"]
-    project_spec["spec"]["resources"]["subnet_reference_list"][0]\
-                ["uuid"] = subnet_info["uuid"]
-    INFO(f"project_spec post-update: {project_spec}")
+    account_info = body_via_v3_post(pc_external_ip, "accounts",
+                                    pc_password, None)
 
-    # Make API call to create project
-    resp = create_via_v3_post(pc_external_ip, "projects",
-                              pc_password, project_spec)
+    # Cycle through our accounts to find the right one
+    for account in account_info["entities"]:
+      if account["status"]["resources"]["type"] == "nutanix_pc":
 
-    # Log appropriately based on response
-    if (resp.code == 200 or resp.code == 202):
-      INFO(f"{project_spec['spec']['name']} Project created successfully.")
-    else:
-      raise Exception(f"{project_spec['spec']['name']} Project create" +
-                      f" failed with:\n" +
-                      f"Error Code: {resp.code}\n" +
-                      f"Error Message: {resp.message}")
+        # Update our project_spec
+        project_spec["spec"]["project_detail"]["name"] = project_name
+        project_spec["spec"]["project_detail"]["resources"]\
+                    ["subnet_reference_list"][0]["name"] = subnet_info["name"]
+        project_spec["spec"]["project_detail"]["resources"]\
+                    ["subnet_reference_list"][0]["uuid"] = subnet_info["uuid"]
+        project_spec["spec"]["project_detail"]["resources"]\
+                    ["account_reference_list"][0]["name"]\
+                    = account["metadata"]["name"]
+        project_spec["spec"]["project_detail"]["resources"]\
+                    ["account_reference_list"][0]["uuid"]\
+                    = account["metadata"]["uuid"]
+        INFO(f"project_spec post-update: {project_spec}")
+
+        # Make API call to create project
+        resp = create_via_v3_post(pc_external_ip, "projects_internal",
+                                  pc_password, project_spec)
+
+        # Log appropriately based on response
+        if (resp.code == 200 or resp.code == 202):
+          INFO(f"{project_spec['spec']['name']} Project created successfully.")
+        else:
+          raise Exception(f"{project_spec['spec']['name']} Project create" +
+                          f" failed with:\n" +
+                          f"Error Code: {resp.code}\n" +
+                          f"Error Message: {resp.message}")
 
   except Exception as ex:
     INFO(ex)

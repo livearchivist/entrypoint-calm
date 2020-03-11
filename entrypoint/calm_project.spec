@@ -1,26 +1,31 @@
 {
-   "api_version":"3.1.0",
+   "api_version":"3.1",
    "metadata":{
       "kind":"project"
    },
    "spec":{
-      "name":"<project_name>",
-      "resources":{
-         "subnet_reference_list":[
-            {
-               "kind":"subnet",
-               "name":"<subnet_name>",
-               "uuid":"<subnet_uuid>"
-            }
-         ],
-         "user_reference_list":[
-            {
-               "kind":"user",
-               "name":"admin",
-               "uuid":"00000000-0000-0000-0000-000000000000"
-            }
-         ],
-         "environment_reference_list":[]
-      }
+      "project_detail":{
+         "name":"<project_name>",
+         "resources":{
+            "account_reference_list":[
+               {
+                  "uuid":"<account_uuid>",
+                  "kind":"account",
+                  "name":"<account_name>"
+               }
+            ],
+            "subnet_reference_list":[
+               {
+                  "kind":"subnet",
+                  "name":"<subnet_name>",
+                  "uuid":"<subnet_uuid>"
+               }
+            ],
+            "environment_reference_list":[]
+         }
+      },
+      "user_list":[],
+      "user_group_list":[],
+      "access_control_policy_list":[]
    }
 }
