@@ -1,0 +1,147 @@
+{
+	"resource_specs": {
+		"tdaas_vpc": {
+			"type": "$NETWORK",
+			"region": "us-west1",
+			"is_new": true
+		},
+		"managed_network": {
+			"zone": "us-west1-c",
+			"region": "us-west1",
+			"dependencies": [
+				"tdaas_cluster",
+				"tdaas_vpc"
+			],
+			"type": "$MANAGED_NETWORK",
+			"networks": [{
+				"cidr": "$AUTO",
+				"vlan_id": "1",
+				"name": "default-net",
+				"virtual_ip": false,
+				"internet_forwarding": false,
+				"subnet_forwarding": {
+					"resources": [
+						"tdaas_vpc"
+					]
+				}
+
+			}],
+			"labels": {}
+		},
+		"tdaas_cluster": {
+			"is_new": true,
+			"type": "$NOS_CLUSTER",
+			"dependencies": [
+				"tdaas_vpc"
+			],
+			"region": "us-west1",
+			"labels": {},
+			"zone": "us-west1-c",
+			"provider": {
+				"host": "tdaas_vpc"
+			},
+			"hardware": {
+				"min_ssd_count": 1,
+				"cluster_min_nodes": 1,
+				"min_host_gb_ram": 20,
+				"min_host_cpu_count": 8,
+				"svm_num_vcpus": 8,
+				"svm_gb_ram": 16
+			},
+			"software": {
+				"nos": {
+					"version": "euphrates-5-11-stable",
+					"build_type": "opt",
+					"build_url": "http://endor.dyn.nutanix.com/builds/nos-builds/master/1ce0a2fb9acdf27a89847662c5c0a42a395db41f/opt/tar/nutanix_installer_package-opt-master-1ce0a2fb9acdf27a89847662c5c0a42a395db41f.tar.gz",
+					"commit": "7d9581"
+				},
+				"hypervisor": {
+					"build_url": "http://endor.dyn.nutanix.com/builds/ahv-builds/20170830.100789/host-bundle-el6.nutanix.20170830.100789.tar.gz",
+					"type": "kvm"
+				}
+			}
+		},
+		"pe_reset_password": {
+			"type": "$POST_DEPLOYMENT",
+			"kind": "$RESET_PRISM_PASS",
+			"dependencies": [
+				"tdaas_cluster",
+				"pe_post_deployment"
+			],
+			"kwargs": {
+				"target": {
+					"res_name": "tdaas_cluster"
+				}
+			}
+		},
+		"pe_post_deployment": {
+			"type": "$POST_DEPLOYMENT",
+			"kind": "$PE_CLOUD_CORE",
+			"dependencies": [
+				"tdaas_cluster",
+				"managed_network",
+				"registration_link_pe_1-_pc_1"
+			]
+		},
+		"registration_link_pe_1-_pc_1": {
+			"dependencies": [
+				"tdaas_vpc",
+				"tdaas_pc",
+				"tdaas_cluster"
+			],
+			"type": "$REGISTER_PE_PC"
+		},
+		"tdaas_pc": {
+			"type": "$PRISM_CENTRAL",
+			"is_new": true,
+			"dependencies": [
+				"tdaas_vpc"
+			],
+			"labels": {},
+			"hardware": {
+				"min_vcpus": 8,
+				"min_ram": 16
+			},
+			"region": "us-west1",
+			"zone": "us-west1-c",
+			"provider": {
+				"host": "tdaas_vpc"
+			},
+			"software": {
+				"prism_central": {
+					"build_url": "pc-upgrade-tars/nutanix_installer_package_pc-release-euphrates-5.11-stable-7d9581dabffc9bf074def3950d29841cfc0dce71.tar.gz"
+				}
+			}
+		},
+		"pc_reset_password": {
+			"type": "$POST_DEPLOYMENT",
+			"kind": "$RESET_PRISM_PASS",
+			"dependencies": [
+				"tdaas_pc",
+				"registration_link_pe_1-_pc_1",
+				"pc_selfservice_postd"
+			],
+			"kwargs": {
+				"target": {
+					"res_name": "tdaas_pc"
+				}
+			}
+		},
+		"pc_selfservice_postd": {
+			"type": "$POST_DEPLOYMENT",
+			"kind": "$PC_CLOUD_CORE",
+			"dependencies": [
+				"tdaas_pc",
+				"pe_post_deployment"
+			]
+		}
+	},
+	"metadata": {
+		"name": "plugin-private-cloud-core",
+		"projects": [
+			"nutanix-testdrive-10"
+		],
+		"duration": 4,
+		"timezone": "Asia/Calcutta"
+	}
+}

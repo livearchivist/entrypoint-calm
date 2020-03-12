@@ -1,0 +1,31 @@
+{
+   "api_version":"3.1",
+   "metadata":{
+      "kind":"project"
+   },
+   "spec":{
+      "project_detail":{
+         "name":"<project_name>",
+         "resources":{
+            "account_reference_list":[
+               {
+                  "uuid":"<account_uuid>",
+                  "kind":"account",
+                  "name":"<account_name>"
+               }
+            ],
+            "subnet_reference_list":[
+               {
+                  "kind":"subnet",
+                  "name":"<subnet_name>",
+                  "uuid":"<subnet_uuid>"
+               }
+            ],
+            "environment_reference_list":[]
+         }
+      },
+      "user_list":[],
+      "user_group_list":[],
+      "access_control_policy_list":[]
+   }
+}

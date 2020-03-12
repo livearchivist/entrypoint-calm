@@ -33,11 +33,11 @@ def main():
   try:
 
     # Read in the spec files and convert to dicts
-    env_spec = file_to_dict("calm_environment.spec")
-    key_spec = file_to_dict("calm_userkey.spec")
-    pass_spec = file_to_dict("calm_userpassword.spec")
-    image_spec = file_to_dict("calm_image.spec")
-    subnet_spec = file_to_dict("calm_subnet.spec")
+    env_spec = file_to_dict("specs/calm_environment.spec")
+    key_spec = file_to_dict("specs/calm_userkey.spec")
+    pass_spec = file_to_dict("specs/calm_userpassword.spec")
+    image_spec = file_to_dict("specs/calm_image.spec")
+    subnet_spec = file_to_dict("specs/calm_subnet.spec")
 
     # Get our subnet info from the infra
     subnet_info = get_subnet_info(pc_external_ip, pc_password,

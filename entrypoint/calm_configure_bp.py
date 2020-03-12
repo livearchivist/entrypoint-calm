@@ -33,11 +33,11 @@ def main():
   try:
 
     # Read in the spec files and conver to dicts
-    subnet_spec = file_to_dict("calm_subnet.spec")
+    subnet_spec = file_to_dict("specs/calm_subnet.spec")
     INFO(f"subnet_spec: {subnet_spec}")
-    key_spec = file_to_dict("calm_userkey.spec")
+    key_spec = file_to_dict("specs/calm_userkey.spec")
     INFO(f"userkey_spec: {key_spec}")
-    pass_spec = file_to_dict("calm_userpassword.spec")
+    pass_spec = file_to_dict("specs/calm_userpassword.spec")
     INFO(f"userpass_spec: {pass_spec}")
 
     # Get our subnet info from the infra

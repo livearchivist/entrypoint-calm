@@ -33,7 +33,7 @@ def main():
   try:
 
     # Read in the spec file and conver to dict
-    image_spec = file_to_dict("calm_image.spec")
+    image_spec = file_to_dict("specs/calm_image.spec")
     INFO(f"image_spec: {image_spec}")
 
     # Loop through each image

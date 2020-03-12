@@ -33,9 +33,9 @@ def main():
   try:
 
     # Read in the spec files and conver to dicts
-    subnet_spec = file_to_dict("calm_subnet.spec")
+    subnet_spec = file_to_dict("specs/calm_subnet.spec")
     INFO(f"subnet_spec: {subnet_spec}")
-    bp_spec = file_to_dict("calm_bp_upload.spec")
+    bp_spec = file_to_dict("specs/calm_bp_upload.spec")
     INFO(f"bp_spec: {bp_spec}")
 
     # Get our subnet info from the infra
