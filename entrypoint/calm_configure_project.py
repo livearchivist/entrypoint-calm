@@ -35,12 +35,11 @@ def main():
     # Convert our spec to dict
     subnet_spec = file_to_dict("specs/calm_subnet.spec")
 
-    # Get our subnet info from the infra
+    # Get our info from the infra
     subnet_info = get_subnet_info(pc_external_ip, pc_password,
                                   subnet_spec["vlan"])
-    INFO(f"subnet_uuid: {subnet_info['uuid']}")
-
-    # Get our only env uuid from the infra
+    account_info = body_via_v3_post(pc_external_ip, "accounts",
+                                    pc_password, None)
     env_uuid = uuid_via_v3_post(pc_external_ip, "environments",
                                 pc_password, "")
 
@@ -56,21 +55,37 @@ def main():
 
       # If default project, add subnet_ref_list
       if project["spec"]["name"] == "default":
-        project["spec"]["resources"]["subnet_reference_list"].append(
+
+        # add subnet if not present
+        if len(project["spec"]["resources"]["subnet_reference_list"]) == 0:
+          project["spec"]["resources"]["subnet_reference_list"].append(
+            {
+              "kind": "subnet",
+              "name": subnet_info["name"],
+              "uuid": subnet_info["uuid"]
+            }
+          )
+
+        # Add account if not present
+        if len(project["spec"]["resources"]["account_reference_list"]) == 0:
+          for account in account_info.json["entities"]:
+            if account["status"]["resources"]["type"] == "nutanix_pc":
+              project["spec"]["resources"]["account_reference_list"].append(
+                {
+                  "kind": "account",
+                  "name": account["metadata"]["name"],
+                  "uuid": account["metadata"]["uuid"]
+                }
+              )
+
+      # Add env if not present
+      if len(project["spec"]["resources"]["environment_reference_list"]) == 0:
+        project["spec"]["resources"]["environment_reference_list"].append(
           {
-            "kind": "subnet",
-            "name": subnet_info["name"],
-            "uuid": subnet_info["uuid"]
+            "kind": "environment",
+            "uuid": env_uuid
           }
         )
-
-      # Add environment to all projects
-      project["spec"]["resources"]["environment_reference_list"].append(
-        {
-          "kind": "environment",
-          "uuid": env_uuid
-        }
-      )
 
       # Make the API call to update the Project
       INFO(f"project: {project}")
