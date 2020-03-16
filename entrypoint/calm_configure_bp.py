@@ -40,9 +40,11 @@ def main():
     pass_spec = file_to_dict("specs/calm_userpassword.spec")
     INFO(f"userpass_spec: {pass_spec}")
 
-    # Get our subnet info from the infra
+    # Get our subnet and image info from the infra
     subnet_info = get_subnet_info(pc_external_ip, pc_password,
                                   subnet_spec["vlan"])
+    image_info = body_via_v3_post(pc_external_ip, "images",
+                                  pc_password, payload).json
 
     # Get a list of DRAFT blueprints
     payload = {
@@ -75,13 +77,18 @@ def main():
           secret["username"] = pass_spec["username"]
         print(json.dumps(secret, sort_keys=True, indent=4))
 
-      # Configure NICs
+      # Configure NICs and Images
       for substrate in bp_body["spec"]["resources"]["substrate_definition_list"]:
         if substrate["type"] == "AHV_VM":
           for nic in substrate["create_spec"]["resources"]["nic_list"]:
             nic["subnet_reference"]["uuid"] = subnet_info["uuid"]
             nic["subnet_reference"]["name"] = subnet_info["name"]
             print(json.dumps(nic, sort_keys=True, indent=4))
+          for disk in substrate["create_spec"]["resources"]["disk_list"]:
+            if disk["data_source_reference"]["kind"] == "image":
+              for image in image_info["entities"]:
+                if image["status"]["name"] == disk["data_source_reference"]["name"]:
+                  disk["data_source_reference"]["uuid"] = image["metadata"]["uuid"]
 
       # Update our blueprint
       resp = update_via_v3_put(pc_external_ip, "blueprints", pc_password,
