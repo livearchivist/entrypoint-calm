@@ -44,7 +44,7 @@ def main():
     subnet_info = get_subnet_info(pc_external_ip, pc_password,
                                   subnet_spec["vlan"])
     image_info = body_via_v3_post(pc_external_ip, "images",
-                                  pc_password, payload).json
+                                  pc_password, None).json
 
     # Get a list of DRAFT blueprints
     payload = {
@@ -85,10 +85,12 @@ def main():
             nic["subnet_reference"]["name"] = subnet_info["name"]
             print(json.dumps(nic, sort_keys=True, indent=4))
           for disk in substrate["create_spec"]["resources"]["disk_list"]:
-            if disk["data_source_reference"]["kind"] == "image":
+            if disk["data_source_reference"] is not None and\
+               disk["data_source_reference"]["kind"] == "image":
               for image in image_info["entities"]:
                 if image["status"]["name"] == disk["data_source_reference"]["name"]:
                   disk["data_source_reference"]["uuid"] = image["metadata"]["uuid"]
+                  print(json.dumps(disk, sort_keys=True, indent=4))
 
       # Update our blueprint
       resp = update_via_v3_put(pc_external_ip, "blueprints", pc_password,
