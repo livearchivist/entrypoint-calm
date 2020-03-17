@@ -70,6 +70,10 @@ def main():
       bp["spec"]["resources"] = {
         "app_attribute_list": ["FEATURED"]
       }
+      bp["spec"]["resources"]["app_state"] = "PENDING" #new
+      bp["spec"]["resources"]["project_reference_list"] = [] #new
+      bp["spec"]["resources"]["change_log"] = "" #new
+      bp["spec"]["resources"]["app_source"] = "LOCAL" #new
       bp["spec"]["resources"]["app_group_uuid"] = str(uuid.uuid4())
       bp["spec"]["resources"]["author"] = user_info["status"]["name"]
       for icon in icon_info["entities"]:
@@ -96,9 +100,9 @@ def main():
 
       # Log appropriately based on response
       if (resp.code == 200 or resp.code == 202):
-        INFO(f"{bp['bp_name']} blueprint created successfully.")
+        INFO(f"{publish['mp_name']} bp published successfully.")
       else:
-        raise Exception(f"{bp['bp_name']} blueprint create" +
+        raise Exception(f"{publish['mp_name']} bp publish" +
                         f" failed with:\n" +
                         f"Error Code: {resp.code}\n" +
                         f"Error Message: {resp.message}")
