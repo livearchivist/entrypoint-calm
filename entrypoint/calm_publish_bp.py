@@ -1,5 +1,5 @@
 """
-calm_publish_bp.py: automation to publish blueprints into
+calm_publishlish_bp.py: automation to publishlish blueprints into
 the Marketplace Manager on NX-on-GCP / Test Drive.
 
 Author: michael@nutanix.com
@@ -34,7 +34,7 @@ def main():
   try:
 
     # Read in the spec files and conver to dicts
-    bp_spec = file_to_dict("specs/calm_bp_publish.spec")
+    publish_spec = file_to_dict("specs/calm_bp_publishlish.spec")
     INFO(f"bp_spec: {bp_spec}")
 
     # Get user and icon info
@@ -44,11 +44,11 @@ def main():
                                  pc_password, None).json
 
     # Loop through the blueprints to upload
-    for bp in bp_spec["entities"]:
+    for publish in publish_spec["entities"]:
 
       # Create our payload and get bp uuid
       payload = {
-        "filter": f"name==bp['bp_name']"
+        "filter": f"name=={publish['bp_name']}"
       }
       bp_info = body_via_v3_post(pc_external_ip, "blueprints",
                                  pc_password, payload).json
@@ -60,8 +60,8 @@ def main():
                 f"{bp_uuid}/export_json?keep_secrets=true").json
 
       # Modify our body
-      bp["spec"]["name"] = bp_spec["mp_name"]
-      bp["status"]["name"] = bp_spec["mp_name"]
+      bp["spec"]["name"] = publish["mp_name"]
+      bp["status"]["name"] = publish["mp_name"]
       spec = copy.deepcopy(bp["spec"])
       status = copy.deepcopy(bp["status"])
       del bp["spec"]["resources"]
