@@ -81,8 +81,8 @@ def upload_icon_via_v3_post(ip, password,
 
   # Create the file dictionary
   files = {
-    "image": (icon["file"],
-              open(f"images/{icon['name']}", "rb"),
+    "image": (icon["name"],
+              open(f"images/{icon['file']}", "rb"),
               "image/png"
              )
   }
