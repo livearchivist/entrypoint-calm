@@ -1,0 +1,24 @@
+{
+   "entities":[
+      {
+         "name":"CentOS",
+         "file":"Centos.png"
+      },
+      {
+         "name":"Jenkins",
+         "file":"Jenkins.png"
+      },
+      {
+         "name":"Redis",
+         "file":"Redis.png"
+      },
+      {
+         "name":"Windows.png",
+         "file":"Windows"
+      },
+      {
+         "name":"Wordpress",
+         "file":"Wordpress.png"
+      }
+   ]
+}

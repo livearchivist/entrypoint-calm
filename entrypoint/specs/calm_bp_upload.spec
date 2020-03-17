@@ -1,6 +1,16 @@
 {
    "entities":[
       {
+         "bp_name":"CentOS_IaaS",
+         "bp_file":"CentOS_IaaS.json",
+         "bp_project":"default"
+      },
+      {
+         "bp_name":"Windows_IaaS",
+         "bp_file":"Windows_IaaS.json",
+         "bp_project":"default"
+      },
+      {
          "bp_name":"Wordpress",
          "bp_file":"Wordpress.json",
          "bp_project":"NY_Office"
@@ -14,16 +24,6 @@
          "bp_name":"Jenkins",
          "bp_file":"Jenkins.json",
          "bp_project":"LA_Office"
-      },
-      {
-         "bp_name":"Windows_IaaS",
-         "bp_file":"Windows_IaaS.json",
-         "bp_project":"default"
-      },
-      {
-         "bp_name":"CentOS_IaaS",
-         "bp_file":"CentOS_IaaS.json",
-         "bp_project":"default"
       }
    ]
 }

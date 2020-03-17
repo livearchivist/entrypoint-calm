@@ -75,6 +75,31 @@ def upload_bp_via_v3_post(ip, password,
 
   return resp
 
+# Uploads an app_icon
+def upload_icon_via_v3_post(ip, password,
+                            body, filename):
+
+  # Create the file dictionary
+  files = {
+    "file": open(f"images/{filename}", "rb")
+  }
+
+  # Make the API call
+  parameters = RequestParameters(
+          uri=create_v3_url(ip, "app_icons/upload"),
+          username="admin",
+          password=password,
+          method="post",
+#          payload=body,
+          files=files
+    )
+  rest_client = RESTClient(parameters)
+  resp = rest_client.request()
+  INFO(f"upload_icon_via_v3_post: {ip}, {body}")
+
+  return resp
+
+
 
 # Return the UUID of a desired entity.  If entity_name is empty
 # assume a single entity in response and send first UUID
