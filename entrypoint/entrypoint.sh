@@ -16,10 +16,11 @@ execute_command "export NUTEST_PATH=/home"
 #python3 calm_create_image.py
 #python3 calm_enable_marketplace.py
 #python3 calm_create_project.py NY_Office LA_Office
-python3 calm_upload_icons.py
+#python3 calm_upload_icons.py
 #sleep 180 # sleep so the image can be created
 #python3 calm_create_env.py
 #python3 calm_configure_project.py
 #python3 calm_upload_bp.py
 #python3 calm_configure_bp.py
+python3 calm_publish_bp.py
 #python3 calm_publish_apps.py

@@ -1,0 +1,34 @@
+{
+   "entities":[
+      {
+         "bp_name":"CentOS_IaaS",
+         "mp_name":"CentOS",
+         "icon_name":"CentOS",
+         "bp_version":"1.0.0"
+      },
+      {
+         "bp_name":"Windows_IaaS",
+         "mp_name":"Windows",
+         "icon_name":"Windows",
+         "bp_version":"1.0.0"
+      },
+      {
+         "bp_name":"Wordpress",
+         "mp_name":"Wordpress",
+         "icon_name":"Wordpress",
+         "bp_version":"1.0.0"
+      },
+      {
+         "bp_name":"Redis",
+         "mp_name":"Redis",
+         "icon_name":"Redis",
+         "bp_version":"1.0.0"
+      },
+      {
+         "bp_name":"Jenkins",
+         "mp_name":"Jenkins",
+         "icon_name":"Jenkins",
+         "bp_version":"1.0.0"
+      }
+   ]
+}

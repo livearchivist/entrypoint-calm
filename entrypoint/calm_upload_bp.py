@@ -57,14 +57,6 @@ def main():
       resp = upload_bp_via_v3_post(pc_external_ip, pc_password,
                                    payload, bp["bp_file"])
 
-      # Need to re-upload to make ACTIVE
-      #project_spec["spec"]["name"] = project_name
-      #project_spec["spec"]["resources"]["subnet_reference_list"][0]\
-      #            ["name"] = subnet_info["name"]
-      #project_spec["spec"]["resources"]["subnet_reference_list"][0]\
-      #            ["uuid"] = subnet_info["uuid"]
-      #INFO(f"project_spec post-update: {project_spec}")
-
       # Log appropriately based on response
       if (resp.code == 200 or resp.code == 202):
         INFO(f"{bp['bp_name']} blueprint created successfully.")
