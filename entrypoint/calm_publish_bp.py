@@ -34,8 +34,8 @@ def main():
   try:
 
     # Read in the spec files and conver to dicts
-    publish_spec = file_to_dict("specs/calm_bp_publishlish.spec")
-    INFO(f"bp_spec: {bp_spec}")
+    publish_spec = file_to_dict("specs/calm_bp_publish.spec")
+    INFO(f"publish_spec: {publish_spec}")
 
     # Get user and icon info
     user_info = body_via_v3_get(pc_external_ip, "users",
@@ -73,16 +73,17 @@ def main():
       bp["spec"]["resources"]["app_group_uuid"] = str(uuid.uuid4())
       bp["spec"]["resources"]["author"] = user_info["status"]["name"]
       for icon in icon_info["entities"]:
-        if icon["status"]["name"] == bp_spec["icon_name"]:
-          bp["spec"]["resources"]["icon_reference_list"].append(
+        if icon["status"]["name"] == publish["icon_name"]:
+          bp["spec"]["resources"]["icon_reference_list"] = [
             {
               "icon_reference": {
                 "kind": "file_item",
                 "uuid": icon["metadata"]["uuid"]
-              }
+              },
+              "icon_type": "ICON"
             }
-          )
-      bp["spec"]["resources"]["version"] = bp_spec["bp_version"]
+          ]
+      bp["spec"]["resources"]["version"] = publish["bp_version"]
       bp["spec"]["resources"]["app_blueprint_template"] = {
         "spec": spec
       }
