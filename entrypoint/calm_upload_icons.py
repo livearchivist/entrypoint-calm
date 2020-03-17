@@ -40,13 +40,12 @@ def main():
 
       # Create our payload
       payload = {
-        "name": icon["name"],
-        "type": "ICON"
+        "name": icon["name"]
       }
 
       # Upload our icon
       resp = upload_icon_via_v3_post(pc_external_ip, pc_password,
-                                     payload, icon["file"])
+                                     payload, icon)
 
       # Log appropriately based on response
       if (resp.code == 200 or resp.code == 202):

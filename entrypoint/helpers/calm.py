@@ -77,11 +77,14 @@ def upload_bp_via_v3_post(ip, password,
 
 # Uploads an app_icon
 def upload_icon_via_v3_post(ip, password,
-                            body, filename):
+                            body, icon):
 
   # Create the file dictionary
   files = {
-    "file": open(f"images/{filename}", "rb")
+    "image": (icon["file"],
+              open(f"images/{icon['name']}", "rb"),
+              "image/png"
+             )
   }
 
   # Make the API call
