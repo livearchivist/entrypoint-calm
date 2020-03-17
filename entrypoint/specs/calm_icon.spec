@@ -2,7 +2,7 @@
    "entities":[
       {
          "name":"CentOS",
-         "file":"Centos.png"
+         "file":"CentOS.png"
       },
       {
          "name":"Jenkins",

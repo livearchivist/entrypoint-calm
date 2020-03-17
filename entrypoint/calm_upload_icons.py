@@ -38,9 +38,15 @@ def main():
     # Loop through the blueprints to upload
     for icon in icon_spec["entities"]:
 
+      # Create our payload
+      payload = {
+        "name": icon["name"],
+        "type": "ICON"
+      }
+
       # Upload our icon
       resp = upload_icon_via_v3_post(pc_external_ip, pc_password,
-                                     None, icon["file"])
+                                     payload, icon["file"])
 
       # Log appropriately based on response
       if (resp.code == 200 or resp.code == 202):
