@@ -182,7 +182,7 @@
                },
                "variable_list":[],
                "name":"Untitled"
-            },
+            }
          ],
          "credential_definition_list":[]
       }

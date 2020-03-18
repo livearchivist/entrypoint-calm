@@ -46,11 +46,11 @@ def main():
     # Get our image info from the infra
     cent_image_name = image_spec["entities"][0]["metadata"]["name"]
     cent_image_uuid = uuid_via_v3_post(pc_external_ip, "images",
-                                       pc_password, image_name)
+                                       pc_password, cent_image_name)
     INFO(f"cent_image_uuid: {cent_image_uuid}")
     win_image_name = image_spec["entities"][1]["metadata"]["name"]
     win_image_uuid = uuid_via_v3_post(pc_external_ip, "images",
-                                       pc_password, image_name)
+                                       pc_password, win_image_name)
     INFO(f"win_image_uuid: {win_image_uuid}")
 
     # Generate UUIDs for new components
@@ -86,8 +86,8 @@ def main():
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["create_spec"]["resources"]["nic_list"][0]\
             ["subnet_reference"]["uuid"] = subnet_info["uuid"]
-    env_spec["spec"]["resources"]["substrate_definition_list"[1]\
-            ["create_spec"]["resources"]["nic_list"][1]\
+    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+            ["create_spec"]["resources"]["nic_list"][0]\
             ["subnet_reference"]["uuid"] = subnet_info["uuid"]
 
     # image
@@ -98,20 +98,20 @@ def main():
             ["create_spec"]["resources"]["disk_list"][0]\
             ["data_source_reference"]["uuid"] = cent_image_uuid
     env_spec["spec"]["resources"]["substrate_definition_list"][1]\
-            ["create_spec"]["resources"]["disk_list"][1]\
+            ["create_spec"]["resources"]["disk_list"][0]\
             ["data_source_reference"]["name"] = win_image_name
     env_spec["spec"]["resources"]["substrate_definition_list"][1]\
-            ["create_spec"]["resources"]["disk_list"][1]\
+            ["create_spec"]["resources"]["disk_list"][0]\
             ["data_source_reference"]["uuid"] = win_image_uuid
 
     # secrets
     for secret in secret_spec["entities"]:
       if secret["type"] == "KEY":
-        uuid = cent_key_uuid
-      else if secret["name"].startswith("CENTOS"):
-        uuid = cent_pass_uuid
+        suuid = cent_key_uuid
+      elif secret["name"].startswith("CENTOS"):
+        suuid = cent_pass_uuid
       else:
-        uuid = win_pass_uuid
+        suuid = win_pass_uuid
       env_spec["spec"]["resources"]["credential_definition_list"].append(
         {
           "name":secret["name"],
@@ -123,7 +123,7 @@ def main():
             },
             "value":secret["secret"]
           },
-          "uuid":uuid
+          "uuid":suuid
         }
       )
 
