@@ -35,10 +35,8 @@ def main():
     # Read in the spec files and conver to dicts
     subnet_spec = file_to_dict("specs/calm_subnet.spec")
     INFO(f"subnet_spec: {subnet_spec}")
-    key_spec = file_to_dict("specs/calm_userkey.spec")
-    INFO(f"userkey_spec: {key_spec}")
-    pass_spec = file_to_dict("specs/calm_userpassword.spec")
-    INFO(f"userpass_spec: {pass_spec}")
+    secret_spec = file_to_dict("specs/calm_secrets.spec")
+    INFO(f"secret_spec: {secret_spec}")
 
     # Get our subnet and image info from the infra
     subnet_info = get_subnet_info(pc_external_ip, pc_password,
@@ -67,14 +65,11 @@ def main():
       for secret in bp_body["spec"]["resources"]\
                            ["credential_definition_list"]:
         secret["secret"]["attrs"]["is_secret_modified"] = True
-        if secret["type"] == "KEY":
-          secret["secret"]["value"] = key_spec["secret"]
-          secret["secret"]["username"] = key_spec["username"]
-          secret["username"] = key_spec["username"]
-        else:
-          secret["secret"]["value"] = pass_spec["secret"]
-          secret["secret"]["username"] = pass_spec["username"]
-          secret["username"] = pass_spec["username"]
+        # Find a matching type/username from our secret_spec
+        for ss in secret_spec["entities"]:
+          if secret["type"] == ss["type"] and\
+             secret["username"] == ss["username"]:
+            secret["secret"]["value"] = ss["secret"]
         print(json.dumps(secret, sort_keys=True, indent=4))
 
       # Configure NICs and Images
