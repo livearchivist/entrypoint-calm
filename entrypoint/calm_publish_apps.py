@@ -32,7 +32,7 @@ def main():
   try:
 
     # Convert our spec to dict
-    apps_spec = file_to_dict("specs/calm_mp_apps.spec")
+    apps_spec = file_to_dict("specs/calm_bp_publish.spec")
 
     # Get our non-default projects before the loop
     projects_payload = {
@@ -46,7 +46,7 @@ def main():
 
       # Construct payload and make call
       mp_payload = {
-        "filter":f"name=={app['app_name']}"
+        "filter":f"name=={app['mp_name']}"
       }
       mp_post = body_via_v3_post(pc_external_ip, "calm_marketplace_items",
                                  pc_password, mp_payload)
@@ -54,7 +54,7 @@ def main():
       # Loop through our response to find matching version
       for mp_item in mp_post.json["entities"]:
         if mp_item["status"]["app_state"] == 'ACCEPTED' and\
-           mp_item["status"]["version"] == app["app_version"]:
+           mp_item["status"]["version"] == app["bp_version"]:
 
           # Make a GET with our UUID
           mp_get = body_via_v3_get(pc_external_ip, "calm_marketplace_items",
