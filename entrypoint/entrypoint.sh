@@ -23,4 +23,5 @@ python3 calm_configure_project.py
 python3 calm_upload_bp.py
 python3 calm_configure_bp.py
 python3 calm_publish_bp.py
-#python3 calm_publish_apps.py
+python3 calm_approve_bp.py
+python3 calm_publish_apps.py
