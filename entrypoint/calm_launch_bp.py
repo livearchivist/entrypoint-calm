@@ -41,12 +41,12 @@ def main():
 
       # Get our blueprint uuid
       payload = {
-        "filter": f"name=={launch['name']}"
+        "filter": f"name=={launch['bp_name']}"
       }
       bp = body_via_v3_post(pc_external_ip, "blueprints",
                             pc_password, payload).json
-      if bp["metatdata"]["total_matches"] != 0:
-        raise Exception(bp["metatdata"]["total_matches"] +
+      if bp["metadata"]["total_matches"] != 1:
+        raise Exception(str(bp["metadata"]["total_matches"]) +
                         " blueprints found, when 1 should" +
                         " have been found.")
       else:
@@ -61,15 +61,15 @@ def main():
            launch["profile_name"]:
           profile_ref = profile["app_profile_reference"]
           run_editables = profile["runtime_editables"]
-      INFO(f"{launch['name']} profile_ref: {profile_ref}")
-      INFO(f"{launch['name']} run_editables: {run_editables}")
+      INFO(f"{launch['bp_name']} profile_ref: {profile_ref}")
+      INFO(f"{launch['bp_name']} run_editables: {run_editables}")
 
       # Set our runtime variables
       for run_edit_var in run_editables["variable_list"]:
         for launch_var in launch["variables"]:
           if run_edit_var["name"] == launch_var["name"]:
             run_edit_var["value"]["value"] = launch_var["value"]
-      INFO(f"{launch['name']} run_editables: {run_editables}")
+      INFO(f"{launch['bp_name']} run_editables: {run_editables}")
 
       # Create our payload and launch our app
       payload = {
@@ -79,6 +79,7 @@ def main():
           "app_profile_reference": profile_ref,
           "runtime_editables": run_editables
         }
+      }
       resp = create_via_v3_post(pc_external_ip, "blueprints/" + bp_uuid
                                 + "/simple_launch", payload)
 
