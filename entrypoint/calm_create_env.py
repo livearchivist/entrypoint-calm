@@ -34,10 +34,9 @@ def main():
 
     # Read in the spec files and convert to dicts
     env_spec = file_to_dict("specs/calm_environment.spec")
-    key_spec = file_to_dict("specs/calm_userkey.spec")
-    pass_spec = file_to_dict("specs/calm_userpassword.spec")
     image_spec = file_to_dict("specs/calm_image.spec")
     subnet_spec = file_to_dict("specs/calm_subnet.spec")
+    secret_spec = file_to_dict("specs/calm_secrets.spec")
 
     # Get our subnet info from the infra
     subnet_info = get_subnet_info(pc_external_ip, pc_password,
@@ -45,17 +44,23 @@ def main():
     INFO(f"subnet_uuid: {subnet_info['uuid']}")
 
     # Get our image info from the infra
-    image_name = image_spec["entities"][0]["metadata"]["name"]
-    image_uuid = uuid_via_v3_post(pc_external_ip, "images",
-                                  pc_password, image_name)
-    INFO(f"image_uuid: {image_uuid}")
-        
+    cent_image_name = image_spec["entities"][0]["metadata"]["name"]
+    cent_image_uuid = uuid_via_v3_post(pc_external_ip, "images",
+                                       pc_password, image_name)
+    INFO(f"cent_image_uuid: {cent_image_uuid}")
+    win_image_name = image_spec["entities"][1]["metadata"]["name"]
+    win_image_uuid = uuid_via_v3_post(pc_external_ip, "images",
+                                       pc_password, image_name)
+    INFO(f"win_image_uuid: {win_image_uuid}")
+
     # Generate UUIDs for new components
     env_name = str(uuid.uuid4())
     env_uuid = str(uuid.uuid4())
-    substrate_uuid = str(uuid.uuid4())
-    key_uuid = str(uuid.uuid4())
-    pass_uuid = str(uuid.uuid4())
+    cent_substrate_uuid = str(uuid.uuid4())
+    win_substrate_uuid = str(uuid.uuid4())
+    cent_key_uuid = str(uuid.uuid4())
+    cent_pass_uuid = str(uuid.uuid4())
+    win_pass_uuid = str(uuid.uuid4())
 
     # Sub in our UUIDs and names:
     # env
@@ -65,45 +70,62 @@ def main():
 
     # substrate
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
-            ["uuid"] = substrate_uuid
+            ["uuid"] = cent_substrate_uuid
+    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+            ["uuid"] = win_substrate_uuid
 
     # account
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["readiness_probe"]["login_credential_local_reference"]\
-            ["uuid"] = key_uuid
+            ["uuid"] = cent_key_uuid
+    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+            ["readiness_probe"]["login_credential_local_reference"]\
+            ["uuid"] = win_pass_uuid
 
     # subnet
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["create_spec"]["resources"]["nic_list"][0]\
             ["subnet_reference"]["uuid"] = subnet_info["uuid"]
+    env_spec["spec"]["resources"]["substrate_definition_list"[1]\
+            ["create_spec"]["resources"]["nic_list"][1]\
+            ["subnet_reference"]["uuid"] = subnet_info["uuid"]
 
     # image
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["create_spec"]["resources"]["disk_list"][0]\
-            ["data_source_reference"]["name"] = image_name
+            ["data_source_reference"]["name"] = cent_image_name
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["create_spec"]["resources"]["disk_list"][0]\
-            ["data_source_reference"]["uuid"] = image_uuid
+            ["data_source_reference"]["uuid"] = cent_image_uuid
+    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+            ["create_spec"]["resources"]["disk_list"][1]\
+            ["data_source_reference"]["name"] = win_image_name
+    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+            ["create_spec"]["resources"]["disk_list"][1]\
+            ["data_source_reference"]["uuid"] = win_image_uuid
 
-    # password credential
-    env_spec["spec"]["resources"]["credential_definition_list"][0]\
-            ["name"] = pass_spec["name"]
-    env_spec["spec"]["resources"]["credential_definition_list"][0]\
-            ["username"] = pass_spec["username"]
-    env_spec["spec"]["resources"]["credential_definition_list"][0]\
-            ["secret"]["value"] = pass_spec["secret"]
-    env_spec["spec"]["resources"]["credential_definition_list"][0]\
-            ["uuid"] = pass_uuid
-
-    # key credential
-    env_spec["spec"]["resources"]["credential_definition_list"][1]\
-            ["name"] = key_spec["name"]
-    env_spec["spec"]["resources"]["credential_definition_list"][1]\
-            ["username"] = key_spec["username"]
-    env_spec["spec"]["resources"]["credential_definition_list"][1]\
-            ["secret"]["value"] = key_spec["secret"]
-    env_spec["spec"]["resources"]["credential_definition_list"][1]\
-            ["uuid"] = key_uuid
+    # secrets
+    for secret in secret_spec["entities"]:
+      if secret["type"] == "KEY":
+        uuid = cent_key_uuid
+      else if secret["name"].startswith("CENTOS"):
+        uuid = cent_pass_uuid
+      else:
+        uuid = win_pass_uuid
+      env_spec["spec"]["resources"]["credential_definition_list"].append(
+        {
+          "name":secret["name"],
+          "type":secret["type"],
+          "username":secret["username"],
+          "secret":{
+            "attrs":{
+              "is_secret_modified":True
+            },
+            "value":secret["secret"]
+          },
+          "uuid":uuid
+        }
+      )
 
     # Make the API call to create the environment
     INFO(f"env_spec: {env_spec}")
