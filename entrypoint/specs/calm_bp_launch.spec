@@ -1,0 +1,43 @@
+{
+   "entities":[
+      {
+         "bp_name":"Windows_IaaS",
+         "profile_name":"",
+         "app_name":"Windows_Workstation",
+         "app_description":"End user Windows Workstation",
+         "variables":[]
+      },
+      {
+         "bp_name":"Wordpress",
+         "profile_name":"",
+         "app_name":"Wordpress_App",
+         "app_description":"To access Wordpress, launch the console of your Windows Workstation, and enter in the IP address of the Ha_Proxy VM into a web browser.",
+         "variables":[
+            {
+               "name":"MYSQL_PASSWORD",
+               "value":"nutanix/4u"
+            },
+            {
+               "name":"WP_DB_PASSWORD",
+               "value":"nutanix/4u"
+            },
+            {
+               "name":"WP_DB_USER",
+               "value":"wordpress"
+            }
+         ]
+      },
+      {
+         "bp_name":"Jenkins",
+         "profile_name":"",
+         "app_name":"Jenkins_App",
+         "app_description":"To access Jenkins, launch the console of your Windows Workstation, and enter in the IP address of the Jenkins Master VM into a web browser.",
+         "variables":[
+            {
+               "name":""INSTALL_BLUEOCEAN,
+               "value":"no"
+            }
+         ]
+      }
+   ]
+}
