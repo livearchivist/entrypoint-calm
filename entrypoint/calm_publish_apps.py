@@ -54,7 +54,8 @@ def main():
       # Loop through our response to find matching version
       for mp_item in mp_post.json["entities"]:
         if mp_item["status"]["app_state"] == 'ACCEPTED' and\
-           mp_item["status"]["version"] == app["bp_version"]:
+           mp_item["status"]["version"] == app["bp_version"] and\
+           mp_item["status"]["app_source"] == app["app_source"]:
 
           # Make a GET with our UUID
           mp_get = body_via_v3_get(pc_external_ip, "calm_marketplace_items",
@@ -79,8 +80,8 @@ def main():
           else:
             raise Exception(f"{mp_body['spec']['name']} MP App Publish" +
                             f" failed with:\n" +
-                            f"Error Code: {resp.code}\n" +
-                            f"Error Message: {resp.message}")
+                            f"Error Code: {pub_resp.code}\n" +
+                            f"Error Message: {pub_resp.message}")
 
   except Exception as ex:
     print(ex)
