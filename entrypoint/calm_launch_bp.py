@@ -9,13 +9,14 @@ Date:   2020-03-18
 import sys
 import os
 import json
+import time
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
 from helpers.calm import (file_to_dict, body_via_v3_post,
-                          body_via_v3_get)
+                          body_via_v3_get, create_via_v3_post)
 
 
 def main():
@@ -80,8 +81,9 @@ def main():
           "runtime_editables": run_editables
         }
       }
-      resp = create_via_v3_post(pc_external_ip, "blueprints/" + bp_uuid
-                                + "/simple_launch", payload)
+      resp = create_via_v3_post(pc_external_ip,
+                                "blueprints/" + bp_uuid + "/simple_launch",
+                                pc_password, payload)
 
       # Log appropriately based on response
       if (resp.code == 200 or resp.code == 202):
@@ -91,6 +93,8 @@ def main():
                         f" failed with:\n" +
                         f"Error Code: {resp.code}\n" +
                         f"Error Message: {resp.message}")
+
+      time.sleep(2)
 
   except Exception as ex:
     INFO(ex)

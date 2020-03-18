@@ -5,7 +5,12 @@
          "profile_name":"Default",
          "app_name":"Windows_Workstation",
          "app_description":"End user Windows Workstation",
-         "variables":[]
+         "variables":[
+            {
+               "name":"password",
+               "value":"nutanix/4u"
+            }
+         ]
       },
       {
          "bp_name":"Wordpress",
