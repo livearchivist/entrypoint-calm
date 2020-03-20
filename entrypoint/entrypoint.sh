@@ -25,4 +25,4 @@ python3 calm_launch_bp.py
 python3 calm_publish_bp.py
 python3 calm_approve_bp.py
 python3 calm_publish_apps.py
-sleep 600
+sleep 1000
