@@ -23,6 +23,7 @@ import os
 import json
 import requests
 import time
+from datetime import datetime
 
 
 # Given a filename, return a dict of the file's contents
@@ -38,13 +39,19 @@ metadata = {
   "name": time.strftime("%Y-%m-%d %H:%M:%S") # optionally change
 }
 
-service_name = file_to_dict("service_name.json")["name"]
 # Store the name of your service in a file titled service_name.json
 # It should be a json with a single key "name", and the value will
 # be the name of the service given by the NX-on-GCP ENG team.
 # This file must be added to your .gitignore, as its contents
 # should not be on public GitHub repos.
+service_name = file_to_dict("service_name.json")["name"]
 # =================================================================
+
+# The headers should not need to be modified
+headers = {
+  "request-type": "SERVICE",
+  "request-service-name": service_name
+}
 
 
 # Function to print script usage help
@@ -63,27 +70,36 @@ def print_help():
   print("To delete a cluster, specify the request_id " +
         "UUID and append .del:")
   print("  python3 manage-nx-on-gcp.py <request_id-uuid>.del\n")
+  print("To use your most recently created cluster, use the following" +\
+        " tail+awk command:")
+  print("  python3 manage-nx-on-gcp.py $(tail -1 requests.ids | awk " +\
+        "{'print $NF'}).info\n")
 
 
 # Output the cluster info
-def info(cluster):
-
-  # Create the headers
-  headers = {
-    "request-type": "SERVICE",
-    "request-service-name": service_name
-  }
+def info(cluster, short):
 
   # Create the URL and make the call
-  req_id = cluster.strip(".info")
+  req_id = cluster.split(".")[0]
   url = f"https://nx-gcp.nutanix.com/api/v1/deployments/requests/{req_id}"
   resp = requests.get(url, headers=headers)
 
-  # Handle success or failure
+  # Handle a successful call
   if resp.ok:
-    cluster_info = json.loads(resp.content.decode("utf-8"))
-    print(json.dumps(cluster_info, indent=4, sort_keys=True))
 
+    # Make sure it wasn't a non-VPN call
+    if str(resp.content).startswith("b'<!DOCTYPE html>"):
+      sys.exit("Error: You must be on VPN to use this script.")
+
+    # Print the info
+    cluster_info = json.loads(resp.content.decode("utf-8"))
+    if short:
+      print(json.dumps(cluster_info["data"]["metadata"],
+                       indent=4, sort_keys=True))
+    else:
+      print(json.dumps(cluster_info, indent=4, sort_keys=True))
+
+  # Handle failure
   else:
     print("Request failed with the following detail:")
     print(str(resp))
@@ -94,12 +110,6 @@ def create(cluster):
 
   # Read in the spec file and conver to dict
   cluster_spec = file_to_dict(cluster)
-
-  # Create the headers
-  headers = {
-    "request-type": "SERVICE",
-    "request-service-name": service_name
-  }
 
   # Create the payload
   payload = {
@@ -114,10 +124,13 @@ def create(cluster):
   # Handle success
   if resp.ok:
 
+    # Make sure it wasn't a non-VPN call
+    if str(resp.content).startswith("b'<!DOCTYPE html>"):
+      sys.exit("Error: You must be on VPN to use this script.")
+
     # Set the response as a dictionary (return is a byte)
     request_info = json.loads(resp.content.decode("utf-8"))
-    print(request_info["message"])
-    print(f"request_id: {request_info['data']['request_id']}")
+    print("=== " + request_info["message"] + " ===")
 
     # Add the request id to the file for usage later
     f = open("requests.ids", "a")
@@ -127,13 +140,90 @@ def create(cluster):
 
     # Call the info function to get additional detail on the deployment
     time.sleep(5)
-    info(request_info['data']['request_id'])
+    info(request_info['data']['request_id'], True)
 
   # Handle failure
   else:
     print("Request failed with the following detail:")
     print(json.dumps(json.loads(resp.content.decode("utf-8")),
           indent=4, sort_keys=True))
+
+
+# Modify a cluster's duration time
+def modify(cluster):
+
+  # Print time and short version of info so user knows current state
+  t = datetime.utcnow()
+  print("Current time (UTC) " + str(t))
+  req_id = cluster.split(".")[0]
+  info(req_id, True)
+
+  # Get users input for how long to extend the cluster
+  while True:
+    try:
+      hours = int(input(f"Enter the number of hours to extend request: "))
+      if hours > 720 or hours < 1:
+        print("Please enter in a number between 1 and 720, inclusive.")
+        continue
+      break
+    except ValueError:
+      print("Please enter in a valid number.")
+      continue
+
+  # Create the payload
+  payload = {
+    "duration": hours
+  }
+
+  # Create the URL and make the call
+  url = f"https://nx-gcp.nutanix.com/api/v1/deployments/requests/{req_id}" +\
+         "/modify_duration"
+  resp = requests.post(url, json=payload, headers=headers)
+
+  # Handle success or failure
+  if resp.ok:
+    extend_info = json.loads(resp.content.decode("utf-8"))
+    print("=== " + extend_info["message"] + " ===")
+    info(req_id, True)
+
+  else:
+    print("Request failed with the following detail:")
+    print(str(resp))
+
+
+# Delete a cluster
+def delete(cluster):
+
+  # Print cluster info
+  req_id = cluster.split(".")[0]
+  info(req_id, True)
+
+  # Make sure the user really wants to delete the cluster
+  while True:
+    yesno = input("Are you sure you want to delete this cluster?" +\
+                  " [y]es/[n]o: ")
+    if yesno.lower() == "n" or yesno.lower() == "no":
+      print("Deletion cancelled. Exiting.")
+      return
+    elif yesno.lower() != "y" and yesno.lower() != "yes":
+      print("Please enter either [y]es or [n]o.")
+      continue
+    break
+
+  # Create the URL and make the call
+  url = f"https://nx-gcp.nutanix.com/api/v1/deployments/requests/{req_id}" +\
+         "/release"
+  resp = requests.post(url, headers=headers)
+
+  # Handle success or failure
+  if resp.ok:
+    delete_info = json.loads(resp.content.decode("utf-8"))
+    print("=== " + delete_info["message"] + " ===")
+    info(req_id, True)
+
+  else:
+    print("Request failed with the following detail:")
+    print(str(resp))
 
 
 # Main function, handle inputs and call correct functions
@@ -161,7 +251,7 @@ if __name__ == '__main__':
           create(cluster)
         # Get info on a cluster
         elif cluster.endswith("info"):
-          info(cluster)
+          info(cluster, False)
         # Download logs for a cluster
         elif cluster.endswith("logs"):
           logs(cluster)
