@@ -89,7 +89,7 @@ def info(cluster, short):
 
     # Make sure it wasn't a non-VPN call
     if str(resp.content).startswith("b'<!DOCTYPE html>"):
-      sys.exit("Error: You must be on VPN to use this script.")
+      sys.exit("Error: You must be on full-tunnel VPN to use this script.")
 
     # Print the info
     cluster_info = json.loads(resp.content.decode("utf-8"))
@@ -126,7 +126,7 @@ def create(cluster):
 
     # Make sure it wasn't a non-VPN call
     if str(resp.content).startswith("b'<!DOCTYPE html>"):
-      sys.exit("Error: You must be on VPN to use this script.")
+      sys.exit("Error: You must be on full-tunnel VPN to use this script.")
 
     # Set the response as a dictionary (return is a byte)
     request_info = json.loads(resp.content.decode("utf-8"))
@@ -188,6 +188,27 @@ def modify(cluster):
 
   else:
     print("Request failed with the following detail:")
+    print(str(resp))
+
+
+# Downloads logs of a cluster
+def logs(cluster):
+
+  # Create the URL and make the call
+  req_id = cluster.split(".")[0]
+  url = f"https://nx-gcp.nutanix.com/api/v1/deployments/requests/{req_id}" +\
+        f"/plugins/logs"
+  resp = requests.get(url, allow_redirects=True, headers=headers)
+
+  # Download the file if successful
+  if resp.ok:
+    open(f"{req_id}-logs.zip", "wb").write(resp.content)
+    print("=== Successfully downloaded file ===")
+    print(f"{req_id}-logs.zip")
+
+  # Error out if not
+  else:
+    print("Request failed with the following detail:")                         
     print(str(resp))
 
 
