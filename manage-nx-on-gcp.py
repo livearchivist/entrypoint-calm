@@ -26,12 +26,6 @@ import time
 from datetime import datetime
 
 
-# Given a filename, return a dict of the file's contents
-def file_to_dict(filename):
-  with open(os.path.join(os.getcwd(), filename)) as json_file:
-    return json.load(json_file)
-
-
 # ================== MODIFY FOR YOUR ENVIRONMENT ==================
 metadata = {          
   "projects": ["nutanix-expo"], # replace with your project name
@@ -39,19 +33,24 @@ metadata = {
   "name": time.strftime("%Y-%m-%d %H:%M:%S") # optionally change
 }
 
-# Store the name of your service in a file titled service_name.json
-# It should be a json with a single key "name", and the value will
-# be the name of the service given by the NX-on-GCP ENG team.
-# This file must be added to your .gitignore, as its contents
-# should not be on public GitHub repos.
-service_name = file_to_dict("service_name.json")["name"]
+service_name = "$MODERN-DC-TESTDRIVE-DEV"
+# This is a value given to you by the NX-on-GCP Eng team. Leaving
+# it as-is should be fine, however for certain templates it may
+# need to be changed.
 # =================================================================
+
 
 # The headers should not need to be modified
 headers = {
   "request-type": "SERVICE",
   "request-service-name": service_name
 }
+
+
+# Given a filename, return a dict of the file's contents                       
+def file_to_dict(filename):                                                    
+  with open(os.path.join(os.getcwd(), filename)) as json_file:                 
+    return json.load(json_file)                                                
 
 
 # Function to print script usage help
