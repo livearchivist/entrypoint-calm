@@ -48,19 +48,19 @@ def main():
     cent_image_uuid = uuid_via_v3_post(pc_external_ip, "images",
                                        pc_password, cent_image_name)
     INFO(f"cent_image_uuid: {cent_image_uuid}")
-    win_image_name = image_spec["entities"][1]["metadata"]["name"]
-    win_image_uuid = uuid_via_v3_post(pc_external_ip, "images",
-                                       pc_password, win_image_name)
-    INFO(f"win_image_uuid: {win_image_uuid}")
+    #win_image_name = image_spec["entities"][1]["metadata"]["name"]
+    #win_image_uuid = uuid_via_v3_post(pc_external_ip, "images",
+    #                                   pc_password, win_image_name)
+    #INFO(f"win_image_uuid: {win_image_uuid}")
 
     # Generate UUIDs for new components
     env_name = str(uuid.uuid4())
     env_uuid = str(uuid.uuid4())
     cent_substrate_uuid = str(uuid.uuid4())
-    win_substrate_uuid = str(uuid.uuid4())
+    #win_substrate_uuid = str(uuid.uuid4())
     cent_key_uuid = str(uuid.uuid4())
     cent_pass_uuid = str(uuid.uuid4())
-    win_pass_uuid = str(uuid.uuid4())
+    #win_pass_uuid = str(uuid.uuid4())
 
     # Sub in our UUIDs and names:
     # env
@@ -71,16 +71,16 @@ def main():
     # substrate
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["uuid"] = cent_substrate_uuid
-    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
-            ["uuid"] = win_substrate_uuid
+    #env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+    #        ["uuid"] = win_substrate_uuid
 
     # account
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["readiness_probe"]["login_credential_local_reference"]\
             ["uuid"] = cent_key_uuid
-    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
-            ["readiness_probe"]["login_credential_local_reference"]\
-            ["uuid"] = win_pass_uuid
+    #env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+    #        ["readiness_probe"]["login_credential_local_reference"]\
+    #        ["uuid"] = win_pass_uuid
 
     # subnet
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
@@ -97,12 +97,12 @@ def main():
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["create_spec"]["resources"]["disk_list"][0]\
             ["data_source_reference"]["uuid"] = cent_image_uuid
-    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
-            ["create_spec"]["resources"]["disk_list"][0]\
-            ["data_source_reference"]["name"] = win_image_name
-    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
-            ["create_spec"]["resources"]["disk_list"][0]\
-            ["data_source_reference"]["uuid"] = win_image_uuid
+    #env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+    #        ["create_spec"]["resources"]["disk_list"][0]\
+    #        ["data_source_reference"]["name"] = win_image_name
+    #env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+    #        ["create_spec"]["resources"]["disk_list"][0]\
+    #        ["data_source_reference"]["uuid"] = win_image_uuid
 
     # secrets
     for secret in secret_spec["entities"]:
@@ -110,8 +110,8 @@ def main():
         suuid = cent_key_uuid
       elif secret["name"].startswith("CENTOS"):
         suuid = cent_pass_uuid
-      else:
-        suuid = win_pass_uuid
+      #else:
+      #  suuid = win_pass_uuid
       env_spec["spec"]["resources"]["credential_definition_list"].append(
         {
           "name":secret["name"],

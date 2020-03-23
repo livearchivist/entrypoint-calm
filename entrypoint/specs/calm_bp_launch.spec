@@ -1,10 +1,10 @@
 {
    "entities":[
       {
-         "bp_name":"Windows_IaaS",
+         "bp_name":"CentOS_IaaS",
          "profile_name":"Default",
-         "app_name":"Windows_Workstation",
-         "app_description":"End user Windows Workstation",
+         "app_name":"CentOS_Workstation",
+         "app_description":"End user CentOS Workstation",
          "variables":[
             {
                "name":"password",

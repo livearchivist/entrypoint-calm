@@ -6,14 +6,14 @@
          "bp_project":"default"
       },
       {
-         "bp_name":"Windows_IaaS",
-         "bp_file":"Windows_IaaS.json",
-         "bp_project":"default"
+         "bp_name":"MySQL",
+         "bp_file":"MySQL.json",
+         "bp_project":"NY_Office"
       },
       {
          "bp_name":"Wordpress",
          "bp_file":"Wordpress.json",
-         "bp_project":"NY_Office"
+         "bp_project":"LA_Office"
       },
       {
          "bp_name":"Redis",
