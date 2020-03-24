@@ -133,6 +133,6 @@
          "pc_reset_password"
       ],
       "type":"$CUSTOM_SCRIPT",
-      "tar_url":"https://github.com/MichaelHaigh/Test-Drive/raw/master/entrypoint.tar.gz"
+      "tar_url":"https://github.com/MichaelHaigh/Test-Drive/raw/release/calm/entrypoint.tar.gz"
    }
 }
