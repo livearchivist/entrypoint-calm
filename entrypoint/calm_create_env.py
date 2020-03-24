@@ -110,8 +110,8 @@ def main():
         suuid = cent_key_uuid
       elif secret["name"].startswith("CENTOS"):
         suuid = cent_pass_uuid
-      #else:
-      #  suuid = win_pass_uuid
+      else:
+        continue
       env_spec["spec"]["resources"]["credential_definition_list"].append(
         {
           "name":secret["name"],
