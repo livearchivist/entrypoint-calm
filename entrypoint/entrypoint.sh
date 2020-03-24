@@ -13,7 +13,7 @@ echo ${CUSTOM_SCRIPT_CONFIG}
 yum -y install $(cat yum_pkgs.txt)
 pip3 install -r requirements.txt
 execute_command "export NUTEST_PATH=/home"
-python3 calm_create_image.py
+python3 pc_create_image.py
 python3 calm_upload_icons.py
 sleep 1200 # sleep so the image can be created
 python3 calm_create_project.py NY_Office LA_Office
