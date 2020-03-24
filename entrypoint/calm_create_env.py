@@ -86,9 +86,9 @@ def main():
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\
             ["create_spec"]["resources"]["nic_list"][0]\
             ["subnet_reference"]["uuid"] = subnet_info["uuid"]
-    env_spec["spec"]["resources"]["substrate_definition_list"][1]\
-            ["create_spec"]["resources"]["nic_list"][0]\
-            ["subnet_reference"]["uuid"] = subnet_info["uuid"]
+    #env_spec["spec"]["resources"]["substrate_definition_list"][1]\
+    #        ["create_spec"]["resources"]["nic_list"][0]\
+    #        ["subnet_reference"]["uuid"] = subnet_info["uuid"]
 
     # image
     env_spec["spec"]["resources"]["substrate_definition_list"][0]\

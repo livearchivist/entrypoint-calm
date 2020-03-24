@@ -11,12 +11,6 @@
          "username":"centos",
          "type":"PASSWORD",
          "secret":"nutanix/4u"
-      },
-      {
-         "name":"WIN_PASS",
-         "username":"Administrator",
-         "type":"PASSWORD",
-         "secret":"nutanix/4u"
       }
    ]
 }
