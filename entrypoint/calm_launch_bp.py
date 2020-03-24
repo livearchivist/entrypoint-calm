@@ -66,11 +66,12 @@ def main():
       INFO(f"{launch['bp_name']} run_editables: {run_editables}")
 
       # Set our runtime variables
-      for run_edit_var in run_editables["variable_list"]:
-        for launch_var in launch["variables"]:
-          if run_edit_var["name"] == launch_var["name"]:
-            run_edit_var["value"]["value"] = launch_var["value"]
-      INFO(f"{launch['bp_name']} run_editables: {run_editables}")
+      if "variable_list" in run_editables:
+        for run_edit_var in run_editables["variable_list"]:
+          for launch_var in launch["variables"]:
+            if run_edit_var["name"] == launch_var["name"]:
+              run_edit_var["value"]["value"] = launch_var["value"]
+        INFO(f"{launch['bp_name']} run_editables: {run_editables}")
 
       # Create our payload and launch our app
       payload = {
