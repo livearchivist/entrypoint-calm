@@ -8,9 +8,9 @@
          "bp_version":"1.0.0"
       },
       {
-         "bp_name":"Windows_IaaS",
-         "mp_name":"Windows",
-         "icon_name":"Windows",
+         "bp_name":"MySQL",
+         "mp_name":"MySQL",
+         "icon_name":"MySQL",
          "app_source": "LOCAL",
          "bp_version":"1.0.0"
       },
