@@ -13,8 +13,8 @@
          "file":"Redis.png"
       },
       {
-         "name":"Windows",
-         "file":"Windows.png"
+         "name":"MySQL",
+         "file":"MySQL.png"
       },
       {
          "name":"Wordpress",
