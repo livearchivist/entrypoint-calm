@@ -48,8 +48,8 @@ def main():
   cvm_external_ip = cvm_info.get("ips")[0][0]
   cluster = NOSCluster(cluster=cvm_external_ip, configured=False)
 
-  autodc_spec = file_to_dict("entrypoint/specs/pc_autodc.spec")
-  subnet_spec = file_to_dict("entrypoint/specs/calm_subnet.spec")
+  autodc_spec = file_to_dict("specs/pc_autodc.spec")
+  subnet_spec = file_to_dict("specs/calm_subnet.spec")
   INFO("autodc_spec: " + str(autodc_spec))
   INFO("subnet_spec: " + str(subnet_spec))
   autodc_ip = autodc_spec["directoryUrl"].split("/")[2].split(":")[0]
