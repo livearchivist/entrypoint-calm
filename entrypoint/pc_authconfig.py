@@ -36,9 +36,9 @@ def main():
     INFO(f"autodc_spec: {autodc_spec}")
 
     # Make API call to configure the authconfig
-    resp = create_via_v3_post(pc_external_ip,
+    resp = create_via_v1_post(pc_external_ip,
                               "authconfig/directories",
-                              pc_password, body)
+                              pc_password, autodc_spec)
 
     # Log appropriately based on response
     if (resp.code == 200 or resp.code == 202):
