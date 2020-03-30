@@ -19,6 +19,12 @@ from framework.interfaces.interface import Interface
 from framework.entities.cluster.nos_cluster import NOSCluster
 
 
+# Given a filename, return a dict of the file's contents
+def file_to_dict(filename):
+  with open(os.path.join(os.getcwd(), filename)) as json_file:
+    return json.load(json_file)
+
+
 def create_vm(cluster, vm_name, image_name, network_name, assigned_ip):
   """
   :param vm_name: name of the VMs. wil be appended by 1,2,3,...
@@ -42,11 +48,17 @@ def main():
   cvm_external_ip = cvm_info.get("ips")[0][0]
   cluster = NOSCluster(cluster=cvm_external_ip, configured=False)
 
+  autodc_spec = file_to_dict("entrypoint/specs/pc_autodc.spec")
+  subnet_spec = file_to_dict("entrypoint/specs/calm_subnet.spec")
+  INFO("autodc_spec: " + str(autodc_spec))
+  INFO("subnet_spec: " + str(subnet_spec))
+  autodc_ip = autodc_spec["directoryUrl"].split("/")[2].split(":")[0]
+
   create_vm(cluster=cluster,
             vm_name='AutoDC2',
             image_name='AutoDC2.qcow2',
-            network_name='default-net',
-            assigned_ip='172.31.0.201'
+            network_name=subnet_spec["name"],
+            assigned_ip=autodc_ip
             )
 
 if __name__ == '__main__':

@@ -32,6 +32,29 @@ def create_v3_url(ip, endpoint):
   return f"https://{ip}:9440/api/nutanix/v3/{endpoint}"
 
 
+# Given an IP and  Endpoint, return Nutanix v1 API URL
+def create_v1_url(ip, endpoint):
+  return f"https://{ip}:9440/PrismGateway/services/rest/v1/{endpoint}"
+
+
+# Create a new entity via a v1 post call, return the response
+def create_via_v1_post(ip, endpoint, password, body):
+
+  # Make the API call
+  parameters = RequestParameters(
+          uri=create_v1_url(ip, f"{endpoint}"),
+          username="admin",
+          password=password,
+          method="post",
+          payload=json.dumps(body)
+    )
+  rest_client = RESTClient(parameters)
+  resp = rest_client.request()
+  INFO(f"create_via_v1_post: {ip}, {endpoint}")
+
+  return resp
+
+
 # Create a new entity via a v3 post call, return the response
 def create_via_v3_post(ip, endpoint, password, body):
 
