@@ -47,6 +47,30 @@
             },
             "name":"CentOS-7-Gnome.qcow2"
          }
+      },
+      {
+         "spec":{
+            "name":"AutoDC2.qcow2",
+            "resources":{
+               "image_type":"DISK_IMAGE",
+               "source_uri":"https://storage.googleapis.com/testdrive-templates/library/images/AutoDC2-1360.qcow2",
+               "version":{
+                  "product_version":"7-1810-GUI",
+                  "product_name":"CentOS"
+               }
+            },
+            "description":"https://storage.googleapis.com/testdrive-templates/library/images/AutoDC2-1360.qcow2"
+         },
+         "api_version":"3.1.0",
+         "metadata":{
+            "kind":"image",
+            "owner_reference":{
+               "kind":"user",
+               "name":"admin",
+               "uuid":"00000000-0000-0000-0000-000000000000"
+            },
+            "name":"AutoDC2-1360.qcow2"
+         }
       }
    ]
 }
