@@ -26,4 +26,5 @@ python3 calm_launch_bp.py
 python3 calm_publish_bp.py
 python3 calm_approve_bp.py
 python3 calm_publish_apps.py
+python3 pc_authconfig.py
 sleep 1000
