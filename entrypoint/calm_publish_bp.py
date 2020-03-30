@@ -61,7 +61,9 @@ def main():
 
       # Modify our body
       bp["spec"]["name"] = publish["mp_name"]
+      bp["spec"]["description"] = publish["mp_description"]
       bp["status"]["name"] = publish["mp_name"]
+      bp["status"]["description"] = publish["mp_description"]
       spec = copy.deepcopy(bp["spec"])
       status = copy.deepcopy(bp["status"])
       del bp["spec"]["resources"]
@@ -70,10 +72,10 @@ def main():
       bp["spec"]["resources"] = {
         "app_attribute_list": ["FEATURED"]
       }
-      bp["spec"]["resources"]["app_state"] = "PENDING" #new
-      bp["spec"]["resources"]["project_reference_list"] = [] #new
-      bp["spec"]["resources"]["change_log"] = "" #new
-      bp["spec"]["resources"]["app_source"] = "LOCAL" #new
+      bp["spec"]["resources"]["app_state"] = "PENDING" 
+      bp["spec"]["resources"]["project_reference_list"] = [] 
+      bp["spec"]["resources"]["change_log"] = "" 
+      bp["spec"]["resources"]["app_source"] = "LOCAL" 
       bp["spec"]["resources"]["app_group_uuid"] = str(uuid.uuid4())
       bp["spec"]["resources"]["author"] = user_info["status"]["name"]
       for icon in icon_info["entities"]:
