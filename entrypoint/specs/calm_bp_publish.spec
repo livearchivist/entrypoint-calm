@@ -6,7 +6,7 @@
          "icon_name":"CentOS",
          "app_source":"LOCAL",
          "bp_version":"1.0.0",
-         "mp_description":"CentOS 7 1810 Developer Workstation with Gnome Desktop Environment installed. While launching the blueprint, the end user can specify their unique password.\n#### Hardware Requirement:\n*2 vCPU with 4 GiB of Memory\n#### Lifecycle:\n*Install NGT Apps\n*Manage NGT Apps\n*Uninstall NGT Apps\n*Snapshot Create\n*Snapshot Delete\n*VM Restore\n*App Update\n*Clone"
+         "mp_description":"CentOS 7 1810 Developer Workstation with Gnome Desktop Environment installed. While launching the blueprint, the end user can specify their unique password.\n#### Hardware Requirement:\n* 2 vCPU with 4 GiB of Memory\n#### Lifecycle:\n* Install NGT Apps\n* Manage NGT Apps\n* Uninstall NGT Apps\n* Snapshot Create\n* Snapshot Delete\n* VM Restore\n* App Update\n* Clone"
       },
       {
          "bp_name":"MySQL",
