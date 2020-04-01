@@ -61,14 +61,13 @@ def main():
 
       # Modify our body
       bp["spec"]["name"] = publish["mp_name"]
-      bp["spec"]["description"] = publish["mp_description"]
       bp["status"]["name"] = publish["mp_name"]
-      #bp["status"]["description"] = publish["mp_description"]
       spec = copy.deepcopy(bp["spec"])
       status = copy.deepcopy(bp["status"])
       del bp["spec"]["resources"]
       del bp["status"]
       bp["metadata"]["kind"] = "marketplace_item"
+      bp["spec"]["description"] = publish["mp_description"]
       bp["spec"]["resources"] = {
         "app_attribute_list": ["FEATURED"]
       }
