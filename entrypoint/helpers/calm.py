@@ -21,24 +21,24 @@ from helpers.rest import (RequestParameters, RequestResponse,
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-# Given a filename, return a dict of the file's contents
 def file_to_dict(filename):
+  """Given a filename, return a dict of the file's contents"""
   with open(os.path.join(os.getcwd(), filename)) as json_file:
     return json.load(json_file)
 
 
-# Given an IP and Endpoint, return Nutanix v3 API URL
 def create_v3_url(ip, endpoint):
+  """Given an IP and Endpoint, return Nutanix v3 API URL"""
   return f"https://{ip}:9440/api/nutanix/v3/{endpoint}"
 
 
-# Given an IP and  Endpoint, return Nutanix v1 API URL
 def create_v1_url(ip, endpoint):
+  """Given an IP and  Endpoint, return Nutanix v1 API URL"""
   return f"https://{ip}:9440/PrismGateway/services/rest/v1/{endpoint}"
 
 
-# Create a new entity via a v1 post call, return the response
 def create_via_v1_post(ip, endpoint, password, body):
+  """Create a new entity via a v1 post call, return the response"""
 
   # Make the API call
   parameters = RequestParameters(
@@ -56,8 +56,8 @@ def create_via_v1_post(ip, endpoint, password, body):
   return resp
 
 
-# Create a new entity via a v3 post call, return the response
 def create_via_v3_post(ip, endpoint, password, body):
+  """Create a new entity via a v3 post call, return the response"""
 
   # Make the API call
   parameters = RequestParameters(
@@ -75,9 +75,8 @@ def create_via_v3_post(ip, endpoint, password, body):
   return resp  
 
 
-# Uploads a named blueprint to a particular project
-def upload_bp_via_v3_post(ip, password,
-                          body, filename):
+def upload_bp_via_v3_post(ip, password, body, filename):
+  """Uploads a named blueprint to a particular project"""
 
   # Create the file dictionary
   files = {
@@ -99,9 +98,8 @@ def upload_bp_via_v3_post(ip, password,
 
   return resp
 
-# Uploads an app_icon
-def upload_icon_via_v3_post(ip, password,
-                            body, icon):
+def upload_icon_via_v3_post(ip, password, body, icon):
+  """Uploads an app_icon"""
 
   # Create the file dictionary
   files = {
@@ -128,9 +126,9 @@ def upload_icon_via_v3_post(ip, password,
 
 
 
-# Return the UUID of a desired entity.  If entity_name is empty
-# assume a single entity in response and send first UUID
 def uuid_via_v3_post(ip, endpoint, password, entity_name):
+  """Return the UUID of a desired entity.  If entity_name is empty
+     assume a single entity in response and send first UUID"""
 
   # Make the API call
   parameters = RequestParameters(
@@ -153,9 +151,9 @@ def uuid_via_v3_post(ip, endpoint, password, entity_name):
       return entity["metadata"]["uuid"]
 
 
-# Return the body of a group of entities
-# If payload is None, assume length=100
 def body_via_v3_post(ip, endpoint, password, payload):
+  """Return the body of a group of entities
+     If payload is None, assume length=100"""
 
   # Determine payload
   if payload is None:
@@ -180,8 +178,8 @@ def body_via_v3_post(ip, endpoint, password, payload):
   return resp
 
 
-# Return the body of a desired entity
 def body_via_v3_get(ip, endpoint, password, entity_uuid):
+  """Return the body of a desired entity"""
 
   # Make the API call
   parameters = RequestParameters(
@@ -200,9 +198,8 @@ def body_via_v3_get(ip, endpoint, password, entity_uuid):
   return resp
 
 
-# Update a given entity with a PUT
-def update_via_v3_put(ip, endpoint, password, entity_uuid,
-                      body):
+def update_via_v3_put(ip, endpoint, password, entity_uuid, body):
+  """Update a given entity with a PUT"""
 
   # Make the API call
   parameters = RequestParameters(
@@ -221,9 +218,8 @@ def update_via_v3_put(ip, endpoint, password, entity_uuid,
   return resp
 
 
-# Given a VLAN ID, return a dict of the matching
-# Subnet UUID and name
 def get_subnet_info(ip, password, vlan_id):
+  """Given a VLAN ID, return a dict of the matching Subnet UUID and name"""
 
   subnet_info = {}
 
