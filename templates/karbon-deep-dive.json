@@ -18,13 +18,7 @@
             "cidr":"$AUTO",
             "vlan_id":"1",
             "name":"default-net",
-            "virtual_ip":false,
-            "internet_forwarding":false,
-            "subnet_forwarding":{
-               "resources":[
-                  "tdaas_vpc"
-               ]
-            }
+            "virtual_ip":false
          }
       ],
       "labels":{}
@@ -35,6 +29,7 @@
       ],
       "type":"$NOS_CLUSTER",
       "is_new":true,
+      "set_cluster_external_ip_address": true,
       "region":"us-west1",
       "zone":"us-west1-c",
       "labels":{},
