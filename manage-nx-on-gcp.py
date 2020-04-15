@@ -124,10 +124,13 @@ def create(cluster):
     cluster_spec = file_to_dict(cluster)
 
     # Create the payload
-    payload = {
-        "resource_specs": cluster_spec,
-        "metadata": metadata
-    }
+    if "resource_specs" in cluster_spec:
+      payload = cluster_spec
+    else:
+      payload = {
+          "resource_specs": cluster_spec,
+          "metadata": metadata
+      }
 
     # Create the URL and make the call
     url = "https://nx-gcp.nutanix.com/api/v1/deployments/requests"
