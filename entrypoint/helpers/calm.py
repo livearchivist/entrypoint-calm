@@ -20,6 +20,12 @@ from helpers.rest import RequestParameters, RequestResponse, RESTClient
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
+def file_to_string(filename):
+    """Given a filename, return a str of the file's contents"""
+    with open(os.path.join(os.getcwd(), filename)) as str_file:
+        return str_file.read().rstrip("\n")
+
+
 def file_to_dict(filename):
     """Given a filename, return a dict of the file's contents"""
     with open(os.path.join(os.getcwd(), filename)) as json_file:

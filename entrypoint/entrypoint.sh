@@ -20,6 +20,8 @@ python3 calm_upload_icons.py
 python3 calm_enable_marketplace.py
 python3 calm_enable_showback.py
 sleep 1200 # sleep so the image can be created
+sh create_ssh_keys.sh
+python3 pc_ssh_keys.py
 python pc_deploy_autodc.py
 python3 calm_create_project.py NY_Office LA_Office
 python3 calm_create_env.py
