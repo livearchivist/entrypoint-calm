@@ -14,7 +14,6 @@ yum -y install $(cat yum_pkgs.txt)
 pip3 install -r requirements.txt
 execute_command "export NUTEST_PATH=/home"
 python3 pc_create_image.py
-python3 pc_authconfig.py
 python3 pc_ntp.py
 python3 pe_ntp.py
 python3 calm_upload_icons.py
@@ -31,4 +30,5 @@ python3 calm_launch_bp.py
 python3 calm_publish_bp.py
 python3 calm_approve_bp.py
 python3 calm_publish_apps.py
+python3 pc_authconfig.py
 sleep 1000
