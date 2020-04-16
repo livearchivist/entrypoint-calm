@@ -1,5 +1,5 @@
 """
-pc_ntp.py: automation to configure PC NTP
+pe_ntp.py: automation to configure PE NTP
 on NX-on-GCP / Test Drive.
 
 Author: michael@nutanix.com
@@ -23,11 +23,11 @@ def main():
   config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
   INFO(config)
 
-  # Get PC info from the config dict
-  pc_info = config.get("tdaas_pc")
-  pc_external_ip = pc_info.get("ips")[0][0]
-  pc_internal_ip = pc_info.get("ips")[0][1]
-  pc_password = pc_info.get("prism_password")
+  # Get PE info from the config dict
+  pe_info = config.get("tdaas_cluster")
+  pe_external_ip = pe_info.get("ips")[0][0]
+  pe_internal_ip = pe_info.get("ips")[0][1]
+  pe_password = pe_info.get("prism_password")
 
   try:
 
@@ -36,15 +36,15 @@ def main():
     INFO(f"ntp_spec: {ntp_spec}")
 
     # Make API call to configure the authconfig
-    resp = create_via_v1_post(pc_external_ip,
+    resp = create_via_v1_post(pe_external_ip,
                               "cluster/ntp_servers/add_list",
-                              pc_password, ntp_spec["entities"])
+                              pe_password, ntp_spec["entities"])
 
     # Log appropriately based on response
     if (resp.code == 200 or resp.code == 202):
-      INFO("PC NTP configured successfully.")
+      INFO("PE NTP configured successfully.")
     else:
-      raise Exception(f"PC NTP config failed with:\n" +
+      raise Exception(f"PE NTP config failed with:\n" +
                       f"Error Code: {resp.code}\n" +
                       f"Error Message: {resp.message}")
 
