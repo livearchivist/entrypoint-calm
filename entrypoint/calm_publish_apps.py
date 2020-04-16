@@ -32,7 +32,7 @@ def main():
   try:
 
     # Convert our spec to dict
-    apps_spec = file_to_dict("specs/calm_bp_publish.spec")
+    apps_spec = file_to_dict("specs/calm_bp_publish.json")
 
     # Get our non-default projects before the loop
     projects_payload = {

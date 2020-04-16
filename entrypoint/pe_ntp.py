@@ -32,7 +32,7 @@ def main():
   try:
 
     # Read in our spec file
-    ntp_spec = file_to_dict("specs/ntp.spec")
+    ntp_spec = file_to_dict("specs/ntp.json")
     INFO(f"ntp_spec: {ntp_spec}")
 
     # Make API call to configure the authconfig

@@ -32,7 +32,7 @@ def main():
   try:
 
     # Read in our spec file
-    autodc_spec = file_to_dict("specs/pc_autodc.spec")
+    autodc_spec = file_to_dict("specs/pc_autodc.json")
     INFO(f"autodc_spec: {autodc_spec}")
 
     # Make API call to configure the authconfig

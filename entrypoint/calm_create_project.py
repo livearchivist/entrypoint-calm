@@ -33,9 +33,9 @@ def main(project_name):
   try:
 
     # Read in the spec files and conver to dicts
-    project_spec = file_to_dict("specs/calm_project.spec")
+    project_spec = file_to_dict("specs/calm_project.json")
     INFO(f"project_spec pre-update: {project_spec}")
-    subnet_spec = file_to_dict("specs/calm_subnet.spec")
+    subnet_spec = file_to_dict("specs/calm_subnet.json")
     INFO(f"subnet_spec pre-update: {subnet_spec}")
 
     # Get our info from the infra

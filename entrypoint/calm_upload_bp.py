@@ -32,7 +32,7 @@ def main():
   try:
 
     # Read in the spec files and conver to dicts
-    bp_spec = file_to_dict("specs/calm_bp_upload.spec")
+    bp_spec = file_to_dict("specs/calm_bp_upload.json")
     INFO(f"bp_spec: {bp_spec}")
 
     # Loop through the blueprints to upload

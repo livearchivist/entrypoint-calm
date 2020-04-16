@@ -34,7 +34,7 @@ def main():
   try:
 
     # Read in the spec files and convert to dicts
-    launch_spec = file_to_dict("specs/calm_bp_launch.spec")
+    launch_spec = file_to_dict("specs/calm_bp_launch.json")
     INFO(f"launch_spec: {launch_spec}")
 
     # Loop through the blueprints to launch

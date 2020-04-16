@@ -33,7 +33,7 @@ def main():
   try:
 
     # Convert our spec to dict
-    subnet_spec = file_to_dict("specs/calm_subnet.spec")
+    subnet_spec = file_to_dict("specs/calm_subnet.json")
 
     # Get our info from the infra
     subnet_info = get_subnet_info(pc_external_ip, pc_password,

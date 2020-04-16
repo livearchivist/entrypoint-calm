@@ -34,7 +34,7 @@ def main():
   try:
 
     # Read in the spec files and conver to dicts
-    publish_spec = file_to_dict("specs/calm_bp_publish.spec")
+    publish_spec = file_to_dict("specs/calm_bp_publish.json")
     INFO(f"publish_spec: {publish_spec}")
 
     # Get user and icon info

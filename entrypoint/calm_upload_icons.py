@@ -32,7 +32,7 @@ def main():
   try:
 
     # Read in the spec files and conver to dicts
-    icon_spec = file_to_dict("specs/calm_icon.spec")
+    icon_spec = file_to_dict("specs/calm_icon.json")
     INFO(f"icon_spec: {icon_spec}")
 
     # Loop through the blueprints to upload
