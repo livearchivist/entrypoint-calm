@@ -7,4 +7,6 @@ service_name.json
 *logs.zip
 PROCESSING*.txt
 SUCCESS*.txt
+FAILED*.txt
+RELEASED*.txt
 entrypoint.tar.gz
