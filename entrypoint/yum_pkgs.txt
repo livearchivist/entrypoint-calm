@@ -1,3 +1,4 @@
+epel-release
 libxml2
 libxml2-devel
 libxslt
@@ -10,4 +11,5 @@ ipmitool
 sudo
 mailx
 sendmail
+jq
 python3
