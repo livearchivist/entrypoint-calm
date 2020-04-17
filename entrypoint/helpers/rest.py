@@ -75,7 +75,6 @@ class RESTClient:
     of our RequestResponse
     """
         response = RequestResponse()
-
         """
     setup the HTTP Basic Authorization header based on the
     supplied username and password
@@ -130,8 +129,7 @@ class RESTClient:
                     )
                 else:
                     api_request = requests.put(
-                        self.params.uri, headers=headers, verify=False,
-                        timeout=10,
+                        self.params.uri, headers=headers, verify=False, timeout=10,
                     )
             elif method.lower() == "get":
                 api_request = requests.get(
@@ -156,8 +154,7 @@ class RESTClient:
         except requests.exceptions.ConnectTimeout:
             # timeout while connecting to the specified IP address or FQDN
             response.code = -99
-            response.message = f"Connection has timed out. {username} " +\
-                               f"{password}"
+            response.message = f"Connection has timed out. {username} " + f"{password}"
             response.details = "Exception: requests.exceptions.ConnectTimeout"
         except urllib3.exceptions.ConnectTimeoutError:
             # timeout while connecting to the specified IP address or FQDN
@@ -176,4 +173,3 @@ class RESTClient:
             response.details = _e
 
         return response
-
