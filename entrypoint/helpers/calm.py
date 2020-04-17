@@ -6,6 +6,8 @@ Author: michael@nutanix.com
 Date:   2020-02-24
 """
 
+from helpers.rest import RequestParameters, RequestResponse, RESTClient
+from framework.lib.nulog import INFO, ERROR
 import sys
 import os
 import requests
@@ -14,8 +16,6 @@ import json
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
-from framework.lib.nulog import INFO, ERROR
-from helpers.rest import RequestParameters, RequestResponse, RESTClient
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -106,7 +106,8 @@ def upload_icon_via_v3_post(ip, password, body, icon):
     """Uploads an app_icon"""
 
     # Create the file dictionary
-    files = {"image": (icon["name"], open(f"images/{icon['file']}", "rb"), "image/png")}
+    files = {"image": (icon["name"], open(
+        f"images/{icon['file']}", "rb"), "image/png")}
 
     # Make the API call
     parameters = RequestParameters(
@@ -227,4 +228,3 @@ def get_subnet_info(ip, password, vlan_id):
             subnet_info["uuid"] = subnet["metadata"]["uuid"]
 
     return subnet_info
-
