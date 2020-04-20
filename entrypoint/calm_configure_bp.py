@@ -35,6 +35,12 @@ def main():
     pc_internal_ip = pc_info.get("ips")[0][1]
     pc_password = pc_info.get("prism_password")
 
+    # Get PE info from the config dict
+    pe_info = config.get("tdaas_cluster")
+    pe_external_ip = pe_info.get("ips")[0][0]
+    pe_internal_ip = pe_info.get("ips")[0][1]
+    pe_password = pe_info.get("prism_password")
+
     try:
 
         # Read in the spec files and conver to dicts
@@ -67,14 +73,22 @@ def main():
             # Configure secrets
             for secret in bp_body["spec"]["resources"]["credential_definition_list"]:
                 secret["secret"]["attrs"]["is_secret_modified"] = True
+                # Handle PC Creds which are unique
+                if secret["name"].lower() == "pc_creds":
+                    secret["secret"]["username"] = "admin"
+                    secret["secret"]["value"] = pc_password
+                elif secret["name"].lower() == "pe_creds":
+                    secret["secret"]["username"] = "admin"
+                    secret["secret"]["value"] = pe_password
                 # Find a matching type/username from our secret_spec
-                for ss in secret_spec["entities"]:
-                    if (
-                        secret["type"] == ss["type"]
-                        and secret["username"] == ss["username"]
-                    ):
-                        secret["secret"]["value"] = ss["secret"]
-                print(json.dumps(secret, sort_keys=True, indent=4))
+                else:
+                    for ss in secret_spec["entities"]:
+                        if (
+                            secret["type"] == ss["type"]
+                            and secret["username"] == ss["username"]
+                        ):
+                            secret["secret"]["value"] = ss["secret"]
+            print(json.dumps(secret, sort_keys=True, indent=4))
 
             # Configure NICs and Images
             for substrate in bp_body["spec"]["resources"]["substrate_definition_list"]:
