@@ -43,7 +43,9 @@ def main(project_name):
         INFO(f"subnet_spec pre-update: {subnet_spec}")
 
         # Get our info from the infra
-        subnet_info = get_subnet_info(pc_external_ip, pc_password, subnet_spec["vlan"])
+        subnet_info = get_subnet_info(
+            pc_external_ip, pc_password, subnet_spec["entities"][0]["vlan"]
+        )
         account_info = body_via_v3_post(pc_external_ip, "accounts", pc_password, None)
 
         # Cycle through our accounts to find the right one

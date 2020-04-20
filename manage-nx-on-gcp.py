@@ -118,6 +118,14 @@ def info(cluster, detail):
                 + f'PE Info:\thttps://{pe_info["external_ip"]}:9440\t\t'
                 + f'{pe_info["prism_password"]}'
             )
+            if "proxy_vm" in cluster_info["data"]["data"]["allocated_resources"]:
+                for uvm in cluster_info["data"]["data"]["allocated_resources"][
+                    "proxy_vm"
+                ]["target"]:
+                    uvm_dict = cluster_info["data"]["data"]["allocated_resources"][
+                        "proxy_vm"
+                    ]["target"][uvm]
+                    print(f'{uvm}:\t{uvm_dict["external_ip"]}')
         else:
             print(json.dumps(cluster_info, indent=4, sort_keys=True))
 

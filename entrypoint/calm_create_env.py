@@ -43,7 +43,9 @@ def main():
         secret_spec = file_to_dict("specs/calm_secrets.json")
 
         # Get our subnet info from the infra
-        subnet_info = get_subnet_info(pc_external_ip, pc_password, subnet_spec["vlan"])
+        subnet_info = get_subnet_info(
+            pc_external_ip, pc_password, subnet_spec["entities"][0]["vlan"]
+        )
         INFO(f"subnet_uuid: {subnet_info['uuid']}")
 
         # Get our image info from the infra

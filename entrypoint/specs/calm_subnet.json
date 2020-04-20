@@ -1,4 +1,12 @@
 {
-   "name":"default-net",
-   "vlan":1
+        "entities": [
+                {
+                        "name": "default-net",
+                        "vlan": 1
+                },
+                {
+                        "name": "public-net",
+                        "vlan": 2
+                }
+        ]
 }

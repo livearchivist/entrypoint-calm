@@ -41,6 +41,20 @@ def create_v1_url(ip, endpoint):
     return f"https://{ip}:9440/PrismGateway/services/rest/v1/{endpoint}"
 
 
+def create_proxy_array(public_uvms):
+    """Given a Proxy VM dictionary, return an array of tuples"""
+
+    uvm_array = []
+    for uvm in public_uvms["public_uvms"]:
+        uvm_array.append(
+            (
+                public_uvms["public_uvms"][uvm]["external_ip"],
+                public_uvms["public_uvms"][uvm]["internal_ip"],
+            )
+        )
+    return uvm_array
+
+
 def create_via_v1_post(ip, endpoint, password, body):
     """Create a new entity via a v1 post call, return the response"""
 
