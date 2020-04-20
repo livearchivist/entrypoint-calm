@@ -7,5 +7,9 @@ PC_IP="${PC_IP%\"}"
 PC_IP="${PC_IP#\"}"
 echo $PC_IP
 
+# Add PC Key to known_hosts
+ssh-keyscan $PC_IP | grep nistp521 > /root/.ssh/known_hosts
+
+# Copy over the containers
 ssh nutanix@$PC_IP 'sudo wget -O /home/docker/karbon_core/karbon-core.tar.xz https://storage.googleapis.com/testdrive-templates/library/release/karbon/karbon-core.tar.xz'
 ssh nutanix@$PC_IP 'sudo wget -O /home/docker/karbon_ui/karbon-ui.tar.xz https://storage.googleapis.com/testdrive-templates/library/release/karbon/karbon-ui.tar.xz'
