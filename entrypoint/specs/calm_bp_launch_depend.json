@@ -1,53 +1,38 @@
 {
         "entities": [
                 {
-                        "bp_name": "CentOS_IaaS",
+                        "bp_name": "EraPostgresProvision",
                         "profile_name": "Default",
-                        "app_name": "CentOS_Workstation",
-                        "app_description": "End user CentOS Workstation",
-                        "variables": [
+                        "app_name": "Postgres_Era_DB",
+                        "app_description": "Era managed PostgreSQL Database",
+                        "dependencies": [
                                 {
-                                        "name": "password",
-                                        "value": "nutanix/4u"
+                                        "app_name": "EraServer",
+                                        "values": [
+                                                {
+                                                        "name": "era_ip",
+                                                        "keys": [
+                                                                "status",
+                                                                "resources",
+                                                                "deployment_list",
+                                                                0,
+                                                                "substrate_configuration",
+                                                                "element_list",
+                                                                0,
+                                                                "address"
+                                                        ]
+                                                }
+                                        ]
                                 }
-                        ]
-                },
-                {
-                        "bp_name": "EraServerDeployment_Infra",
-                        "profile_name": "Default",
-                        "app_name": "EraServer",
-                        "app_description": "Nutanix Era Server Deployment",
-                        "variables": []
-                },
-                {
-                        "bp_name": "Wordpress",
-                        "profile_name": "Small_AHV",
-                        "app_name": "Wordpress_App",
-                        "app_description": "To access Wordpress, launch the console of your Windows Workstation, and enter in the IP address of the Ha_Proxy VM into a web browser.",
+                        ],
                         "variables": [
                                 {
-                                        "name": "MYSQL_PASSWORD",
+                                        "name": "db_password",
                                         "value": "nutanix/4u"
                                 },
                                 {
-                                        "name": "WP_DB_PASSWORD",
-                                        "value": "nutanix/4u"
-                                },
-                                {
-                                        "name": "WP_DB_USER",
-                                        "value": "wordpress"
-                                }
-                        ]
-                },
-                {
-                        "bp_name": "Jenkins",
-                        "profile_name": "Nutanix",
-                        "app_name": "Jenkins_App",
-                        "app_description": "To access Jenkins, launch the console of your Windows Workstation, and enter in the IP address of the Jenkins Master VM into a web browser.",
-                        "variables": [
-                                {
-                                        "name": "INSTALL_BLUEOCEAN",
-                                        "value": "no"
+                                        "name": "era_ip",
+                                        "value": ""
                                 }
                         ]
                 }

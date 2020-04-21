@@ -20,6 +20,7 @@ from helpers.calm import (
     body_via_v3_post,
     body_via_v3_get,
     create_via_v3_post,
+    recursive_dict_lookup,
 )
 
 
@@ -71,6 +72,33 @@ def main(launch):
                     run_editables = profile["runtime_editables"]
             INFO(f"{launch['bp_name']} profile_ref: {profile_ref}")
             INFO(f"{launch['bp_name']} run_editables: {run_editables}")
+
+            # Determine if this blueprint has an app dependency
+            if len(launch["dependencies"]) > 0:
+                # Get a list of running apps
+                apps = body_via_v3_post(pc_external_ip, "apps", pc_password, None).json
+                # Cycle through the apps
+                for app in apps["entities"]:
+                    # Cycle through our launch dependencies
+                    for depend in launch["dependencies"]:
+                        # Find the matching app name
+                        if app["status"]["name"] == depend["app_name"]:
+                            # Get app body
+                            app_body = body_via_v3_get(
+                                pc_external_ip,
+                                "apps",
+                                pc_password,
+                                app["metadata"]["uuid"],
+                            ).json
+                            # Loop through our dependency values
+                            for value in depend["values"]:
+                                # Get value from our body+key combo
+                                app_val = recursive_dict_lookup(app_body, value["keys"])
+                                # Set our app_val to the appropriate variable value
+                                for launch_var in launch["variables"]:
+                                    if value["name"] == launch_var["name"]:
+                                        launch_var["value"] = app_val
+                INFO(f'{launch["bp_name"]} vars after depend: {launch["variables"]}')
 
             # Set our runtime variables
             if "variable_list" in run_editables:
