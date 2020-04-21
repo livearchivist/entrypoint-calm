@@ -6,21 +6,21 @@ Author: michael@nutanix.com
 Date:   2020-03-18
 """
 
+import sys
+import os
+import json
+import uuid
+
+sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
+
+from framework.lib.nulog import INFO, ERROR
+from helpers.rest import RequestResponse
 from helpers.calm import (
     file_to_dict,
     body_via_v3_get,
     body_via_v3_post,
     update_via_v3_put,
 )
-from helpers.rest import RequestResponse
-from framework.lib.nulog import INFO, ERROR
-import sys
-import os
-import json
-import copy
-import uuid
-
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 
 def main():

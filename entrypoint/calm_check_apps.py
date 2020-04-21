@@ -6,15 +6,16 @@ Author: michael@nutanix.com
 Date:   2020-04-21
 """
 
-from helpers.calm import body_via_v3_post
-from helpers.rest import RequestResponse
-from framework.lib.nulog import INFO, ERROR
 import sys
 import os
 import json
 import time
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
+
+from framework.lib.nulog import INFO, ERROR
+from helpers.rest import RequestResponse
+from helpers.calm import body_via_v3_post
 
 
 def main():
