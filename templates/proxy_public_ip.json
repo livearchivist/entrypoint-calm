@@ -160,6 +160,7 @@
                         "managed_network",
                         "tdaas_pc",
                         "enable_calm",
+                        "proxy_vm",
                         "pc_reset_password"
                 ],
                 "type": "$CUSTOM_SCRIPT",
