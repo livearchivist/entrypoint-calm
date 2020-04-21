@@ -6,8 +6,8 @@
                         "bp_project": "default"
                 },
                 {
-                        "bp_name": "FiestaNoDB-PGSQL",
-                        "bp_file": "FiestaNoDB-PGSQL.json",
+                        "bp_name": "EraPostgresProvision",
+                        "bp_file": "EraPostgresProvision.json",
                         "bp_project": "default"
                 },
                 {
