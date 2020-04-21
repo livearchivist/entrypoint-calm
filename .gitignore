@@ -7,3 +7,6 @@ service_name.json
 *logs.zip
 PROCESSING*.txt
 SUCCESS*.txt
+RELEASED*.txt
+FAILED*.txt
+ABORTED*.txt
