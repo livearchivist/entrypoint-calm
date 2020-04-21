@@ -5,7 +5,6 @@
                         "profile_name": "Default",
                         "app_name": "CentOS_Workstation",
                         "app_description": "End user CentOS Workstation",
-                        "dependencies": [],
                         "variables": [
                                 {
                                         "name": "password",
@@ -18,7 +17,6 @@
                         "profile_name": "Default",
                         "app_name": "EraServer",
                         "app_description": "Nutanix Era Server Deployment",
-                        "dependencies": [],
                         "variables": []
                 },
                 {
@@ -26,7 +24,6 @@
                         "profile_name": "Small_AHV",
                         "app_name": "Wordpress_App",
                         "app_description": "To access Wordpress, launch the console of your Windows Workstation, and enter in the IP address of the Ha_Proxy VM into a web browser.",
-                        "dependencies": [],
                         "variables": [
                                 {
                                         "name": "MYSQL_PASSWORD",
@@ -47,7 +44,6 @@
                         "profile_name": "Nutanix",
                         "app_name": "Jenkins_App",
                         "app_description": "To access Jenkins, launch the console of your Windows Workstation, and enter in the IP address of the Jenkins Master VM into a web browser.",
-                        "dependencies": [],
                         "variables": [
                                 {
                                         "name": "INSTALL_BLUEOCEAN",

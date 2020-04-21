@@ -23,7 +23,7 @@ from helpers.calm import (
 )
 
 
-def main():
+def main(launch):
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
@@ -38,7 +38,7 @@ def main():
     try:
 
         # Read in the spec files and convert to dicts
-        launch_spec = file_to_dict("specs/calm_bp_launch.json")
+        launch_spec = file_to_dict(f"specs/{launch}")
         INFO(f"launch_spec: {launch_spec}")
 
         # Loop through the blueprints to launch
@@ -114,5 +114,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    for launch_spec in sys.argv:
+        if not launch_spec.endswith("py"):
+            main(launch_spec)
 

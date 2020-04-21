@@ -125,7 +125,10 @@ def info(cluster, detail):
                     uvm_dict = cluster_info["data"]["data"]["allocated_resources"][
                         "proxy_vm"
                     ]["target"][uvm]
-                    print(f'{uvm}:\t{uvm_dict["external_ip"]}')
+                    print(
+                        f'{uvm}:\t{uvm_dict["external_ip"]}\t\t'
+                        + f'{uvm_dict["internal_ip"]}'
+                    )
         else:
             print(json.dumps(cluster_info, indent=4, sort_keys=True))
 

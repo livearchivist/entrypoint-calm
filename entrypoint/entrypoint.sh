@@ -28,9 +28,12 @@ python3 calm_create_env.py
 python3 calm_configure_project.py
 python3 calm_upload_bp.py
 python3 calm_configure_bp.py
-python3 calm_launch_bp.py
+python3 calm_launch_bp.py calm_bp_launch.json
 python3 calm_publish_bp.py
 python3 calm_approve_bp.py
 python3 calm_publish_apps.py
 python3 pc_authconfig.py
 sleep 1000
+#python3 calm_launch_bp.py calm_bp_launch_depend.json
+#sleep 1000
+python3 calm_check_apps.py
