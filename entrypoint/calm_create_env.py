@@ -113,9 +113,9 @@ def main():
 
         # secrets
         for secret in secret_spec["entities"]:
-            if secret["type"] == "KEY":
+            if secret["name"] == "CENTOS_KEY":
                 suuid = cent_key_uuid
-            elif secret["name"].startswith("CENTOS"):
+            elif secret["name"] == "CENTOS_PASS":
                 suuid = cent_pass_uuid
             else:
                 continue
