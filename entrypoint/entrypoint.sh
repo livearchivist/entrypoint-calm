@@ -22,7 +22,9 @@ python3 calm_configure_project.py
 python3 calm_upload_bp.py
 python3 calm_configure_bp.py
 python3 calm_launch_bp.py calm_bp_launch.json
+sleep 60
+python3 calm_launch_bp.py calm_bp_launch_era.json
 sleep 600
-python3 calm_launch_bp.py calm_bp_launch_depend.json
+python3 calm_launch_bp.py calm_bp_launch_postgres.json
 sleep 900
 python3 calm_check_apps.py
