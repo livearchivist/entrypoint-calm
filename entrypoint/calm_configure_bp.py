@@ -100,7 +100,7 @@ def main():
                             and secret["username"] == ss["username"]
                         ):
                             secret["secret"]["value"] = ss["secret"]
-            print(json.dumps(secret, sort_keys=True, indent=4))
+                INFO(f"secret: {secret}")
 
             # Configure NICs and Images
             for substrate in bp_body["spec"]["resources"]["substrate_definition_list"]:

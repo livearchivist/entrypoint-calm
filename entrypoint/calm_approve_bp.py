@@ -80,7 +80,7 @@ def main():
                     )
 
     except Exception as ex:
-        INFO(traceback.format_exc())
+        ERROR(traceback.format_exc())
 
 
 if __name__ == "__main__":
