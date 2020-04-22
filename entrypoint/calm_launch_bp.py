@@ -75,7 +75,7 @@ def main(launch):
             INFO(f"{launch['bp_name']} run_editables: {run_editables}")
 
             # Determine if this blueprint has an app dependency
-            if len(launch["dependencies"]) > 0:
+            if "dependencies" in launch and len(launch["dependencies"]) > 0:
                 # Get a list of running apps
                 apps = body_via_v3_post(pc_external_ip, "apps", pc_password, None).json
                 # Cycle through the apps
