@@ -3,12 +3,13 @@ calm_upload_icons.py: automation to upload
 blueprint icons on NX-on-GCP / Test Drive.
 
 Author: michael@nutanix.com
-Date:   2020-03-`7
+Date:   2020-03-17
 """
 
 import sys
 import os
 import json
+import traceback
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
@@ -56,7 +57,7 @@ def main():
                 )
 
     except Exception as ex:
-        INFO(ex)
+        ERROR(traceback.format_exc())
 
 
 if __name__ == "__main__":

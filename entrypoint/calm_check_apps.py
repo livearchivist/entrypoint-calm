@@ -10,6 +10,7 @@ import sys
 import os
 import json
 import time
+import traceback
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
@@ -46,7 +47,7 @@ def main():
                 raise Exception(f"{app['status']['name']} app in a non-running state.")
 
     except Exception as ex:
-        ERROR(ex)
+        ERROR(traceback.format_exc())
         # NX-on-GCP does not support erroring out based on return codes,
         # so sleeping to time the deployment out
         time.sleep(18000)
