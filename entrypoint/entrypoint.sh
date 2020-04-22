@@ -26,5 +26,5 @@ sleep 60
 python3 calm_launch_bp.py calm_bp_launch_era.json
 sleep 600
 python3 calm_launch_bp.py calm_bp_launch_postgres.json
-sleep 900
-python3 calm_check_apps.py
+#sleep 900
+#python3 calm_check_apps.py
