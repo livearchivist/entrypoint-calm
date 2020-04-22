@@ -10,6 +10,7 @@ import sys
 import os
 import json
 import uuid
+import traceback
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
@@ -148,7 +149,7 @@ def main():
             )
 
     except Exception as ex:
-        INFO(ex)
+        ERROR(traceback.format_exc())
 
 
 if __name__ == "__main__":

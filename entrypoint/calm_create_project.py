@@ -9,6 +9,7 @@ Date:   2020-02-28
 import sys
 import os
 import json
+import traceback
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
@@ -87,7 +88,7 @@ def main(project_name):
                     )
 
     except Exception as ex:
-        INFO(ex)
+        ERROR(traceback.format_exc())
 
 
 if __name__ == "__main__":
