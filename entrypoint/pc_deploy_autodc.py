@@ -63,7 +63,7 @@ def main():
         cluster=cluster,
         vm_name="AutoDC2",
         image_name="AutoDC2.qcow2",
-        network_name=subnet_spec["name"],
+        network_name=subnet_spec["entities"][0]["name"],
         assigned_ip=autodc_ip,
     )
 

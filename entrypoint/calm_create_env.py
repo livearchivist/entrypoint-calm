@@ -10,6 +10,7 @@ import sys
 import os
 import json
 import uuid
+import traceback
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
@@ -43,7 +44,9 @@ def main():
         secret_spec = file_to_dict("specs/calm_secrets.json")
 
         # Get our subnet info from the infra
-        subnet_info = get_subnet_info(pc_external_ip, pc_password, subnet_spec["vlan"])
+        subnet_info = get_subnet_info(
+            pc_external_ip, pc_password, subnet_spec["entities"][0]["vlan"]
+        )
         INFO(f"subnet_uuid: {subnet_info['uuid']}")
 
         # Get our image info from the infra
@@ -111,9 +114,9 @@ def main():
 
         # secrets
         for secret in secret_spec["entities"]:
-            if secret["type"] == "KEY":
+            if secret["name"] == "CENTOS_KEY":
                 suuid = cent_key_uuid
-            elif secret["name"].startswith("CENTOS"):
+            elif secret["name"] == "CENTOS_PASS":
                 suuid = cent_pass_uuid
             else:
                 continue
@@ -146,7 +149,7 @@ def main():
             )
 
     except Exception as ex:
-        INFO(ex)
+        ERROR(traceback.format_exc())
 
 
 if __name__ == "__main__":

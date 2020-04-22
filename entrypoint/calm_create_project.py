@@ -9,6 +9,7 @@ Date:   2020-02-28
 import sys
 import os
 import json
+import traceback
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
@@ -43,7 +44,9 @@ def main(project_name):
         INFO(f"subnet_spec pre-update: {subnet_spec}")
 
         # Get our info from the infra
-        subnet_info = get_subnet_info(pc_external_ip, pc_password, subnet_spec["vlan"])
+        subnet_info = get_subnet_info(
+            pc_external_ip, pc_password, subnet_spec["entities"][0]["vlan"]
+        )
         account_info = body_via_v3_post(pc_external_ip, "accounts", pc_password, None)
 
         # Cycle through our accounts to find the right one
@@ -85,7 +88,7 @@ def main(project_name):
                     )
 
     except Exception as ex:
-        INFO(ex)
+        ERROR(traceback.format_exc())
 
 
 if __name__ == "__main__":

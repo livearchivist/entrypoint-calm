@@ -9,6 +9,7 @@ Date:   2020-02-24
 import sys
 import os
 import json
+import traceback
 
 sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
@@ -40,7 +41,13 @@ def main():
         subnet_spec = file_to_dict("specs/calm_subnet.json")
 
         # Get our info from the infra
-        subnet_info = get_subnet_info(pc_external_ip, pc_password, subnet_spec["vlan"])
+        subnet_info = get_subnet_info(
+            pc_external_ip, pc_password, subnet_spec["entities"][0]["vlan"]
+        )
+        if "proxy_vm" in config:
+            public_subnet_info = get_subnet_info(
+                pc_external_ip, pc_password, subnet_spec["entities"][1]["vlan"]
+            )
         account_info = body_via_v3_post(pc_external_ip, "accounts", pc_password, None)
         env_uuid = uuid_via_v3_post(pc_external_ip, "environments", pc_password, "")
 
@@ -65,6 +72,14 @@ def main():
                             "uuid": subnet_info["uuid"],
                         }
                     )
+                    if "proxy_vm" in config:
+                        project["spec"]["resources"]["subnet_reference_list"].append(
+                            {
+                                "kind": "subnet",
+                                "name": public_subnet_info["name"],
+                                "uuid": public_subnet_info["uuid"],
+                            }
+                        )
 
                 # Add account if not present
                 if len(project["spec"]["resources"]["account_reference_list"]) == 0:
@@ -108,7 +123,7 @@ def main():
                 )
 
     except Exception as ex:
-        print(ex)
+        ERROR(traceback.format_exc())
 
 
 if __name__ == "__main__":

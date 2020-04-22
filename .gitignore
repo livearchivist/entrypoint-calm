@@ -9,4 +9,5 @@ PROCESSING*.txt
 SUCCESS*.txt
 FAILED*.txt
 RELEASED*.txt
+ABORTED*.txt
 entrypoint.tar.gz
