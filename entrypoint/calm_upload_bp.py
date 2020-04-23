@@ -55,8 +55,8 @@ def main():
                 INFO(f"{bp['bp_name']} blueprint created successfully.")
             else:
                 raise Exception(
-                    f"{bp['bp_name']} blueprint create"
-                    + f" failed with:\n"
+                    f"{bp['bp_name']} blueprint create failed with:\n"
+                    + f"Resp: {resp}\n"
                     + f"Error Code: {resp.code}\n"
                     + f"Error Message: {resp.message}"
                 )

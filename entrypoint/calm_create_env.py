@@ -142,8 +142,8 @@ def main():
             INFO(f"{env_spec['spec']['name']} Env created successfully.")
         else:
             raise Exception(
-                f"{env_spec['spec']['name']} Env create"
-                + f" failed with:\n"
+                f"{env_spec['spec']['name']} Env create failed with:\n"
+                + f"Resp: {resp}\n"
                 + f"Error Code: {resp.code}\n"
                 + f"Error Message: {resp.message}"
             )

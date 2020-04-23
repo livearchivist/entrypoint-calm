@@ -50,6 +50,7 @@ def main():
         else:
             raise Exception(
                 f"PC NTP config failed with:\n"
+                + f"Resp: {resp}\n"
                 + f"Error Code: {resp.code}\n"
                 + f"Error Message: {resp.message}"
             )

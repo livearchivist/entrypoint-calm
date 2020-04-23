@@ -50,8 +50,8 @@ def main():
                 INFO(f"{icon['name']} icon created successfully.")
             else:
                 raise Exception(
-                    f"{icon['name']} icon create"
-                    + f" failed with:\n"
+                    f"{icon['name']} icon create failed with:\n"
+                    + f"Resp: {resp}\n"
                     + f"Error Code: {resp.code}\n"
                     + f"Error Message: {resp.message}"
                 )
