@@ -30,5 +30,5 @@ python3 calm_launch_bp.py calm_bp_launch.json
 python3 pc_authconfig.py
 sleep 600
 python3 calm_launch_bp.py calm_bp_launch_depend.json
-#sleep 1200
+sleep 1200
 #python3 calm_check_apps.py

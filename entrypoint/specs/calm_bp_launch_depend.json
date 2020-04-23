@@ -8,6 +8,10 @@
                         "dependencies": [],
                         "variables": [
                                 {
+                                        "name": "k8s_version",
+                                        "value": "1.16.8-0"
+                                },
+                                {
                                         "name": "cluster_name",
                                         "value": "test-drive-cluster"
                                 },
