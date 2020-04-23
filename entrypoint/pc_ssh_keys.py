@@ -48,6 +48,7 @@ def main():
         else:
             raise Exception(
                 f"SSH Key failed to add to PC with:\n"
+                + f"Resp: {resp}\n"
                 + f"Error Code: {resp.code}\n"
                 + f"Error Message: {resp.message}"
             )

@@ -116,8 +116,8 @@ def main():
                 INFO(f"{project['spec']['name']} Project updated successfully.")
             else:
                 raise Exception(
-                    f"{project['spec']['name']} Project update"
-                    + f" failed with:\n"
+                    f"{project['spec']['name']} Project update failed with:\n"
+                    + f"Resp: {resp}\n"
                     + f"Error Code: {resp.code}\n"
                     + f"Error Message: {resp.message}"
                 )

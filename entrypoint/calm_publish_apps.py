@@ -95,8 +95,8 @@ def main():
                         )
                     else:
                         raise Exception(
-                            f"{mp_body['spec']['name']} MP App Publish"
-                            + f" failed with:\n"
+                            f"{mp_body['spec']['name']} MP App Publish failed with:\n"
+                            + f"Resp: {resp}\n"
                             + f"Error Code: {pub_resp.code}\n"
                             + f"Error Message: {pub_resp.message}"
                         )

@@ -109,8 +109,8 @@ def main():
                 INFO(f"{publish['mp_name']} bp published successfully.")
             else:
                 raise Exception(
-                    f"{publish['mp_name']} bp publish"
-                    + f" failed with:\n"
+                    f"{publish['mp_name']} bp publish failed with:\n"
+                    + f"Resp: {resp}\n"
                     + f"Error Code: {resp.code}\n"
                     + f"Error Message: {resp.message}"
                 )
