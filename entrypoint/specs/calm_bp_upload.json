@@ -8,12 +8,12 @@
                 {
                         "bp_name": "Deploy_Karbon_Kubernetes",
                         "bp_file": "Deploy_Karbon_Kubernetes.json",
-                        "bp_project": "Default"
+                        "bp_project": "default"
                 },
                 {
                         "bp_name": "Enable_Karbon",
                         "bp_file": "Enable_Karbon.json",
-                        "bp_project": "Default"
+                        "bp_project": "default"
                 }
         ]
 }
