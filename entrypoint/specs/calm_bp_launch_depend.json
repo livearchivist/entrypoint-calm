@@ -1,38 +1,23 @@
 {
         "entities": [
                 {
-                        "bp_name": "EraPostgresProvision",
+                        "bp_name": "Deploy_Karbon_Kubernetes",
                         "profile_name": "Default",
-                        "app_name": "Postgres_Era_DB",
-                        "app_description": "Era managed PostgreSQL Database",
-                        "dependencies": [
-                                {
-                                        "app_name": "EraServer",
-                                        "values": [
-                                                {
-                                                        "name": "era_ip",
-                                                        "keys": [
-                                                                "status",
-                                                                "resources",
-                                                                "deployment_list",
-                                                                0,
-                                                                "substrate_configuration",
-                                                                "element_list",
-                                                                0,
-                                                                "address"
-                                                        ]
-                                                }
-                                        ]
-                                }
-                        ],
+                        "app_name": "Workstation_K8S_Cluster",
+                        "app_description": "Workstation and a Karbon deployed Kubernetes Cluster",
+                        "dependencies": [],
                         "variables": [
                                 {
-                                        "name": "db_password",
-                                        "value": "nutanix/4u"
+                                        "name": "cluster_name",
+                                        "value": "test-drive-cluster"
                                 },
                                 {
-                                        "name": "era_ip",
-                                        "value": ""
+                                        "name": "network_name",
+                                        "value": "default-net"
+                                },
+                                {
+                                        "name": "image_name",
+                                        "value": "ntnx-0.4"
                                 }
                         ]
                 }

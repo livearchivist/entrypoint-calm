@@ -22,13 +22,13 @@ sh create_ssh_keys.sh
 python3 pc_ssh_keys.py
 sh copy_karbon_bits.sh
 python pc_deploy_autodc.py
-#python3 calm_create_env.py
-#python3 calm_configure_project.py
-#python3 calm_upload_bp.py
-#python3 calm_configure_bp.py
-#python3 calm_launch_bp.py calm_bp_launch.json
+python3 calm_create_env.py
+python3 calm_configure_project.py
+python3 calm_upload_bp.py
+python3 calm_configure_bp.py
+python3 calm_launch_bp.py calm_bp_launch.json
 python3 pc_authconfig.py
-#sleep 1200
-#python3 calm_launch_bp.py calm_bp_launch_depend.json
+sleep 600
+python3 calm_launch_bp.py calm_bp_launch_depend.json
 #sleep 1200
 #python3 calm_check_apps.py
