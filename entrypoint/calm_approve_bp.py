@@ -73,8 +73,8 @@ def main():
                     INFO(f"{item['status']['name']} bp approved successfully.")
                 else:
                     raise Exception(
-                        f"{item['status']['name']} bp approved"
-                        + f" failed with:\n"
+                        f"{item['status']['name']} bp approved failed with:\n"
+                        + f"Resp: {resp}\n"
                         + f"Error Code: {resp.code}\n"
                         + f"Error Message: {resp.message}"
                     )

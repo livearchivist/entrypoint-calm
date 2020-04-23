@@ -130,8 +130,8 @@ def main(launch):
                 INFO(f"{launch['app_name']} app launched successfully.")
             else:
                 raise Exception(
-                    f"{launch['app_name']} app launch"
-                    + f" failed with:\n"
+                    f"{launch['app_name']} app launch failed with:\n"
+                    + f"Resp: {resp}\n"
                     + f"Error Code: {resp.code}\n"
                     + f"Error Message: {resp.message}"
                 )

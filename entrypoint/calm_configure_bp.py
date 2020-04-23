@@ -163,8 +163,8 @@ def main():
                 INFO(f"{bp['metadata']['name']} blueprint updated successfully.")
             else:
                 raise Exception(
-                    f"{bp['metadata']['name']} blueprint update"
-                    + f" failed with:\n"
+                    f"{bp['metadata']['name']} blueprint update failed with:\n"
+                    + f"Resp: {resp}\n"
                     + f"Error Code: {resp.code}\n"
                     + f"Error Message: {resp.message}"
                 )

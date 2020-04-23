@@ -46,6 +46,7 @@ def main():
         else:
             raise Exception(
                 f"Showback enable failed with:\n"
+                + f"Resp: {resp}\n"
                 + f"Error Code: {resp.code}\n"
                 + f"Error Message: {resp.message}"
             )

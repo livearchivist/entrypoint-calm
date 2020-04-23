@@ -52,8 +52,8 @@ def main():
                 INFO(f"image['spec']['name'] Image created successfully.")
             else:
                 raise Exception(
-                    f"image['spec']['name'] Image create "
-                    + f"failed with:\n"
+                    f"image['spec']['name'] Image create failed with:\n"
+                    + f"Resp: {resp}\n"
                     + f"Error Code: {resp.code}\n"
                     + f"Error Message: {resp.message}"
                 )
