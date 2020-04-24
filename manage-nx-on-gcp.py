@@ -113,7 +113,7 @@ def info(cluster, detail):
                     "tdaas_pc"
                 ]
                 print(
-                    'PC Info:\thttps://{pc_info["external_ip"]}:9440\t\t'
+                    f'PC Info:\thttps://{pc_info["external_ip"]}:9440\t\t'
                     + f'{pc_info["prism_password"]}'
                 )
             pe_info = cluster_info["data"]["data"]["allocated_resources"][
