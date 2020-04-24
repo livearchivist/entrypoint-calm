@@ -108,14 +108,19 @@ def info(cluster, detail):
                 json.dumps(cluster_info["data"]["metadata"], indent=4, sort_keys=True)
             )
         elif detail == "pass":
-            pc_info = cluster_info["data"]["data"]["allocated_resources"]["tdaas_pc"]
+            if "tdaas_pc" in cluster_info["data"]["data"]["allocated_resources"]:
+                pc_info = cluster_info["data"]["data"]["allocated_resources"][
+                    "tdaas_pc"
+                ]
+                print(
+                    'PC Info:\thttps://{pc_info["external_ip"]}:9440\t\t'
+                    + f'{pc_info["prism_password"]}'
+                )
             pe_info = cluster_info["data"]["data"]["allocated_resources"][
                 "tdaas_cluster"
             ]
             print(
-                f'PC Info:\thttps://{pc_info["external_ip"]}:9440\t\t'
-                + f'{pc_info["prism_password"]}\n'
-                + f'PE Info:\thttps://{pe_info["external_ip"]}:9440\t\t'
+                f'PE Info:\thttps://{pe_info["external_ip"]}:9440\t\t'
                 + f'{pe_info["prism_password"]}'
             )
             if "proxy_vm" in cluster_info["data"]["data"]["allocated_resources"]:
