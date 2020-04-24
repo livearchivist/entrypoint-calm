@@ -1,0 +1,111 @@
+{
+        "on-prem-nw": {
+                "region": "us-west1",
+                "type": "$NETWORK",
+                "is_new": true
+        },
+        "firewall": {
+                "type": "$FIREWALL",
+                "dependencies": [
+                        "on-prem-nw"
+                ],
+                "source_ip_ranges": [
+                        "0.0.0.0/0"
+                ],
+                "target_ports": [
+                        "10-9000"
+                ],
+                "target_tags": [
+                        "publicnet"
+                ]
+        },
+        "tdaas_cluster": {
+                "zone": "us-west1-c",
+                "region": "us-west1",
+                "is_new": true,
+                "type": "$NOS_CLUSTER",
+                "dependencies": [
+                        "on-prem-nw"
+                ],
+                "labels": {},
+                "provider": {
+                        "host": "on-prem-nw"
+                },
+                "hardware": {
+                        "min_ssd_count": 1,
+                        "cluster_min_nodes": 1,
+                        "min_host_gb_ram": 90,
+                        "min_host_cpu_count": 30,
+                        "svm_num_vcpus": 8,
+                        "svm_gb_ram": 16
+                },
+                "software": {
+                        "nos": {
+                                "version": "euphrates-5-11-stable",
+                                "build_type": "opt",
+                                "build_url": "http://endor.dyn.nutanix.com/builds/nos-builds/master/1ce0a2fb9acdf27a89847662c5c0a42a395db41f/opt/tar/nutanix_installer_package-opt-master-1ce0a2fb9acdf27a89847662c5c0a42a395db41f.tar.gz",
+                                "commit": "7d9581"
+                        },
+                        "hypervisor": {
+                                "build_url": "http://endor.dyn.nutanix.com/builds/ahv-builds/20170830.100789/host-bundle-el6.nutanix.20170830.100789.tar.gz",
+                                "type": "kvm"
+                        }
+                }
+        },
+        "managednetwork": {
+                "type": "$MANAGED_NETWORK",
+                "is_new": true,
+                "zone": "us-west1-c",
+                "region": "us-west1",
+                "public_net": true,
+                "networks": [
+                        {
+                                "cidr": "$AUTO",
+                                "vlan_id": 1,
+                                "name": "default-net"
+                        }
+                ],
+                "dependencies": [
+                        "tdaas_cluster",
+                        "on-prem-nw"
+                ]
+        },
+        "proxy_vm": {
+                "type": "$PROXY_VM",
+                "is_new": true,
+                "region": "us-west1",
+                "zone": "us-west1-c",
+                "dependencies": [
+                        "on-prem-nw",
+                        "tdaas_cluster",
+                        "managednetwork"
+                ],
+                "target": {
+                        "era-uvm": {}
+                },
+                "network_tags": [
+                        "publicnet"
+                ]
+        },
+        "era": {
+                "type": "$ERA",
+                "is_new": true,
+                "dependencies": [
+                        "tdaas_cluster",
+                        "managednetwork",
+                        "proxy_vm"
+                ],
+                "proxy_label": "era-uvm",
+                "image_spec": {
+                        "name": "EraVMImage",
+                        "source_url": "http://download.nutanix.com/era/1.2.1.1/ERA-Server-build-1.2.1.1-d7f5f065d4b2d0fe5f919694f124144acf0c7bdf.qcow2"
+                },
+                "vm_spec": {
+                        "name": "EraVM",
+                        "num_vcpus": "4",
+                        "num_cores_per_vcpu": "1",
+                        "memory": "16G"
+                },
+                "era_password": "Nutanix.123"
+        }
+}
