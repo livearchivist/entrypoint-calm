@@ -135,10 +135,14 @@ class RESTClient:
                 api_request = requests.get(
                     self.params.uri, headers=headers, timeout=10, verify=False
                 )
+            elif method.lower() == "delete":
+                api_request = requests.delete(
+                    self.params.uri, headers=headers, timeout=10, verify=False
+                )
             else:
                 raise Exception(
                     f"Passed method of '{method}' is not supported. "
-                    + " Supported methods are 'post', 'put', and 'get'."
+                    + " Supported methods are 'post', 'put', 'get', and 'delete'."
                 )
 
             # if no exceptions occur here, we can process the response
