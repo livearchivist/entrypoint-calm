@@ -1,6 +1,6 @@
 """
-calm_delete_apps.py: automation to delete or soft delete
-Nutanix Calm applications.
+calm_delete_apps.py: automation to delete
+Nutanix Calm blueprints.
 
 Author: michael@nutanix.com
 Date:   2020-04-25
@@ -34,29 +34,25 @@ def main():
     try:
 
         # Read in the delete spec file
-        delete_spec = file_to_dict("specs/calm_app_delete.json")
+        delete_spec = file_to_dict("specs/calm_bp_delete.json")
 
-        # Loop through the apps to delete
-        for app in delete_spec["entities"]:
+        # Loop through the bps to delete
+        for bp in delete_spec["entities"]:
 
-            # Get the app uuid
-            app_uuid = uuid_via_v3_post(
-                pc_external_ip, "apps", pc_password, app["app_name"]
+            # Get the bp uuid
+            bp_uuid = uuid_via_v3_post(
+                pc_external_ip, "blueprints", pc_password, bp["bp_name"]
             )
 
-            # Handle soft_delete
-            if app["soft_delete"]:
-                app_uuid = app_uuid + "?type=soft"
-
-            # Delete the app
-            resp = del_via_v3_delete(pc_external_ip, "apps", pc_password, app_uuid)
+            # Delete the bp
+            resp = del_via_v3_delete(pc_external_ip, "blueprints", pc_password, bp_uuid)
 
             # Log appropriately based on response
             if resp.code == 200 or resp.code == 202:
-                INFO(f'{app["app_name"]} app deleted successfully.')
+                INFO(f'{bp["bp_name"]} blueprint deleted successfully.')
             else:
                 raise Exception(
-                    'f{app["app_name"]} app delete failed with:\n'
+                    'f{bp["bp_name"]} blueprint delete failed with:\n'
                     + f"Resp: {resp}\n"
                     + f"Error Code: {resp.code}\n"
                     + f"Error Message: {resp.message}"
