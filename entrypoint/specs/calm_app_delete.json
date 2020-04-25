@@ -1,0 +1,8 @@
+{
+        "entities": [
+                {
+                        "app_name": "EnableKarbon",
+                        "soft_delete": true
+                }
+        ]
+}
