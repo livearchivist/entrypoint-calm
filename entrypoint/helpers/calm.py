@@ -237,6 +237,24 @@ def update_via_v3_put(ip, endpoint, password, entity_uuid, body):
     return resp
 
 
+def del_via_v3_delete(ip, endpoint, password, entity_uuid):
+    """Delete a given entity with a DELETE"""
+
+    # Make the API call
+    parameters = RequestParameters(
+        uri=create_v3_url(ip, f"{endpoint}/{entity_uuid}"),
+        username="admin",
+        password=password,
+        method="delete",
+    )
+    rest_client = RESTClient(parameters)
+    resp = rest_client.request()
+    INFO(f"del_via_v3_delete: {ip}, {endpoint}, {entity_uuid}")
+
+    # Return the response
+    return resp
+
+
 def get_subnet_info(ip, password, vlan_id):
     """Given a VLAN ID, return a dict of the matching Subnet UUID and name"""
 
