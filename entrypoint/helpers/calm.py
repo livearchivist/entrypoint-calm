@@ -246,6 +246,8 @@ def del_via_v3_delete(ip, endpoint, password, entity_uuid):
         username="admin",
         password=password,
         method="delete",
+        payload=None,
+        files=None
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
