@@ -52,13 +52,15 @@ def main():
             resp = del_via_v3_delete(pc_external_ip, "apps", pc_password, app_uuid)
 
             # Log appropriately based on response
-            if (resp.code == 200 or resp.code == 202):
+            if resp.code == 200 or resp.code == 202:
                 INFO(f'{app["app_name"]} app deleted successfully.')
             else:
-                raise Exception('f{app["app_name"]} app delete failed with:\n' +
-                        + f"Resp: {resp}\n"
-                        + f"Error Code: {resp.code}\n"
-                        + f"Error Message: {resp.message}"
+                raise Exception(
+                    'f{app["app_name"]} app delete failed with:\n'
+                    + +f"Resp: {resp}\n"
+                    + f"Error Code: {resp.code}\n"
+                    + f"Error Message: {resp.message}"
+                )
 
     except Exception as ex:
         ERROR(traceback.format_exc())
