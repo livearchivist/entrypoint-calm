@@ -28,3 +28,4 @@ sleep 600
 python3 calm_launch_bp.py calm_bp_launch_postgres.json
 sleep 1800
 python3 calm_check_apps.py
+exit 0
