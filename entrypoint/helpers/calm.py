@@ -237,6 +237,26 @@ def update_via_v3_put(ip, endpoint, password, entity_uuid, body):
     return resp
 
 
+def update_via_v1_put(ip, endpoint, password, entity, body):
+    """Update a given entity with a PUT"""
+
+    # Make the API call
+    parameters = RequestParameters(
+        uri=create_v1_url(ip, f"{endpoint}/{entity}"),
+        username="admin",
+        password=password,
+        method="put",
+        payload=json.dumps(body),
+        files=None,
+    )
+    rest_client = RESTClient(parameters)
+    resp = rest_client.request()
+    INFO(f"update_via_v1_put: {ip}, {endpoint}, {entity}")
+
+    # Return the response
+    return resp
+
+
 def del_via_v3_delete(ip, endpoint, password, entity_uuid):
     """Delete a given entity with a DELETE"""
 
@@ -247,7 +267,7 @@ def del_via_v3_delete(ip, endpoint, password, entity_uuid):
         password=password,
         method="delete",
         payload=None,
-        files=None
+        files=None,
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()

@@ -1,0 +1,18 @@
+{
+        "entities": [
+                {
+                        "profile": {
+                                "username": "karbon",
+                                "firstName": "karbon",
+                                "lastName": "karbon",
+                                "emailId": "karbon@nutanix.com",
+                                "password": "karbon/4u",
+                                "locale": "en-US"
+                        },
+                        "enabled": true,
+                        "roles": [
+                                "ROLE_CLUSTER_ADMIN"
+                        ]
+                }
+        ]
+}
