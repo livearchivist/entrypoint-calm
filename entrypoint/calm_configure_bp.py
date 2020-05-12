@@ -11,9 +11,6 @@ import os
 import json
 import traceback
 
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
-
-from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
 from helpers.calm import (
     file_to_dict,
@@ -29,7 +26,7 @@ def main():
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
-    INFO(config)
+    print(config)
 
     # Get PC info from the config dict
     pc_info = config.get("tdaas_pc")
@@ -47,9 +44,9 @@ def main():
 
         # Read in the spec files and conver to dicts
         subnet_spec = file_to_dict("specs/calm_subnet.json")
-        INFO(f"subnet_spec: {subnet_spec}")
+        print(f"subnet_spec: {subnet_spec}")
         secret_spec = file_to_dict("specs/calm_secrets.json")
-        INFO(f"secret_spec: {secret_spec}")
+        print(f"secret_spec: {secret_spec}")
 
         # Get our subnet and image info from the infra
         subnet_info = get_subnet_info(
@@ -100,7 +97,7 @@ def main():
                             and secret["username"] == ss["username"]
                         ):
                             secret["secret"]["value"] = ss["secret"]
-                INFO(f"secret: {secret}")
+                print(f"secret: {secret}")
 
             # Configure NICs and Images
             for substrate in bp_body["spec"]["resources"]["substrate_definition_list"]:
@@ -120,7 +117,7 @@ def main():
                                 proxy_ips = proxy_array.pop()
                                 nic["ip_endpoint_list"][0]["ip"] = proxy_ips[1]
                             else:
-                                ERROR(
+                                print(
                                     f'Blueprint "{bp_body["metadata"]["name"]}" has '
                                     + f'"infra" in the name, but there were not enough '
                                     + f" proxy IPs configured: {config}. If"
@@ -160,7 +157,7 @@ def main():
 
             # Log appropriately based on response
             if resp.code == 200 or resp.code == 202:
-                INFO(f"{bp['metadata']['name']} blueprint updated successfully.")
+                print(f"{bp['metadata']['name']} blueprint updated successfully.")
             else:
                 raise Exception(
                     f"{bp['metadata']['name']} blueprint update"
@@ -170,7 +167,7 @@ def main():
                 )
 
     except Exception as ex:
-        ERROR(traceback.format_exc())
+        print(traceback.format_exc())
 
 
 if __name__ == "__main__":

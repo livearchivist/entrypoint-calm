@@ -11,9 +11,6 @@ import os
 import json
 import traceback
 
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
-
-from framework.lib.nulog import INFO, ERROR
 from helpers.calm import (
     body_via_v3_get,
     body_via_v3_post,
@@ -26,7 +23,7 @@ def main():
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
-    INFO(config)
+    print(config)
 
     # Get PC info from the config dict
     pc_info = config.get("tdaas_pc")
@@ -90,19 +87,24 @@ def main():
 
                     # Log appropriately based on response
                     if pub_resp.code == 200 or pub_resp.code == 202:
-                        INFO(
+                        print(
                             f"{mp_body['spec']['name']} MP item published successfully."
                         )
                     else:
                         raise Exception(
+<<<<<<< HEAD
                             f"{mp_body['spec']['name']} MP App Publish"
                             + f" failed with:\n"
+=======
+                            f"{mp_body['spec']['name']} MP App Publish failed with:\n"
+                            + f"Resp: {pub_resp}\n"
+>>>>>>> c577c7d... Removed nutest egg so error codes can be implemented
                             + f"Error Code: {pub_resp.code}\n"
                             + f"Error Message: {pub_resp.message}"
                         )
 
     except Exception as ex:
-        ERROR(traceback.format_exc())
+        print(traceback.format_exc())
 
 
 if __name__ == "__main__":
