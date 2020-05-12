@@ -10,9 +10,6 @@ import sys
 import os
 import json
 
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
-
-from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
 from helpers.calm import (
     file_to_dict,
@@ -26,7 +23,7 @@ def main(project_name):
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
-    INFO(config)
+    print(config)
 
     # Get PC info from the config dict
     pc_info = config.get("tdaas_pc")
@@ -38,9 +35,9 @@ def main(project_name):
 
         # Read in the spec files and conver to dicts
         project_spec = file_to_dict("specs/calm_project.spec")
-        INFO(f"project_spec pre-update: {project_spec}")
+        print(f"project_spec pre-update: {project_spec}")
         subnet_spec = file_to_dict("specs/calm_subnet.spec")
-        INFO(f"subnet_spec pre-update: {subnet_spec}")
+        print(f"subnet_spec pre-update: {subnet_spec}")
 
         # Get our info from the infra
         subnet_info = get_subnet_info(pc_external_ip, pc_password, subnet_spec["vlan"])
@@ -64,7 +61,7 @@ def main(project_name):
                 project_spec["spec"]["resources"]["account_reference_list"][0][
                     "uuid"
                 ] = account["metadata"]["uuid"]
-                INFO(f"project_spec post-update: {project_spec}")
+                print(f"project_spec post-update: {project_spec}")
 
                 # Make API call to create project
                 resp = create_via_v3_post(
@@ -73,7 +70,7 @@ def main(project_name):
 
                 # Log appropriately based on response
                 if resp.code == 200 or resp.code == 202:
-                    INFO(
+                    print(
                         f"{project_spec['spec']['name']} Project created successfully."
                     )
                 else:
@@ -85,7 +82,7 @@ def main(project_name):
                     )
 
     except Exception as ex:
-        INFO(ex)
+        print(ex)
 
 
 if __name__ == "__main__":
