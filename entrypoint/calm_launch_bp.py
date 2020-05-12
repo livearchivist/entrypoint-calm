@@ -12,9 +12,6 @@ import json
 import time
 import traceback
 
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
-
-from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
 from helpers.calm import (
     file_to_dict,
@@ -29,7 +26,7 @@ def main(launch):
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
-    INFO(config)
+    print(config)
 
     # Get PC info from the config dict
     pc_info = config.get("tdaas_pc")
@@ -41,7 +38,7 @@ def main(launch):
 
         # Read in the spec files and convert to dicts
         launch_spec = file_to_dict(f"specs/{launch}")
-        INFO(f"launch_spec: {launch_spec}")
+        print(f"launch_spec: {launch_spec}")
 
         # Loop through the blueprints to launch
         for launch in launch_spec["entities"]:
@@ -71,8 +68,8 @@ def main(launch):
                 if profile["app_profile_reference"]["name"] == launch["profile_name"]:
                     profile_ref = profile["app_profile_reference"]
                     run_editables = profile["runtime_editables"]
-            INFO(f"{launch['bp_name']} profile_ref: {profile_ref}")
-            INFO(f"{launch['bp_name']} run_editables: {run_editables}")
+            print(f"{launch['bp_name']} profile_ref: {profile_ref}")
+            print(f"{launch['bp_name']} run_editables: {run_editables}")
 
             # Determine if this blueprint has an app dependency
             if len(launch["dependencies"]) > 0:
@@ -99,7 +96,7 @@ def main(launch):
                                 for launch_var in launch["variables"]:
                                     if value["name"] == launch_var["name"]:
                                         launch_var["value"] = app_val
-                INFO(f'{launch["bp_name"]} vars after depend: {launch["variables"]}')
+                print(f'{launch["bp_name"]} vars after depend: {launch["variables"]}')
 
             # Set our runtime variables
             if "variable_list" in run_editables:
@@ -107,7 +104,7 @@ def main(launch):
                     for launch_var in launch["variables"]:
                         if run_edit_var["name"] == launch_var["name"]:
                             run_edit_var["value"]["value"] = launch_var["value"]
-                INFO(f"{launch['bp_name']} run_editables: {run_editables}")
+                print(f"{launch['bp_name']} run_editables: {run_editables}")
 
             # Create our payload and launch our app
             payload = {
@@ -127,7 +124,7 @@ def main(launch):
 
             # Log appropriately based on response
             if resp.code == 200 or resp.code == 202:
-                INFO(f"{launch['app_name']} app launched successfully.")
+                print(f"{launch['app_name']} app launched successfully.")
             else:
                 raise Exception(
                     f"{launch['app_name']} app launch failed with:\n"
@@ -139,7 +136,7 @@ def main(launch):
             time.sleep(2)
 
     except Exception as ex:
-        ERROR(traceback.format_exc())
+        print(traceback.format_exc())
 
 
 if __name__ == "__main__":
