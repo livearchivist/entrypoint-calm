@@ -7,14 +7,11 @@ Date:   2020-02-24
 """
 
 from helpers.rest import RequestParameters, RequestResponse, RESTClient
-from framework.lib.nulog import INFO, ERROR
 import sys
 import os
 import requests
 import urllib3
 import json
-
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -79,7 +76,7 @@ def create_via_v1_post(ip, endpoint, password, body):
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
-    INFO(f"create_via_v1_post: {ip}, {endpoint}")
+    print(f"create_via_v1_post: {ip}, {endpoint}")
 
     return resp
 
@@ -98,7 +95,7 @@ def create_via_v3_post(ip, endpoint, password, body):
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
-    INFO(f"create_via_v3_post: {ip}, {endpoint}")
+    print(f"create_via_v3_post: {ip}, {endpoint}")
 
     return resp
 
@@ -120,7 +117,7 @@ def upload_bp_via_v3_post(ip, password, body, filename):
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
-    INFO(f"upload_bp_via_v3_post: {ip}, {body}")
+    print(f"upload_bp_via_v3_post: {ip}, {body}")
 
     return resp
 
@@ -142,7 +139,7 @@ def upload_icon_via_v3_post(ip, password, body, icon):
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
-    INFO(f"upload_icon_via_v3_post: {ip}, {body}")
+    print(f"upload_icon_via_v3_post: {ip}, {body}")
 
     return resp
 
@@ -162,7 +159,7 @@ def uuid_via_v3_post(ip, endpoint, password, entity_name):
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
-    INFO(f"uuid_via_v3_post: {ip}, {endpoint}, {entity_name}")
+    print(f"uuid_via_v3_post: {ip}, {endpoint}, {entity_name}")
 
     # Return UUID
     for entity in resp.json["entities"]:
@@ -191,7 +188,7 @@ def body_via_v3_post(ip, endpoint, password, payload):
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
-    INFO(f"body_via_v3_post: {ip}, {endpoint}")
+    print(f"body_via_v3_post: {ip}, {endpoint}")
 
     # Return the response
     return resp
@@ -211,7 +208,7 @@ def body_via_v3_get(ip, endpoint, password, entity_uuid):
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
-    INFO(f"body_via_v3_get: {ip}, {endpoint}, {entity_uuid}")
+    print(f"body_via_v3_get: {ip}, {endpoint}, {entity_uuid}")
 
     # Return the response
     return resp
@@ -231,7 +228,7 @@ def update_via_v3_put(ip, endpoint, password, entity_uuid, body):
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
-    INFO(f"update_via_v3_put: {ip}, {endpoint}, {entity_uuid}")
+    print(f"update_via_v3_put: {ip}, {endpoint}, {entity_uuid}")
 
     # Return the response
     return resp
@@ -247,11 +244,11 @@ def del_via_v3_delete(ip, endpoint, password, entity_uuid):
         password=password,
         method="delete",
         payload=None,
-        files=None
+        files=None,
     )
     rest_client = RESTClient(parameters)
     resp = rest_client.request()
-    INFO(f"del_via_v3_delete: {ip}, {endpoint}, {entity_uuid}")
+    print(f"del_via_v3_delete: {ip}, {endpoint}, {entity_uuid}")
 
     # Return the response
     return resp
