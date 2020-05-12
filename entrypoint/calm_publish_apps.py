@@ -10,9 +10,6 @@ import sys
 import os
 import json
 
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
-
-from framework.lib.nulog import INFO, ERROR
 from helpers.calm import (
     body_via_v3_get,
     body_via_v3_post,
@@ -25,7 +22,7 @@ def main():
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
-    INFO(config)
+    print(config)
 
     # Get PC info from the config dict
     pc_info = config.get("tdaas_pc")
@@ -89,7 +86,7 @@ def main():
 
                     # Log appropriately based on response
                     if pub_resp.code == 200 or pub_resp.code == 202:
-                        INFO(
+                        print(
                             f"{mp_body['spec']['name']} MP item published successfully."
                         )
                     else:

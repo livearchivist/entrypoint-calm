@@ -11,9 +11,6 @@ import os
 import json
 import uuid
 
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
-
-from framework.lib.nulog import INFO, ERROR
 from helpers.calm import (
     file_to_dict,
     uuid_via_v3_post,
@@ -26,7 +23,7 @@ def main():
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
-    INFO(config)
+    print(config)
 
     # Get PC info from the config dict
     pc_info = config.get("tdaas_pc")
@@ -44,18 +41,18 @@ def main():
 
         # Get our subnet info from the infra
         subnet_info = get_subnet_info(pc_external_ip, pc_password, subnet_spec["vlan"])
-        INFO(f"subnet_uuid: {subnet_info['uuid']}")
+        print(f"subnet_uuid: {subnet_info['uuid']}")
 
         # Get our image info from the infra
         cent_image_name = image_spec["entities"][0]["metadata"]["name"]
         cent_image_uuid = uuid_via_v3_post(
             pc_external_ip, "images", pc_password, cent_image_name
         )
-        INFO(f"cent_image_uuid: {cent_image_uuid}")
+        print(f"cent_image_uuid: {cent_image_uuid}")
         # win_image_name = image_spec["entities"][1]["metadata"]["name"]
         # win_image_uuid = uuid_via_v3_post(pc_external_ip, "images",
         #                                   pc_password, win_image_name)
-        # INFO(f"win_image_uuid: {win_image_uuid}")
+        # print(f"win_image_uuid: {win_image_uuid}")
 
         # Generate UUIDs for new components
         env_name = str(uuid.uuid4())
@@ -131,12 +128,12 @@ def main():
             )
 
         # Make the API call to create the environment
-        INFO(f"env_spec: {env_spec}")
+        print(f"env_spec: {env_spec}")
         resp = create_via_v3_post(pc_external_ip, "environments", pc_password, env_spec)
 
         # Log appropriately based on response
         if resp.code == 200 or resp.code == 202:
-            INFO(f"{env_spec['spec']['name']} Env created successfully.")
+            print(f"{env_spec['spec']['name']} Env created successfully.")
         else:
             raise Exception(
                 f"{env_spec['spec']['name']} Env create"
@@ -146,7 +143,7 @@ def main():
             )
 
     except Exception as ex:
-        INFO(ex)
+        print(ex)
 
 
 if __name__ == "__main__":

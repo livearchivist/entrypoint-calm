@@ -12,9 +12,6 @@ import json
 import time
 import traceback
 
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
-
-from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
 from helpers.calm import body_via_v3_post
 
@@ -23,7 +20,7 @@ def main():
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
-    INFO(config)
+    print(config)
 
     # Get PC info from the config dict
     pc_info = config.get("tdaas_pc")
@@ -40,14 +37,14 @@ def main():
         for app in apps["entities"]:
 
             # Print out status
-            INFO(f'{app["status"]["name"]} App State: {app["status"]["state"]}')
+            print(f'{app["status"]["name"]} App State: {app["status"]["state"]}')
 
             # Fail out if app is not in running state
             if app["status"]["state"].lower() != "running":
                 raise Exception(f"{app['status']['name']} app in a non-running state.")
 
     except Exception as ex:
-        ERROR(traceback.format_exc())
+        print(traceback.format_exc())
         # NX-on-GCP does not support erroring out based on return codes,
         # so sleeping to time the deployment out
         time.sleep(18000)

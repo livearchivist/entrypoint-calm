@@ -10,9 +10,6 @@ import sys
 import os
 import json
 
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
-
-from framework.lib.nulog import INFO, ERROR
 from helpers.rest import RequestResponse
 from helpers.calm import (
     file_to_dict,
@@ -27,7 +24,7 @@ def main():
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
-    INFO(config)
+    print(config)
 
     # Get PC info from the config dict
     pc_info = config.get("tdaas_pc")
@@ -39,9 +36,9 @@ def main():
 
         # Read in the spec files and conver to dicts
         subnet_spec = file_to_dict("specs/calm_subnet.spec")
-        INFO(f"subnet_spec: {subnet_spec}")
+        print(f"subnet_spec: {subnet_spec}")
         secret_spec = file_to_dict("specs/calm_secrets.spec")
-        INFO(f"secret_spec: {secret_spec}")
+        print(f"secret_spec: {secret_spec}")
 
         # Get our subnet and image info from the infra
         subnet_info = get_subnet_info(pc_external_ip, pc_password, subnet_spec["vlan"])
@@ -109,7 +106,7 @@ def main():
 
             # Log appropriately based on response
             if resp.code == 200 or resp.code == 202:
-                INFO(f"{bp['metadata']['name']} blueprint updated successfully.")
+                print(f"{bp['metadata']['name']} blueprint updated successfully.")
             else:
                 raise Exception(
                     f"{bp['metadata']['name']} blueprint update"
@@ -119,7 +116,7 @@ def main():
                 )
 
     except Exception as ex:
-        INFO(ex)
+        print(ex)
 
 
 if __name__ == "__main__":
