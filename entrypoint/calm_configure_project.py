@@ -11,9 +11,6 @@ import os
 import json
 import traceback
 
-sys.path.append(os.path.join(os.getcwd(), "nutest_gcp.egg"))
-
-from framework.lib.nulog import INFO, ERROR
 from helpers.calm import (
     uuid_via_v3_post,
     body_via_v3_post,
@@ -27,7 +24,7 @@ def main():
 
     # Get and log the config from the Env variable
     config = json.loads(os.environ["CUSTOM_SCRIPT_CONFIG"])
-    INFO(config)
+    print(config)
 
     # Get PC info from the config dict
     pc_info = config.get("tdaas_pc")
@@ -102,7 +99,7 @@ def main():
                 )
 
             # Make the API call to update the Project
-            INFO(f"project: {project}")
+            print(f"project: {project}")
             resp = update_via_v3_put(
                 pc_external_ip,
                 "projects",
@@ -113,7 +110,7 @@ def main():
 
             # Log appropriately based on response
             if resp.code == 202 or resp.code == 200:
-                INFO(f"{project['spec']['name']} Project updated successfully.")
+                print(f"{project['spec']['name']} Project updated successfully.")
             else:
                 raise Exception(
                     f"{project['spec']['name']} Project update failed with:\n"
@@ -123,7 +120,7 @@ def main():
                 )
 
     except Exception as ex:
-        ERROR(traceback.format_exc())
+        print(traceback.format_exc())
 
 
 if __name__ == "__main__":
