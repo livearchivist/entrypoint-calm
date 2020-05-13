@@ -29,8 +29,8 @@ python3 calm_configure_project.py
 python3 calm_upload_bp.py
 python3 calm_configure_bp.py
 python3 calm_launch_bp.py calm_bp_launch.json
-python3 pc_authconfig.py
 sleep 600
+python3 pc_authconfig.py
 python3 calm_launch_bp.py calm_bp_launch_depend.json
 python3 calm_delete_apps.py
 python3 calm_delete_bps.py
