@@ -44,9 +44,8 @@ def main():
 
     except Exception as ex:
         print(ex)
-        # NX-on-GCP does not support erroring out based on return codes,
-        # so sleeping to time the deployment out
-        time.sleep(18000)
+        # Throw a non-zero error code so the deployment fails
+        sys.exit(1)
 
 
 if __name__ == "__main__":
