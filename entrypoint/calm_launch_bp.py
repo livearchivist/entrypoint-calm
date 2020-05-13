@@ -10,6 +10,7 @@ import sys
 import os
 import json
 import time
+import traceback
 
 from helpers.rest import RequestResponse
 from helpers.calm import (
@@ -107,7 +108,7 @@ def main():
             time.sleep(2)
 
     except Exception as ex:
-        print(ex)
+        print(traceback.format_exc())
 
 
 if __name__ == "__main__":

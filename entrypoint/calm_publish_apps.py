@@ -9,6 +9,7 @@ Date:   2020-03-01
 import sys
 import os
 import json
+import traceback
 
 from helpers.calm import (
     body_via_v3_get,
@@ -98,7 +99,7 @@ def main():
                         )
 
     except Exception as ex:
-        print(ex)
+        print(traceback.format_exc())
 
 
 if __name__ == "__main__":

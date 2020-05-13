@@ -11,6 +11,7 @@ import os
 import json
 import copy
 import uuid
+import traceback
 
 from helpers.rest import RequestResponse
 from helpers.calm import (
@@ -77,7 +78,7 @@ def main():
                     )
 
     except Exception as ex:
-        print(ex)
+        print(traceback.format_exc())
 
 
 
