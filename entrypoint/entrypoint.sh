@@ -30,4 +30,3 @@ python3 calm_publish_apps.py
 python3 pc_authconfig.py
 sleep 1200
 python3 calm_check_apps.py
-exit 0
