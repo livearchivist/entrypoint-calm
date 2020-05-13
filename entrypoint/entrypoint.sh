@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 function execute_command {
     echo "Executing: $@"
     eval $@
