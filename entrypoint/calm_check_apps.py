@@ -10,6 +10,7 @@ import sys
 import os
 import json
 import time
+import traceback
 
 from helpers.rest import RequestResponse
 from helpers.calm import body_via_v3_post
@@ -43,7 +44,7 @@ def main():
                 raise Exception(f"{app['status']['name']} app in a non-running state.")
 
     except Exception as ex:
-        print(ex)
+        print(traceback.format_exc())
         # Throw a non-zero error code so the deployment fails
         sys.exit(1)
 

@@ -9,6 +9,7 @@ Date:   2020-03-30
 import sys
 import os
 import json
+import traceback
 
 from helpers.rest import RequestResponse
 from helpers.calm import create_via_v3_post
@@ -47,7 +48,7 @@ def main():
             )
 
     except Exception as ex:
-        print(ex)
+        print(traceback.format_exc())
 
 
 if __name__ == "__main__":
