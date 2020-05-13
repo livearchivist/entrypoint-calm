@@ -183,11 +183,14 @@ def create(cluster):
     # Handle failure
     else:
         print("Request failed with the following detail:")
-        print(
-            json.dumps(
-                json.loads(resp.content.decode("utf-8")), indent=4, sort_keys=True
+        try:
+            print(
+                json.dumps(
+                    json.loads(resp.content.decode("utf-8")), indent=4, sort_keys=True
+                )
             )
-        )
+        except json.decoder.JSONDecodeError:
+            print(resp.content.decode("utf-8"))
 
 
 # Modify a cluster's duration time
