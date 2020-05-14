@@ -34,15 +34,21 @@ metadata = {
 }
 
 service_name = "$MODERN-DC-TESTDRIVE-DEV"
+
 # This is a value given to you by the NX-on-GCP Eng team. Leaving
 # it as-is should be fine, however for certain templates it may
 # need to be changed.
+
+env = "nx-gcp" # nx-gcp or nx-dev
 # =================================================================
 
+if env == "nx-dev":
+    prot = "http"
+else:
+    prot = "https"
 
 # The headers should not need to be modified
 headers = {"request-type": "SERVICE", "request-service-name": service_name}
-
 
 # Given a filename, return a dict of the file's contents
 def file_to_dict(filename):
@@ -91,8 +97,12 @@ def info(cluster, detail):
 
     # Create the URL and make the call
     req_id = cluster.split(".")[0]
-    url = f"https://nx-gcp.nutanix.com/api/v1/deployments/requests/{req_id}"
-    resp = requests.get(url, headers=headers)
+    url = f"{prot}://{env}.nutanix.com/api/v1/deployments/requests/{req_id}"
+
+    try:
+      resp = requests.get(url, headers=headers)
+    except Exception as e:
+      sys.exit(f"An exception occurred: {e}")
 
     # Handle a successful call
     if resp.ok:
@@ -156,8 +166,11 @@ def create(cluster):
         payload = {"resource_specs": cluster_spec, "metadata": metadata}
 
     # Create the URL and make the call
-    url = "https://nx-gcp.nutanix.com/api/v1/deployments/requests"
-    resp = requests.post(url, json=payload, headers=headers)
+    url = f"{prot}://{env}.nutanix.com/api/v1/deployments/requests"
+    try:
+        resp = requests.post(url, json=payload, headers=headers)
+    except Exception as e:
+        sys.exit(f"An exception occurred: {e}")
 
     # Handle success
     if resp.ok:
@@ -219,10 +232,14 @@ def modify(cluster):
 
     # Create the URL and make the call
     url = (
-        f"https://nx-gcp.nutanix.com/api/v1/deployments/requests/{req_id}"
+        f"{prot}://{env}.nutanix.com/api/v1/deployments/requests/{req_id}"
         + "/modify_duration"
     )
-    resp = requests.post(url, json=payload, headers=headers)
+
+    try:
+        resp = requests.post(url, json=payload, headers=headers)
+    except Exception as e:
+        sys.exit(f"An exception occurred: {e}")
 
     # Handle success or failure
     if resp.ok:
@@ -241,10 +258,16 @@ def logs(cluster):
     # Create the URL and make the call
     req_id = cluster.split(".")[0]
     url = (
-        f"https://nx-gcp.nutanix.com/api/v1/deployments/requests/{req_id}"
+        f"{prot}://{env}.nutanix.com/api/v1/deployments/requests/{req_id}"
         + f"/plugins/logs"
     )
-    resp = requests.get(url, allow_redirects=True, headers=headers)
+    print(url)
+    print(headers)
+
+    try:
+        resp = requests.get(url, allow_redirects=True, headers=headers)
+    except Exception as e:
+        sys.exit(f"An exception occurred: {e}")
 
     # Download the file if successful
     if resp.ok:
@@ -278,9 +301,13 @@ def delete(cluster):
 
     # Create the URL and make the call
     url = (
-        f"https://nx-gcp.nutanix.com/api/v1/deployments/requests/{req_id}" + "/release"
+        f"{prot}://{env}.nutanix.com/api/v1/deployments/requests/{req_id}" + "/release"
     )
-    resp = requests.post(url, headers=headers)
+
+    try:
+        resp = requests.post(url, headers=headers)
+    except Exception as e:
+        sys.exit(f"An exception occurred: {e}")
 
     # Handle success or failure
     if resp.ok:
@@ -313,6 +340,7 @@ if __name__ == "__main__":
 
     # Create an NX-on-GCP cluster for each cluster spec file
     else:
+        print(f"Environment: {env}")
         for cluster in sys.argv:
             if not cluster.endswith("py"):
                 # Create a cluster
