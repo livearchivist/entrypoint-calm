@@ -22,7 +22,7 @@ sleep 1200 # sleep so the image can be created
 python3 pe_add_users.py
 sh create_ssh_keys.sh
 python3 pc_ssh_keys.py
-sh copy_karbon_bits.sh
+sh copy_old_karbon_bits.sh
 python pc_deploy_autodc.py
 python3 calm_create_env.py
 python3 calm_configure_project.py
@@ -30,9 +30,15 @@ python3 calm_upload_bp.py
 python3 calm_configure_bp.py
 python3 calm_launch_bp.py calm_bp_launch.json
 sleep 600
+python3 calm_check_apps.py
 python3 pc_authconfig.py
-python3 calm_launch_bp.py calm_bp_launch_depend.json
+python3 calm_launch_bp.py calm_bp_launch_mod2.json
 python3 calm_delete_apps.py
 python3 calm_delete_bps.py
+sleep 1500
+sh copy_new_karbon_bits.sh
+python3 calm_check_apps.py
+sleep 180
+python3 calm_launch_bp.py calm_bp_launch_mod3.json
 sleep 1500
 python3 calm_check_apps.py

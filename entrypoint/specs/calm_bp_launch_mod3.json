@@ -1,0 +1,29 @@
+{
+        "entities": [
+                {
+                        "bp_name": "Deploy_Karbon_Kubernetes",
+                        "profile_name": "Default",
+                        "app_name": "Module_3_Cluster",
+                        "app_description": "Workstation and a Karbon deployed Kubernetes Cluster",
+                        "dependencies": [],
+                        "variables": [
+                                {
+                                        "name": "k8s_version",
+                                        "value": "1.16.8-0"
+                                },
+                                {
+                                        "name": "cluster_name",
+                                        "value": "module_3"
+                                },
+                                {
+                                        "name": "network_name",
+                                        "value": "default-net"
+                                },
+                                {
+                                        "name": "image_name",
+                                        "value": "ntnx-0.5"
+                                }
+                        ]
+                }
+        ]
+}
