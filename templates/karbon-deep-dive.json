@@ -36,8 +36,8 @@
                 "hardware": {
                         "min_ssd_count": 1,
                         "cluster_min_nodes": 1,
-                        "min_host_gb_ram": 104,
-                        "min_host_cpu_count": 16,
+                        "min_host_gb_ram": 156,
+                        "min_host_cpu_count": 24,
                         "svm_num_vcpus": 8,
                         "svm_gb_ram": 16
                 },
