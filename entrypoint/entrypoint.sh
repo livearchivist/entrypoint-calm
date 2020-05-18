@@ -22,17 +22,14 @@ sleep 1200 # sleep so the image can be created
 sh create_ssh_keys.sh
 python3 pc_ssh_keys.py
 python pc_deploy_autodc.py
-python3 calm_create_project.py NY_Office LA_Office
 python3 calm_create_env.py
 python3 calm_configure_project.py
 python3 calm_upload_bp.py
 python3 calm_configure_bp.py
 python3 calm_launch_bp.py calm_bp_launch.json
-python3 calm_publish_bp.py
-python3 calm_approve_bp.py
-python3 calm_publish_apps.py
-python3 pc_authconfig.py
-sleep 1200
-python3 calm_launch_bp.py calm_bp_launch_depend.json
-sleep 1200
+sleep 600
 python3 calm_check_apps.py
+python3 pc_authconfig.py
+python3 calm_delete_apps.py
+python3 calm_delete_bps.py
+sh nuclei_enable_flow.sh

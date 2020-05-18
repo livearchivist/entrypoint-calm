@@ -1,7 +1,7 @@
 {
         "entities": [
                 {
-                        "app_name": "EnableKarbon",
+                        "app_name": "EnableFlow",
                         "soft_delete": true
                 }
         ]
