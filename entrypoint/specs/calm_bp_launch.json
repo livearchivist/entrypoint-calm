@@ -5,6 +5,7 @@
          "profile_name":"Default",
          "app_name":"Linux_Tools_App",
          "app_description":"Linux Tools VM",
+         "dependencies": [],
          "variables":[]
       },
       {
@@ -12,6 +13,7 @@
          "profile_name":"Default",
          "app_name":"Objects_AutoDeploy",
          "app_description":"Objects Deployment",
+         "dependencies": [],
          "variables":[
             {
                "name": "domain",
