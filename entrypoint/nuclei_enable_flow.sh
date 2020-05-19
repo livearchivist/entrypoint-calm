@@ -11,4 +11,4 @@ echo $PC_IP
 ssh-keyscan $PC_IP | grep nistp521 > /root/.ssh/known_hosts
 
 # Enable Flow
-ssh nutanix@$PC_IP 'source /etc/profile; nuclei microseg.enable'
+ssh -t nutanix@$PC_IP "bash -lc 'nuclei microseg.enable'"
