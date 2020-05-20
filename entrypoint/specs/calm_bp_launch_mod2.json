@@ -3,7 +3,7 @@
                 {
                         "bp_name": "Deploy_Karbon_Kubernetes",
                         "profile_name": "Default",
-                        "app_name": "Module_2_Cluster",
+                        "app_name": "Module_2_and_4_Cluster",
                         "app_description": "Workstation and a Karbon deployed Kubernetes Cluster",
                         "dependencies": [],
                         "variables": [
@@ -13,7 +13,7 @@
                                 },
                                 {
                                         "name": "cluster_name",
-                                        "value": "module_2"
+                                        "value": "module_2_and_4"
                                 },
                                 {
                                         "name": "network_name",
