@@ -23,6 +23,18 @@
       ],
       "labels":{}
    },
+   "firewall": {
+      "dependencies": [
+         "tdaas_vpc"
+      ],
+      "type": "$FIREWALL",
+      "source_ip_ranges": [
+         "0.0.0.0/0"
+      ],
+      "target_ports": [
+         "7200"
+      ]
+   },
    "tdaas_cluster":{
       "dependencies":[
          "tdaas_vpc"
