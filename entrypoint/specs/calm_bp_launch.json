@@ -34,6 +34,14 @@
             {
                "name": "objects_dns_ip",
                "value": "172.31.0.231"
+            },
+            {
+               "name": "OBJECT_VERS",
+               "value": "2.0"
+            },
+            {
+               "name": "MSP_VERS",
+               "value": "1.0.5"
             }
          ]
       }
