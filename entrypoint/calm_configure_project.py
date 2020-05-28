@@ -46,7 +46,13 @@ def main():
                 pc_external_ip, pc_password, subnet_spec["entities"][1]["vlan"]
             )
         account_info = body_via_v3_post(pc_external_ip, "accounts", pc_password, None)
-        env_uuid = uuid_via_v3_post(pc_external_ip, "environments", pc_password, "")
+
+        # Handle multiple environments
+        env_body = body_via_v3_post(pc_external_ip, "environments", pc_password, None)
+        for env in env_body.json["entities"]:
+            if env["status"]["state"] == "ACTIVE":
+                env_uuid = env["metadata"]["uuid"]
+                break
 
         # Get the pojects body
         project_resp = body_via_v3_post(pc_external_ip, "projects", pc_password, None)
@@ -92,11 +98,15 @@ def main():
                                 }
                             )
 
-            # Add env if not present
+            # Add env if not present, update if it is
             if len(project["spec"]["resources"]["environment_reference_list"]) == 0:
                 project["spec"]["resources"]["environment_reference_list"].append(
                     {"kind": "environment", "uuid": env_uuid}
                 )
+            else:
+                project["spec"]["resources"]["environment_reference_list"][0][
+                    "uuid"
+                ] = env_uuid
 
             # Make the API call to update the Project
             print(f"project: {project}")
