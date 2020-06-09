@@ -127,6 +127,6 @@
          "pc_reset_password"
       ],
       "type":"$CUSTOM_SCRIPT",
-      "tar_url":"https://storage.googleapis.com/testdrive-templates/library/release/calm/entrypoint.tar.gz"
+      "tar_url":"https://storage.googleapis.com/testdrive-templates/library/calm3-releasecalm/entrypoint.tar.gz"
    }
 }
