@@ -6,7 +6,12 @@
                         "app_name": "EraServer",
                         "app_description": "Nutanix Era Server Deployment",
                         "dependencies": [],
-                        "variables": []
+                        "variables": [
+                                {
+                                        "name": "db_network",
+                                        "value": "default-net"
+                                }
+                        ]
                 }
         ]
 }
