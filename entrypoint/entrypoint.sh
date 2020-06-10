@@ -19,6 +19,7 @@ python3 pc_create_image.py
 python3 calm_upload_icons.py
 sh create_ssh_keys.sh
 python3 pc_ssh_keys.py
+sleep 60
 sh copy_calm_bits.sh
 sleep 1200 # sleep so the image can be created
 python pc_deploy_autodc.py
