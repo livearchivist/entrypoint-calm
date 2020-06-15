@@ -31,18 +31,6 @@
                "value":"wordpress"
             }
          ]
-      },
-      {
-         "bp_name":"Jenkins",
-         "profile_name":"Nutanix",
-         "app_name":"Jenkins_App",
-         "app_description":"To access Jenkins, launch the console of your Windows Workstation, and enter in the IP address of the Jenkins Master VM into a web browser.",
-         "variables":[
-            {
-               "name":"INSTALL_BLUEOCEAN",
-               "value":"no"
-            }
-         ]
       }
    ]
 }
