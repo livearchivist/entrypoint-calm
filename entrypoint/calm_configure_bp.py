@@ -45,10 +45,9 @@ def main():
         subnet_info = get_subnet_info(pc_external_ip, pc_password, subnet_spec["vlan"])
         image_info = body_via_v3_post(pc_external_ip, "images", pc_password, None).json
 
-        # Get a list of DRAFT blueprints
-        payload = {"filter": "state==DRAFT"}
+        # Get a list of blueprints
         draft_resp = body_via_v3_post(
-            pc_external_ip, "blueprints", pc_password, payload
+            pc_external_ip, "blueprints", pc_password, None
         ).json
 
         # Loop through the blueprints to modify
