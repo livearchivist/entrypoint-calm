@@ -194,6 +194,26 @@ def body_via_v3_post(ip, endpoint, password, payload):
     return resp
 
 
+def body_via_v1_get(ip, endpoint, password):
+    """Return the body of a group of entities"""
+
+    # Make the API call
+    parameters = RequestParameters(
+        uri=create_v1_url(ip, f"{endpoint}"),
+        username="admin",
+        password=password,
+        method="get",
+        payload=None,
+        files=None,
+    )
+    rest_client = RESTClient(parameters)
+    resp = rest_client.request()
+    print(f"body_via_v1_get: {ip}, {endpoint}")
+
+    # Return the response
+    return resp
+
+
 def body_via_v3_get(ip, endpoint, password, entity_uuid):
     """Return the body of a desired entity"""
 

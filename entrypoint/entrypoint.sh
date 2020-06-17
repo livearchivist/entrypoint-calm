@@ -34,4 +34,6 @@ python3 calm_approve_bp.py
 python3 calm_publish_apps.py
 sleep 1200
 python3 pc_authconfig.py
+sleep 60
+python3 pc_list_authconfig.py
 python3 calm_check_apps.py
