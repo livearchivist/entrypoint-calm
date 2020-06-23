@@ -55,10 +55,10 @@
       },
       "software":{
          "nos":{
-            "version":"euphrates-5-11-2-stable",
+            "version":"euphrates-5-17-stable",
             "build_type":"opt",
             "build_url":"http://endor.dyn.nutanix.com/builds/nos-builds/master/1ce0a2fb9acdf27a89847662c5c0a42a395db41f/opt/tar/nutanix_installer_package-opt-master-1ce0a2fb9acdf27a89847662c5c0a42a395db41f.tar.gz",
-            "commit":"23a09f"
+            "commit":"29d261"
          },
          "hypervisor":{
             "build_url":"http://endor.dyn.nutanix.com/builds/ahv-builds/20170830.100789/host-bundle-el6.nutanix.20170830.100789.tar.gz",
